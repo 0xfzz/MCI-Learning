@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COURSUE - Tutorial Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #7c3aed;
+            --primary-light: #a855f7;
+            --primary-dark: #6d28d9;
+            --secondary: #ec4899;
+            --gray-50: #fafafa;
+            --gray-100: #f5f5f5;
+            --gray-200: #e8e8e8;
+            --gray-300: #d4d4d4;
+            --gray-400: #a3a3a3;
+            --gray-500: #737373;
+            --gray-600: #525252;
+            --gray-700: #404040;
+            --gray-800: #262626;
+            --gray-900: #171717;
+            --blue: #3b82f6;
+            --green: #10b981;
+            --orange: #f59e0b;
+            --red: #ef4444;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #fafafa;
+            color: #333;
+        }
+
+        .app {
+            display: grid;
+            grid-template-columns: 260px 1fr 340px;
+            height: 100vh;
+        }
+
+        /* LEFT SIDEBAR */
+        .sidebar {
+            background: #fff;
+            padding: 30px 20px;
+            border-right: 1px solid #e8e8e8;
+            overflow-y: auto;
+        }
+
+        /* LEFT SIDEBAR */
+        .sidebar {
+            background: #fff;
+            padding: 30px 20px;
+            border-right: 1px solid #e8e8e8;
+            overflow-y: auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 40px;
+            padding-left: 5px;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #a855f7, #ec4899);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 900;
+            font-size: 18px;
+        }
+
+        .logo-text {
+            font-size: 18px;
+            font-weight: 800;
+            color: #7c3aed;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            color: #aaa;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin: 25px 0 10px 10px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 11px 14px;
+            color: #666;
+            border-radius: 8px;
+            margin-bottom: 2px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 15px;
+        }
+
+        .nav-item:hover {
+            background: #f5f5f5;
+        }
+
+        .nav-item.active {
+            background: #f3f0ff;
+            color: #7c3aed;
+            font-weight: 600;
+        }
+
+        .nav-icon {
+            font-size: 18px;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* MAIN CONTENT */
+        .main {
+            padding: 30px 35px;
+            overflow-y: auto;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            max-width: 600px;
+        }
+
+        .search-box::before {
+            content: '🔍';
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 16px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 16px 12px 45px;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .search-box input:focus {
+            border-color: #7c3aed;
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+        }
+
+        .top-icons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .icon-button {
+            width: 40px;
+            height: 40px;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 18px;
+        }
+
+        .icon-button:hover {
+            border-color: #7c3aed;
+            background: #f9f5ff;
+        }
+
+        /* VIDEO SECTION */
+        .video-section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .card {
+            background: #fff;
+            border: 1px solid #e8e8e8;
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .video-player {
+            padding: 20px;
+        }
+
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 */
+            border-radius: 12px;
+            overflow: hidden;
+            background: #000;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .video-info {
+            padding: 24px;
+            border-top: 1px solid #e8e8e8;
+        }
+
+        .video-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .video-meta {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            font-size: 14px;
+            color: #999;
+        }
+
+        .video-meta span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* INFO CARDS */
+        .info-card {
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .info-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .info-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .info-icon.forum {
+            background: linear-gradient(135deg, #f3f0ff, #e9d5ff);
+            color: #7c3aed;
+        }
+
+        .info-icon.whatsapp {
+            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+            color: #10b981;
+        }
+
+        .info-icon.download {
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+            color: #3b82f6;
+        }
+
+        .info-content h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 4px;
+        }
+
+        .info-content p {
+            font-size: 14px;
+            color: #999;
+        }
+
+        .info-button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            align-self: flex-start;
+        }
+
+        .btn-primary {
+            background: #7c3aed;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: #6d28d9;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(124, 58, 237, 0.3);
+        }
+
+        .btn-green {
+            background: #10b981;
+            color: #fff;
+        }
+
+        .btn-green:hover {
+            background: #059669;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-blue {
+            background: #3b82f6;
+            color: #fff;
+        }
+
+        .btn-blue:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(59, 130, 246, 0.3);
+        }
+
+        .warning-box {
+            background: #fff7ed;
+            border: 1px solid #fed7aa;
+            border-radius: 10px;
+            padding: 16px;
+            display: flex;
+            gap: 12px;
+            align-items: start;
+        }
+
+        .warning-box .icon {
+            color: #f59e0b;
+            font-size: 20px;
+        }
+
+        .warning-box p {
+            font-size: 13px;
+            color: #404040;
+            line-height: 1.6;
+        }
+
+        /* RIGHT SIDEBAR - PLAYLIST */
+        .right-sidebar {
+            background: #fff;
+            padding: 30px 20px;
+            border-left: 1px solid #e8e8e8;
+            overflow-y: auto;
+        }
+
+        /* RIGHT SIDEBAR - PLAYLIST */
+        .right-sidebar {
+            background: #fff;
+            padding: 30px 20px;
+            border-left: 1px solid #e8e8e8;
+            overflow-y: auto;
+        }
+
+        .playlist-header {
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e8e8e8;
+            margin-bottom: 20px;
+        }
+
+        .playlist-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 6px;
+        }
+
+        .playlist-stats {
+            font-size: 13px;
+            color: #999;
+            margin-bottom: 10px;
+        }
+
+        .toggle-all {
+            color: #7c3aed;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .playlist-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .playlist-content::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .playlist-content::-webkit-scrollbar-thumb {
+            background: #d4d4d4;
+            border-radius: 3px;
+        }
+
+        .playlist-content::-webkit-scrollbar-thumb:hover {
+            background: #a3a3a3;
+        }
+
+        .category-section {
+            margin-bottom: 8px;
+        }
+
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            background: #f5f5f5;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .category-header:hover {
+            background: #e8e8e8;
+        }
+
+        .category-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .category-count {
+            font-size: 13px;
+            color: #999;
+        }
+
+        .chevron {
+            transition: transform 0.3s;
+            color: #999;
+        }
+
+        .category-section.collapsed .chevron {
+            transform: rotate(-90deg);
+        }
+
+        .video-list {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .category-section:not(.collapsed) .video-list {
+            max-height: 1000px;
+        }
+
+        .video-item {
+            display: flex;
+            align-items: start;
+            gap: 12px;
+            padding: 12px;
+            margin: 4px 0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .video-item:hover {
+            background: #f5f5f5;
+            border-color: #e8e8e8;
+        }
+
+        .video-item.active {
+            background: #eff6ff;
+            border-color: #3b82f6;
+        }
+
+        .play-icon {
+            width: 40px;
+            height: 40px;
+            flex-shrink: 0;
+            background: linear-gradient(135deg, #a855f7, #ec4899);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 16px;
+        }
+
+        .video-item.active .play-icon {
+            background: #3b82f6;
+        }
+
+        .video-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .video-item-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 4px;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .video-duration {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .video-checkbox {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+            margin-top: 10px;
+            cursor: pointer;
+            accent-color: #7c3aed;
+        }
+
+        /* FOOTER */
+        .footer {
+            background: #111827;
+            color: #9ca3af;
+            padding: 60px 0 30px;
+            margin-top: 80px;
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-brand h3 {
+            color: #fff;
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-brand .logo-icon {
+            width: 36px;
+            height: 36px;
+        }
+
+        .footer-brand p {
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .footer-section h4 {
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: #9ca3af;
+            text-decoration: none;
+            transition: color 0.2s;
+            font-size: 14px;
+        }
+
+        .footer-links a:hover {
+            color: #a855f7;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 12px;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: #1f2937;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            text-decoration: none;
+            transition: all 0.2s;
+            font-size: 18px;
+        }
+
+        .social-icon:hover {
+            background: #7c3aed;
+            transform: translateY(-2px);
+        }
+
+        .footer-bottom {
+            padding-top: 30px;
+            border-top: 1px solid #1f2937;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1400px) {
+            .app {
+                grid-template-columns: 260px 1fr;
+            }
+            .right-sidebar {
+                display: none;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .app {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main {
+                padding: 20px 16px;
+            }
+
+            .video-title {
+                font-size: 20px;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <!-- LEFT SIDEBAR -->
+        <aside class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">C!</div>
+                <div class="logo-text">COURSUE</div>
+            </div>
+
+            <div class="nav-label">MENU</div>
+            <div class="nav-item">
+                <span class="nav-icon">🏠</span>
+                Dashboard
+            </div>
+            <div class="nav-item active">
+                <span class="nav-icon">📚</span>
+                Tutorial
+            </div>
+            <div class="nav-item">
+                <span class="nav-icon">💡</span>
+                Info Open Source
+            </div>
+            <div class="nav-item">
+                <span class="nav-icon">�</span>
+                Contact
+            </div>
+            <div class="nav-item">
+                <span class="nav-icon">🏆</span>
+                Leaderboard
+            </div>
+
+            <div class="nav-label">KATEGORI</div>
+            <div class="nav-item">
+                <span class="nav-icon">⚛️</span>
+                React JS
+            </div>
+            <div class="nav-item">
+                <span class="nav-icon">💚</span>
+                Vue JS
+            </div>
+            <div class="nav-item">
+                <span class="nav-icon">🅰️</span>
+                Angular
+            </div>
+            <div class="nav-item">
+                <span class="nav-icon">⚡</span>
+                Node JS
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main">
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <div class="search-box">
+                    <input type="text" placeholder="Cari tutorial disini...">
+                </div>
+                <div class="top-icons">
+                    <div class="icon-button" title="Dark Mode">🌙</div>
+                    <div class="icon-button" title="Notifications">🔔</div>
+                    <div class="icon-button" title="Settings">⚙️</div>
+                </div>
+            </div>
+
+            <!-- Breadcrumb -->
+            <div style="background: #fff; padding: 12px 16px; border-radius: 10px; border: 1px solid #e8e8e8; margin-bottom: 30px; display: flex; align-items: center; gap: 8px; font-size: 14px;">
+                <a href="#" style="color: #999; text-decoration: none;">Home</a>
+                <span style="color: #ccc;">›</span>
+                <a href="#" style="color: #999; text-decoration: none;">Tutorial</a>
+                <span style="color: #ccc;">›</span>
+                <a href="#" style="color: #999; text-decoration: none;">Frontend</a>
+                <span style="color: #ccc;">›</span>
+                <span style="color: #7c3aed; font-weight: 600;">React Hooks</span>
+            </div>
+
+            <!-- Video Section -->
+            <div class="video-section">
+                <!-- Video Player -->
+                <div class="card">
+                    <div class="video-player">
+                        <div class="video-wrapper">
+                            <iframe 
+                                src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
+                                frameborder="0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen>
+                            </iframe>
+                        </div>
+                    </div>
+                    <div class="video-info">
+                        <h1 class="video-title">Introduction to React Hooks - useState & useEffect</h1>
+                        <div class="video-meta">
+                            <span>👁️ 12,458 views</span>
+                            <span>📅 2 hari yang lalu</span>
+                            <span>⏱️ 24:35</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Forum Discussion Card -->
+                <div class="card info-card">
+                    <div class="info-header">
+                        <div class="info-icon forum">💬</div>
+                        <div class="info-content">
+                            <h3>Forum Diskusi</h3>
+                            <p>Bergabung dengan 1,247 diskusi aktif</p>
+                        </div>
+                    </div>
+                    <button class="info-button btn-primary">Lihat Forum</button>
+                </div>
+
+                <!-- WhatsApp Group Card -->
+                <div class="card info-card">
+                    <div class="info-header">
+                        <div class="info-icon whatsapp">📱</div>
+                        <div class="info-content">
+                            <h3>Grup WhatsApp</h3>
+                            <p>Join komunitas belajar dengan 500+ members</p>
+                        </div>
+                    </div>
+                    <button class="info-button btn-green">Gabung Grup</button>
+                </div>
+
+                <!-- Source Code Download Card -->
+                <div class="card info-card">
+                    <div class="info-header">
+                        <div class="info-icon download">💾</div>
+                        <div class="info-content">
+                            <h3>Download Source Code</h3>
+                            <p>Akses full source code untuk tutorial ini</p>
+                        </div>
+                    </div>
+                    <div class="warning-box">
+                        <span class="icon">⚠️</span>
+                        <p><strong>Perhatian:</strong> Source code hanya untuk keperluan belajar. Dilarang menggunakan untuk keperluan komersial tanpa izin.</p>
+                    </div>
+                    <button class="info-button btn-blue">Download Source Code</button>
+                </div>
+            </div>
+        </main>
+
+        <!-- RIGHT SIDEBAR - PLAYLIST -->
+        <aside class="right-sidebar">
+            <div class="playlist-header">
+                <h2 class="playlist-title">Daftar Video</h2>
+                <p class="playlist-stats">24 videos • 6 jam 45 menit</p>
+                <span class="toggle-all">Lihat Semua</span>
+            </div>
+            <div class="playlist-content">
+                    <!-- Category 1 -->
+                    <div class="category-section">
+                        <div class="category-header">
+                            <div>
+                                <div class="category-name">Pengenalan React</div>
+                                <div class="category-count">5 videos</div>
+                            </div>
+                            <span class="chevron">▼</span>
+                        </div>
+                        <div class="video-list">
+                            <div class="video-item">
+                                <div class="play-icon">▶</div>
+                                <div class="video-details">
+                                    <div class="video-item-title">Apa itu React dan Kenapa Menggunakannya?</div>
+                                    <div class="video-duration">15:30</div>
+                                </div>
+                                <input type="checkbox" class="video-checkbox" checked>
+                            </div>
+                            <div class="video-item">
+                                <div class="play-icon">▶</div>
+                                <div class="video-details">
+                                    <div class="video-item-title">Setup Environment untuk React Development</div>
+                                    <div class="video-duration">12:45</div>
+                                </div>
+                                <input type="checkbox" class="video-checkbox" checked>
+                            </div>
+                            <div class="video-item active">
+                                <div class="play-icon">▶</div>
+                                <div class="video-details">
+                                    <div class="video-item-title">Introduction to React Hooks - useState & useEffect</div>
+                                    <div class="video-duration">24:35</div>
+                                </div>
+                                <input type="checkbox" class="video-checkbox">
+                            </div>
+                            <div class="video-item">
+                                <div class="play-icon">▶</div>
+                                <div class="video-details">
+                                    <div class="video-item-title">JSX Syntax dan Component Basics</div>
+                                    <div class="video-duration">18:20</div>
+                                </div>
+                                <input type="checkbox" class="video-checkbox">
+                            </div>
+                            <div class="video-item">
+                                <div class="play-icon">▶</div>
+                                <div class="video-details">
+                                    <div class="video-item-title">Props dan State Management</div>
+                                    <div class="video-duration">22:10</div>
+                                </div>
+                                <input type="checkbox" class="video-checkbox">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Category 2 -->
+                    <div class="category-section">
+                        <div class="category-header">
+                            <div>
+                                <div class="category-name">Advanced Hooks</div>
+                                <div class="category-count">6 videos</div>
+                            </div>
+                            <span class="chevron">▼</span>
+                        </div>
+                        <div class="video-list">
+                            <div class="video-item">
+                                <div class="play-icon">▶</div>
+                                <div class="video-details">
+                                    <div class="video-item-title">useContext untuk State Global</div>
+                                    <div class="video-duration">19:45</div>
+                                </div>
+                                <input type="checkbox" class="video-checkbox">
+                            </div>
+                            <div class="video-item">
+                                <div class="play-icon">▶</div>
+                                <div class="video-details">
+                                    <div class="video-item-title">useReducer untuk Complex State Logic</div>
+                                    <div class="video-duration">25:30</div>
+                                </div>
+                                <input type="checkbox" class="video-checkbox">
+                            </div>
+                            <div class="video-item">
+                                <div class="play-icon">▶</div>
+                                <div class="video-details">
+                                    <div class="video-item-title">useCallback dan useMemo Optimization</div>
+                                    <div class="video-duration">21:15</div>
+                                </div>
+                                <input type="checkbox" class="video-checkbox">
+                            </div>
+                            <div class="video-item">
+                                <div class="play-icon">▶</div>
+                                <div class="video-details">
+                                    <div class="video-item-title">useRef untuk DOM Manipulation</div>
+                                    <div class="video-duration">16:40</div>
+                                </div>
+                                <input type="checkbox" class="video-checkbox">
+                            </div>
+                            <div class="video-item">
+                                <div class="play-icon">▶</div>
+                                <div class="video-details">
+                                    <div class="video-item-title">Custom Hooks - Membuat Hooks Sendiri</div>
+                                    <div class="video-duration">28:20</div>
+                                </div>
+                                <input type="checkbox" class="video-checkbox">
+                            </div>
+                            <div class="video-item">
+                                <div class="play-icon">▶</div>
+                                <div class="video-details">
+                                    <div class="video-item-title">useLayoutEffect vs useEffect</div>
+                                    <div class="video-duration">14:55</div>
+                                </div>
+                                <input type="checkbox" class="video-checkbox">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Category 3 -->
+                    <div class="category-section collapsed">
+                        <div class="category-header">
+                            <div>
+                                <div class="category-name">React Router</div>
+                                <div class="category-count">4 videos</div>
+                            </div>
+                            <span class="chevron">▼</span>
+                        </div>
+                        <div class="video-list">
+                            <div class="video-item">
+                                <div class="play-icon">▶</div>
+                                <div class="video-details">
+                                    <div class="video-item-title">Setup React Router v6</div>
+                                    <div class="video-duration">13:25</div>
+                                </div>
+                                <input type="checkbox" class="video-checkbox">
+                            </div>
+                            <div class="video-item">
+                                <div class="play-icon">▶</div>
+                                <div class="video-details">
+                                    <div class="video-item-title">Nested Routes dan Layout</div>
+                                    <div class="video-duration">20:10</div>
+                                </div>
+                                <input type="checkbox" class="video-checkbox">
+                            </div>
+                            <div class="video-item">
+                                <div class="play-icon">▶</div>
+                                <div class="video-details">
+                                    <div class="video-item-title">Dynamic Routes dan URL Parameters</div>
+                                    <div class="video-duration">17:35</div>
+                                </div>
+                                <input type="checkbox" class="video-checkbox">
+                            </div>
+                            <div class="video-item">
+                                <div class="play-icon">▶</div>
+                                <div class="video-details">
+                                    <div class="video-item-title">Protected Routes dan Authentication</div>
+                                    <div class="video-duration">23:50</div>
+                                </div>
+                                <input type="checkbox" class="video-checkbox">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Category 4 -->
+                    <div class="category-section collapsed">
+                        <div class="category-header">
+                            <div>
+                                <div class="category-name">State Management</div>
+                                <div class="category-count">5 videos</div>
+                            </div>
+                            <span class="chevron">▼</span>
+                        </div>
+                        <div class="video-list">
+                            <div class="video-item">
+                                <div class="play-icon">▶</div>
+                                <div class="video-details">
+                                    <div class="video-item-title">Introduction to Redux Toolkit</div>
+                                    <div class="video-duration">26:40</div>
+                                </div>
+                                <input type="checkbox" class="video-checkbox">
+                            </div>
+                            <div class="video-item">
+                                <div class="play-icon">▶</div>
+                                <div class="video-details">
+                                    <div class="video-item-title">Redux Store dan Slices</div>
+                                    <div class="video-duration">22:15</div>
+                                </div>
+                                <input type="checkbox" class="video-checkbox">
+                            </div>
+                            <div class="video-item">
+                                <div class="play-icon">▶</div>
+                                <div class="video-details">
+                                    <div class="video-item-title">Async Actions dengan createAsyncThunk</div>
+                                    <div class="video-duration">28:30</div>
+                                </div>
+                                <input type="checkbox" class="video-checkbox">
+                            </div>
+                            <div class="video-item">
+                                <div class="play-icon">▶</div>
+                                <div class="video-details">
+                                    <div class="video-item-title">Zustand - Alternative State Management</div>
+                                    <div class="video-duration">19:20</div>
+                                </div>
+                                <input type="checkbox" class="video-checkbox">
+                            </div>
+                            <div class="video-item">
+                                <div class="play-icon">▶</div>
+                                <div class="video-details">
+                                    <div class="video-item-title">Jotai untuk Atomic State Management</div>
+                                    <div class="video-duration">16:45</div>
+                                </div>
+                                <input type="checkbox" class="video-checkbox">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Category 5 -->
+                    <div class="category-section collapsed">
+                        <div class="category-header">
+                            <div>
+                                <div class="category-name">Project Final</div>
+                                <div class="category-count">4 videos</div>
+                            </div>
+                            <span class="chevron">▼</span>
+                        </div>
+                        <div class="video-list">
+                            <div class="video-item">
+                                <div class="play-icon">▶</div>
+                                <div class="video-details">
+                                    <div class="video-item-title">Planning dan Setup Project E-Commerce</div>
+                                    <div class="video-duration">18:30</div>
+                                </div>
+                                <input type="checkbox" class="video-checkbox">
+                            </div>
+                            <div class="video-item">
+                                <div class="play-icon">▶</div>
+                                <div class="video-details">
+                                    <div class="video-item-title">Implementasi Product Listing dan Detail</div>
+                                    <div class="video-duration">32:15</div>
+                                </div>
+                                <input type="checkbox" class="video-checkbox">
+                            </div>
+                            <div class="video-item">
+                                <div class="play-icon">▶</div>
+                                <div class="video-details">
+                                    <div class="video-item-title">Shopping Cart dan Checkout Flow</div>
+                                    <div class="video-duration">35:40</div>
+                                </div>
+                                <input type="checkbox" class="video-checkbox">
+                            </div>
+                            <div class="video-item">
+                                <div class="play-icon">▶</div>
+                                <div class="video-details">
+                                    <div class="video-item-title">Deployment ke Production</div>
+                                    <div class="video-duration">24:20</div>
+                                </div>
+                                <input type="checkbox" class="video-checkbox">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h3>
+                        <div class="logo-icon">C!</div>
+                        COURSUE
+                    </h3>
+                    <p>Platform pembelajaran online terbaik untuk meningkatkan skill programming Anda dengan tutorial berkualitas dari instruktur berpengalaman.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-icon" title="Instagram">📷</a>
+                        <a href="#" class="social-icon" title="TikTok">🎵</a>
+                        <a href="#" class="social-icon" title="YouTube">📺</a>
+                        <a href="#" class="social-icon" title="Twitter">🐦</a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Tutorial</a></li>
+                        <li><a href="#">Courses</a></li>
+                        <li><a href="#">Leaderboard</a></li>
+                        <li><a href="#">About Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Community</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <ul class="footer-links">
+                        <li><a href="mailto:info@coursue.com">info@coursue.com</a></li>
+                        <li><a href="tel:+6281234567890">+62 812-3456-7890</a></li>
+                        <li>Jakarta, Indonesia</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 COURSUE. All rights reserved. Made with 💜 by COURSUE Team</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Category Collapse/Expand
+        const categoryHeaders = document.querySelectorAll('.category-header');
+        
+        categoryHeaders.forEach(header => {
+            header.addEventListener('click', () => {
+                const section = header.parentElement;
+                section.classList.toggle('collapsed');
+            });
+        });
+
+        // Video Item Click
+        const videoItems = document.querySelectorAll('.video-item');
+        
+        videoItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                if (e.target.type !== 'checkbox') {
+                    videoItems.forEach(v => v.classList.remove('active'));
+                    item.classList.add('active');
+                }
+            });
+        });
+
+        // Toggle All Videos
+        const toggleAll = document.querySelector('.toggle-all');
+        let allExpanded = false;
+
+        toggleAll.addEventListener('click', () => {
+            const sections = document.querySelectorAll('.category-section');
+            allExpanded = !allExpanded;
+            
+            sections.forEach(section => {
+                if (allExpanded) {
+                    section.classList.remove('collapsed');
+                } else {
+                    section.classList.add('collapsed');
+                }
+            });
+            
+            toggleAll.textContent = allExpanded ? 'Tutup Semua' : 'Lihat Semua';
+        });
+    </script>
+</body>
+</html>

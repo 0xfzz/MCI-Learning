@@ -1,0 +1,1602 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduGrow - Transform Your Future with Knowledge</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            overflow-x: hidden;
+            background: #0a0a0f;
+            color: #fff;
+            line-height: 1.6;
+        }
+
+        /* Navbar */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 25px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(20px);
+            background: rgba(10, 10, 15, 0.85);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        nav.scrolled {
+            padding: 18px 8%;
+            background: rgba(10, 10, 15, 0.95);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff 0%, #a78bfa 50%, #10b981 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo::before {
+            content: '🌱';
+            font-size: 28px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 45px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #e5e5e5;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: #10b981;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #a78bfa, #10b981);
+            transition: width 0.3s;
+            border-radius: 10px;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .cta-nav {
+            padding: 14px 32px;
+            background: linear-gradient(135deg, #a78bfa 0%, #10b981 100%);
+            border: none;
+            border-radius: 50px;
+            color: #fff;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(167, 139, 250, 0.3);
+        }
+
+        .cta-nav:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(167, 139, 250, 0.5);
+        }
+
+        .mobile-menu {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .mobile-menu span {
+            width: 25px;
+            height: 3px;
+            background: #a78bfa;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 120px 8% 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(167, 139, 250, 0.15) 0%, transparent 70%);
+            top: -250px;
+            right: -250px;
+            animation: pulse 6s ease-in-out infinite;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.12) 0%, transparent 70%);
+            bottom: -200px;
+            left: -200px;
+            animation: pulse 6s ease-in-out infinite 3s;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.6; }
+            50% { transform: scale(1.3) rotate(180deg); opacity: 0.9; }
+        }
+
+        .hero-content {
+            flex: 1;
+            z-index: 2;
+            max-width: 650px;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 24px;
+            background: rgba(167, 139, 250, 0.1);
+            border: 1.5px solid rgba(167, 139, 250, 0.3);
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 28px;
+            animation: glow 3s ease-in-out infinite;
+            color: #c4b5fd;
+        }
+
+        .hero-badge::before {
+            content: '✨';
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 10px rgba(167, 139, 250, 0.3); }
+            50% { box-shadow: 0 0 25px rgba(167, 139, 250, 0.6); }
+        }
+
+        h1 {
+            font-size: 72px;
+            line-height: 1.15;
+            margin-bottom: 24px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #fff 0%, #e9d5ff 40%, #10b981 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -2px;
+        }
+
+        .hero-text {
+            font-size: 20px;
+            color: #b4b4b4;
+            margin-bottom: 40px;
+            line-height: 1.8;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 60px;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            padding: 20px 45px;
+            background: linear-gradient(135deg, #a78bfa 0%, #10b981 100%);
+            border: none;
+            border-radius: 50px;
+            color: #fff;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 15px 40px rgba(167, 139, 250, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 50px rgba(167, 139, 250, 0.5);
+        }
+
+        .btn-secondary {
+            padding: 20px 45px;
+            background: transparent;
+            border: 2px solid #a78bfa;
+            border-radius: 50px;
+            color: #a78bfa;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(167, 139, 250, 0.1);
+            transform: translateY(-4px);
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 60px;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            text-align: left;
+        }
+
+        .stat-number {
+            font-size: 42px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #a78bfa 0%, #10b981 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 15px;
+            color: #8b8b8b;
+            margin-top: 8px;
+            font-weight: 500;
+        }
+
+        .hero-image {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2;
+            animation: fadeInRight 1s ease-out;
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(60px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .dashboard-mockup {
+            width: 100%;
+            max-width: 600px;
+            height: 450px;
+            background: linear-gradient(135deg, rgba(30, 30, 40, 0.8) 0%, rgba(20, 20, 30, 0.6) 100%);
+            border-radius: 30px;
+            display: flex;
+            flex-direction: column;
+            padding: 30px;
+            position: relative;
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(167, 139, 250, 0.2);
+            animation: float 4s ease-in-out infinite;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), 0 0 100px rgba(167, 139, 250, 0.2);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-25px) rotate(2deg); }
+        }
+
+        .mockup-header {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 25px;
+        }
+
+        .mockup-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #a78bfa, #10b981);
+            opacity: 0.8;
+        }
+
+        .mockup-content {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .mockup-card {
+            background: rgba(167, 139, 250, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(167, 139, 250, 0.2);
+            animation: cardPulse 2s ease-in-out infinite;
+            backdrop-filter: blur(10px);
+        }
+
+        .mockup-card:nth-child(2) { animation-delay: 0.2s; }
+        .mockup-card:nth-child(3) { animation-delay: 0.4s; }
+        .mockup-card:nth-child(4) { animation-delay: 0.6s; }
+
+        @keyframes cardPulse {
+            0%, 100% { opacity: 0.6; border-color: rgba(167, 139, 250, 0.2); }
+            50% { opacity: 1; border-color: rgba(16, 185, 129, 0.4); }
+        }
+
+        /* Trusted By Section */
+        .trusted-by {
+            padding: 80px 8%;
+            background: rgba(20, 20, 30, 0.5);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .trusted-by h3 {
+            text-align: center;
+            color: #8b8b8b;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 40px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .logos {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .logo-item {
+            font-size: 28px;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.2);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .logo-item:hover {
+            color: #a78bfa;
+            transform: scale(1.1);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 120px 8%;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 80px;
+        }
+
+        .section-tag {
+            color: #a78bfa;
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        .section-title {
+            font-size: 52px;
+            font-weight: 900;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .section-subtitle {
+            color: #b4b4b4;
+            font-size: 19px;
+            line-height: 1.7;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 35px;
+            margin-top: 60px;
+        }
+
+        .feature-card {
+            background: rgba(30, 30, 40, 0.5);
+            padding: 45px;
+            border-radius: 25px;
+            border: 2px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(167, 139, 250, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-12px);
+            background: rgba(30, 30, 40, 0.8);
+            border-color: rgba(167, 139, 250, 0.3);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #a78bfa 0%, #10b981 100%);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 34px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(167, 139, 250, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-title {
+            font-size: 26px;
+            margin-bottom: 15px;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-desc {
+            color: #b4b4b4;
+            line-height: 1.8;
+            font-size: 16px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Courses Section */
+        .courses {
+            padding: 120px 8%;
+            background: rgba(20, 20, 30, 0.5);
+        }
+
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 35px;
+            margin-top: 60px;
+        }
+
+        .course-card {
+            background: rgba(30, 30, 40, 0.6);
+            border-radius: 25px;
+            overflow: hidden;
+            border: 2px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.4s;
+            cursor: pointer;
+        }
+
+        .course-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(167, 139, 250, 0.4);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .course-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #a78bfa 0%, #10b981 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            position: relative;
+        }
+
+        .course-image::after {
+            content: '';
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .course-content {
+            padding: 30px;
+        }
+
+        .course-category {
+            display: inline-block;
+            padding: 6px 16px;
+            background: rgba(167, 139, 250, 0.15);
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #c4b5fd;
+            margin-bottom: 15px;
+        }
+
+        .course-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .course-desc {
+            color: #b4b4b4;
+            font-size: 15px;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .course-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .course-rating {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #fbbf24;
+            font-weight: 600;
+        }
+
+        .course-students {
+            color: #8b8b8b;
+            font-size: 14px;
+        }
+
+        /* Testimonials Section */
+        .testimonials {
+            padding: 120px 8%;
+            position: relative;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 35px;
+            margin-top: 60px;
+        }
+
+        .testimonial-card {
+            background: rgba(30, 30, 40, 0.5);
+            padding: 40px;
+            border-radius: 25px;
+            border: 2px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s;
+            position: relative;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(167, 139, 250, 0.3);
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5);
+        }
+
+        .testimonial-card::before {
+            content: '"';
+            position: absolute;
+            top: 20px;
+            left: 30px;
+            font-size: 80px;
+            color: rgba(167, 139, 250, 0.15);
+            font-weight: 900;
+            line-height: 1;
+        }
+
+        .testimonial-text {
+            color: #d4d4d4;
+            font-size: 17px;
+            line-height: 1.8;
+            margin-bottom: 25px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .author-avatar {
+            width: 55px;
+            height: 55px;
+            background: linear-gradient(135deg, #a78bfa, #10b981);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .author-info h4 {
+            font-size: 18px;
+            margin-bottom: 4px;
+        }
+
+        .author-info p {
+            color: #8b8b8b;
+            font-size: 14px;
+        }
+
+        /* Pricing Section */
+        .pricing {
+            padding: 120px 8%;
+            background: rgba(20, 20, 30, 0.5);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 35px;
+            margin-top: 60px;
+            max-width: 1100px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .pricing-card {
+            background: rgba(30, 30, 40, 0.6);
+            padding: 45px;
+            border-radius: 25px;
+            border: 2px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.4s;
+            text-align: center;
+            position: relative;
+        }
+
+        .pricing-card.featured {
+            transform: scale(1.05);
+            border-color: #a78bfa;
+            background: rgba(167, 139, 250, 0.05);
+            box-shadow: 0 25px 50px rgba(167, 139, 250, 0.2);
+        }
+
+        .pricing-card.featured::before {
+            content: '⭐ POPULER';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #a78bfa, #10b981);
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(167, 139, 250, 0.3);
+        }
+
+        .pricing-card.featured:hover {
+            transform: scale(1.08) translateY(-10px);
+        }
+
+        .pricing-plan {
+            font-size: 18px;
+            font-weight: 700;
+            color: #a78bfa;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .pricing-price {
+            font-size: 56px;
+            font-weight: 900;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #fff, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .pricing-period {
+            color: #8b8b8b;
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 35px;
+            text-align: left;
+        }
+
+        .pricing-features li {
+            padding: 12px 0;
+            color: #d4d4d4;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            color: #10b981;
+            font-weight: 900;
+            font-size: 18px;
+        }
+
+        .pricing-button {
+            width: 100%;
+            padding: 18px;
+            background: transparent;
+            border: 2px solid #a78bfa;
+            border-radius: 50px;
+            color: #a78bfa;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .pricing-card.featured .pricing-button {
+            background: linear-gradient(135deg, #a78bfa, #10b981);
+            color: #fff;
+            border: none;
+        }
+
+        .pricing-button:hover {
+            transform: scale(1.05);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 120px 8%;
+            background: linear-gradient(135deg, #1e1e28 0%, #0a0a0f 100%);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-top: 1px solid rgba(167, 139, 250, 0.2);
+            border-bottom: 1px solid rgba(167, 139, 250, 0.2);
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(167, 139, 250, 0.15) 0%, transparent 70%);
+            top: -200px;
+            right: -200px;
+            animation: rotate 20s linear infinite;
+        }
+
+        .cta-section::after {
+            content: '';
+            position: absolute;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 70%);
+            bottom: -175px;
+            left: -175px;
+            animation: rotate 15s linear infinite reverse;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta-section h2 {
+            font-size: 56px;
+            font-weight: 900;
+            margin-bottom: 25px;
+            line-height: 1.2;
+            background: linear-gradient(135deg, #fff 0%, #a78bfa 50%, #10b981 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .cta-section p {
+            font-size: 22px;
+            margin-bottom: 45px;
+            color: #b4b4b4;
+            line-height: 1.6;
+        }
+
+        .btn-white {
+            padding: 22px 55px;
+            background: linear-gradient(135deg, #a78bfa 0%, #10b981 100%);
+            border: none;
+            border-radius: 50px;
+            color: #fff;
+            font-size: 19px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s;
+            box-shadow: 0 20px 45px rgba(167, 139, 250, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-white:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 55px rgba(167, 139, 250, 0.5);
+        }
+
+        /* Footer */
+        footer {
+            background: #0a0a0f;
+            padding: 80px 8% 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 60px;
+            margin-bottom: 60px;
+        }
+
+        .footer-about h3 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #a78bfa, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .footer-about p {
+            color: #8b8b8b;
+            line-height: 1.8;
+            margin-bottom: 25px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-link {
+            width: 45px;
+            height: 45px;
+            background: rgba(167, 139, 250, 0.1);
+            border: 1px solid rgba(167, 139, 250, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #a78bfa;
+            font-size: 20px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .social-link:hover {
+            background: linear-gradient(135deg, #a78bfa, #10b981);
+            color: #fff;
+            transform: translateY(-5px);
+            border-color: transparent;
+        }
+
+        .footer-links h4 {
+            font-size: 18px;
+            margin-bottom: 25px;
+            color: #a78bfa;
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links ul li {
+            margin-bottom: 15px;
+        }
+
+        .footer-links ul li a {
+            color: #8b8b8b;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 15px;
+        }
+
+        .footer-links ul li a:hover {
+            color: #a78bfa;
+            padding-left: 5px;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: #6b6b6b;
+            font-size: 15px;
+        }
+
+        /* Scroll to top button */
+        .scroll-top {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            width: 55px;
+            height: 55px;
+            background: linear-gradient(135deg, #a78bfa, #10b981);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(100px);
+            transition: all 0.4s;
+            z-index: 999;
+            box-shadow: 0 10px 30px rgba(167, 139, 250, 0.4);
+        }
+
+        .scroll-top.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .scroll-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(167, 139, 250, 0.6);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu {
+                display: flex;
+            }
+
+            .hero {
+                flex-direction: column;
+                text-align: center;
+                padding-top: 140px;
+            }
+
+            h1 {
+                font-size: 52px;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .hero-stats {
+                justify-content: center;
+            }
+
+            .dashboard-mockup {
+                margin-top: 60px;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+                gap: 40px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 42px;
+            }
+
+            .section-title {
+                font-size: 38px;
+            }
+
+            .cta-section h2 {
+                font-size: 42px;
+            }
+
+            .hero-text {
+                font-size: 18px;
+            }
+
+            .features-grid,
+            .courses-grid,
+            .testimonials-grid,
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-card.featured {
+                transform: scale(1);
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+
+            .btn-primary,
+            .btn-secondary {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav id="navbar">
+        <div class="logo">EduGrow</div>
+        <div class="nav-links">
+            <a href="#home">Home</a>
+            <a href="#features">Features</a>
+            <a href="#courses">Courses</a>
+            <a href="#testimonials">Testimonials</a>
+            <a href="#pricing">Pricing</a>
+            <button class="cta-nav">Daftar Gratis</button>
+        </div>
+        <div class="mobile-menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <div class="hero-badge">Platform Pembelajaran #1 di Indonesia</div>
+            <h1>Wujudkan Potensi Terbaikmu Bersama Kami</h1>
+            <p class="hero-text">Bergabunglah dengan 100,000+ pembelajar yang telah mengubah karir mereka. Akses ratusan course premium, mentor berpengalaman, dan komunitas yang supportif untuk mencapai kesuksesan.</p>
+            <div class="hero-buttons">
+                <button class="btn-primary">
+                    🚀 Mulai Belajar Gratis
+                </button>
+                <button class="btn-secondary">
+                    ▶ Tonton Demo
+                </button>
+            </div>
+            <div class="hero-stats">
+                <div class="stat">
+                    <div class="stat-number">100K+</div>
+                    <div class="stat-label">Siswa Aktif</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">2,500+</div>
+                    <div class="stat-label">Video Course</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">500+</div>
+                    <div class="stat-label">Expert Mentors</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">98%</div>
+                    <div class="stat-label">Satisfaction Rate</div>
+                </div>
+            </div>
+        </div>
+        <div class="hero-image">
+            <div class="dashboard-mockup">
+                <div class="mockup-header">
+                    <div class="mockup-dot"></div>
+                    <div class="mockup-dot"></div>
+                    <div class="mockup-dot"></div>
+                </div>
+                <div class="mockup-content">
+                    <div class="mockup-card"></div>
+                    <div class="mockup-card"></div>
+                    <div class="mockup-card"></div>
+                    <div class="mockup-card"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trusted By Section -->
+    <section class="trusted-by">
+        <h3>Dipercaya oleh perusahaan terkemuka</h3>
+        <div class="logos">
+            <div class="logo-item">Google</div>
+            <div class="logo-item">Microsoft</div>
+            <div class="logo-item">Amazon</div>
+            <div class="logo-item">Meta</div>
+            <div class="logo-item">Apple</div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="section-header">
+            <div class="section-tag">✨ Keunggulan Kami</div>
+            <h2 class="section-title">Mengapa EduGrow Pilihan Terbaik?</h2>
+            <p class="section-subtitle">Platform pembelajaran online yang dirancang khusus untuk memaksimalkan potensi Anda dengan teknologi terkini dan metode pembelajaran yang efektif.</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🎓</div>
+                <h3 class="feature-title">Kurikulum Premium</h3>
+                <p class="feature-desc">Materi pembelajaran yang disusun oleh para ahli industri dengan pengalaman puluhan tahun. Setiap course dirancang untuk memberikan skill praktis yang langsung applicable.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3 class="feature-title">Belajar Fleksibel</h3>
+                <p class="feature-desc">Akses materi 24/7 dari perangkat apa saja. Belajar sesuai pace Anda sendiri tanpa batasan waktu dengan lifetime access untuk setiap course yang dibeli.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">👨‍🏫</div>
+                <h3 class="feature-title">Mentor Berpengalaman</h3>
+                <p class="feature-desc">Didukung oleh 500+ mentor profesional yang siap membimbing perjalanan belajar Anda. Live mentoring session setiap minggu untuk menjawab pertanyaan Anda.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🌐</div>
+                <h3 class="feature-title">Komunitas Global</h3>
+                <p class="feature-desc">Bergabung dengan komunitas pembelajar dari 50+ negara. Networking, kolaborasi, dan berbagi pengalaman dengan sesama learners di seluruh dunia.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🏆</div>
+                <h3 class="feature-title">Sertifikat Terverifikasi</h3>
+                <p class="feature-desc">Dapatkan sertifikat yang diakui oleh lebih dari 1000+ perusahaan global. Tingkatkan CV dan LinkedIn Anda dengan kredensial yang valuable.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3 class="feature-title">Project-Based Learning</h3>
+                <p class="feature-desc">Belajar sambil praktek dengan real-world projects. Bangun portofolio yang impressive untuk meningkatkan peluang karir Anda.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3 class="feature-title">Progress Tracking</h3>
+                <p class="feature-desc">Monitor perkembangan belajar Anda dengan dashboard analytics yang detail. Set goals dan achieve milestones dengan sistem gamification yang engaging.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💼</div>
+                <h3 class="feature-title">Career Support</h3>
+                <p class="feature-desc">Dapatkan career coaching, resume review, dan akses ke job board eksklusif dengan ratusan peluang kerja dari partner perusahaan kami.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔄</div>
+                <h3 class="feature-title">Update Berkelanjutan</h3>
+                <p class="feature-desc">Course content yang selalu diupdate mengikuti perkembangan industri terkini. Tidak ada konten yang outdated, semuanya fresh dan relevan.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Courses Section -->
+    <section class="courses" id="courses">
+        <div class="section-header">
+            <div class="section-tag">📚 Course Populer</div>
+            <h2 class="section-title">Temukan Course yang Tepat untuk Anda</h2>
+            <p class="section-subtitle">Pilihan course terlengkap dalam berbagai kategori dari teknologi, bisnis, design, hingga personal development.</p>
+        </div>
+        <div class="courses-grid">
+            <div class="course-card">
+                <div class="course-image">💻</div>
+                <div class="course-content">
+                    <span class="course-category">Web Development</span>
+                    <h3 class="course-title">Full Stack Web Development Masterclass</h3>
+                    <p class="course-desc">Pelajari HTML, CSS, JavaScript, React, Node.js dan bangun 10+ real-world projects profesional.</p>
+                    <div class="course-footer">
+                        <div class="course-rating">⭐ 4.9 (12,543)</div>
+                        <div class="course-students">45K siswa</div>
+                    </div>
+                </div>
+            </div>
+            <div class="course-card">
+                <div class="course-image">🎨</div>
+                <div class="course-content">
+                    <span class="course-category">UI/UX Design</span>
+                    <h3 class="course-title">UI/UX Design Complete Guide</h3>
+                    <p class="course-desc">Master Figma, design principles, user research, dan create stunning interfaces yang user-friendly.</p>
+                    <div class="course-footer">
+                        <div class="course-rating">⭐ 4.8 (8,932)</div>
+                        <div class="course-students">32K siswa</div>
+                    </div>
+                </div>
+            </div>
+            <div class="course-card">
+                <div class="course-image">🤖</div>
+                <div class="course-content">
+                    <span class="course-category">Data Science</span>
+                    <h3 class="course-title">Data Science & Machine Learning A-Z</h3>
+                    <p class="course-desc">Python, Pandas, Scikit-learn, TensorFlow - dari basic hingga advanced AI applications.</p>
+                    <div class="course-footer">
+                        <div class="course-rating">⭐ 4.9 (15,234)</div>
+                        <div class="course-students">56K siswa</div>
+                    </div>
+                </div>
+            </div>
+            <div class="course-card">
+                <div class="course-image">📱</div>
+                <div class="course-content">
+                    <span class="course-category">Mobile Development</span>
+                    <h3 class="course-title">React Native: Build iOS & Android Apps</h3>
+                    <p class="course-desc">Create cross-platform mobile apps dengan React Native dan deploy ke App Store & Play Store.</p>
+                    <div class="course-footer">
+                        <div class="course-rating">⭐ 4.7 (6,721)</div>
+                        <div class="course-students">28K siswa</div>
+                    </div>
+                </div>
+            </div>
+            <div class="course-card">
+                <div class="course-image">📈</div>
+                <div class="course-content">
+                    <span class="course-category">Digital Marketing</span>
+                    <h3 class="course-title">Digital Marketing Mastery 2025</h3>
+                    <p class="course-desc">SEO, SEM, Social Media Marketing, Email Marketing, dan Analytics untuk grow your business online.</p>
+                    <div class="course-footer">
+                        <div class="course-rating">⭐ 4.8 (11,456)</div>
+                        <div class="course-students">42K siswa</div>
+                    </div>
+                </div>
+            </div>
+            <div class="course-card">
+                <div class="course-image">🔒</div>
+                <div class="course-content">
+                    <span class="course-category">Cybersecurity</span>
+                    <h3 class="course-title">Ethical Hacking & Cybersecurity Pro</h3>
+                    <p class="course-desc">Learn penetration testing, network security, dan protect systems dari cyber threats.</p>
+                    <div class="course-footer">
+                        <div class="course-rating">⭐ 4.9 (7,892)</div>
+                        <div class="course-students">25K siswa</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials" id="testimonials">
+        <div class="section-header">
+            <div class="section-tag">💬 Testimoni</div>
+            <h2 class="section-title">Apa Kata Mereka tentang EduGrow?</h2>
+            <p class="section-subtitle">Ribuan siswa telah merasakan transformasi karir dan skill mereka bersama kami.</p>
+        </div>
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <p class="testimonial-text">EduGrow benar-benar mengubah karir saya! Dari yang tadinya tidak tahu coding sama sekali, sekarang saya sudah bekerja sebagai Full Stack Developer di perusahaan tech startup. Materinya sangat lengkap dan mentornya super helpful!</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">BW</div>
+                    <div class="author-info">
+                        <h4>Budi Wirawan</h4>
+                        <p>Full Stack Developer</p>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <p class="testimonial-text">Sebagai UI/UX Designer, saya selalu perlu update skill. EduGrow menyediakan course yang selalu up-to-date dengan trend terbaru. Project-based learning nya juga sangat membantu build portofolio saya.</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">SR</div>
+                    <div class="author-info">
+                        <h4>Sarah Rahmawati</h4>
+                        <p>Senior UI/UX Designer</p>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <p class="testimonial-text">Investasi terbaik untuk career development! Saya ambil course Data Science dan dalam 6 bulan sudah dapat job offer dengan salary 2x lipat. Komunitasnya juga sangat supportive dan active.</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">AP</div>
+                    <div class="author-info">
+                        <h4>Ahmad Pratama</h4>
+                        <p>Data Scientist</p>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <p class="testimonial-text">Fleksibilitas belajarnya luar biasa! Sebagai working mom, saya bisa belajar kapan saja. Interface nya user-friendly dan materinya dijelaskan dengan sangat clear. Highly recommended!</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">LK</div>
+                    <div class="author-info">
+                        <h4>Linda Kusuma</h4>
+                        <p>Digital Marketing Specialist</p>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <p class="testimonial-text">Course nya sangat worth it! Tidak hanya teori, tapi banyak hands-on practice dan real projects. Mentor nya juga responsif banget kalau ada pertanyaan. 5 bintang dari saya!</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">DF</div>
+                    <div class="author-info">
+                        <h4>Doni Firmansyah</h4>
+                        <p>Mobile App Developer</p>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <p class="testimonial-text">Platform e-learning terbaik yang pernah saya coba! Dari segi konten, instruktur, sampai career support nya sangat comprehensive. Berkat EduGrow, saya berhasil career switch ke tech industry.</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">MH</div>
+                    <div class="author-info">
+                        <h4>Maya Handayani</h4>
+                        <p>Product Manager</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing" id="pricing">
+        <div class="section-header">
+            <div class="section-tag">💎 Harga</div>
+            <h2 class="section-title">Pilih Paket yang Sesuai untuk Anda</h2>
+            <p class="section-subtitle">Investasi terbaik untuk masa depan karir Anda dengan harga yang terjangkau.</p>
+        </div>
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <div class="pricing-plan">BASIC</div>
+                <div class="pricing-price">Free</div>
+                <div class="pricing-period">Selamanya gratis</div>
+                <ul class="pricing-features">
+                    <li>Akses 50+ course gratis</li>
+                    <li>Video berkualitas HD</li>
+                    <li>Komunitas pembelajar</li>
+                    <li>Sertifikat completion</li>
+                    <li>Mobile & desktop access</li>
+                </ul>
+                <button class="pricing-button">Mulai Gratis</button>
+            </div>
+            <div class="pricing-card featured">
+                <div class="pricing-plan">PRO</div>
+                <div class="pricing-price">Rp 299K</div>
+                <div class="pricing-period">Per bulan</div>
+                <ul class="pricing-features">
+                    <li>Akses SEMUA course (2500+)</li>
+                    <li>Offline video download</li>
+                    <li>Live mentoring session</li>
+                    <li>Sertifikat terverifikasi</li>
+                    <li>Priority support 24/7</li>
+                    <li>Career guidance</li>
+                    <li>Exclusive community</li>
+                    <li>Job board access</li>
+                </ul>
+                <button class="pricing-button">Mulai Sekarang</button>
+            </div>
+            <div class="pricing-card">
+                <div class="pricing-plan">LIFETIME</div>
+                <div class="pricing-price">Rp 2.9JT</div>
+                <div class="pricing-period">Sekali bayar</div>
+                <ul class="pricing-features">
+                    <li>Semua fitur PRO</li>
+                    <li>Akses selamanya</li>
+                    <li>Free future updates</li>
+                    <li>1-on-1 career mentoring</li>
+                    <li>Portfolio review</li>
+                    <li>Interview preparation</li>
+                    <li>VIP community access</li>
+                </ul>
+                <button class="pricing-button">Beli Sekarang</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2>Siap Memulai Perjalanan Belajar Anda?</h2>
+            <p>Bergabunglah dengan ribuan pelajar lainnya dan raih kesuksesan Anda hari ini!</p>
+            <button class="btn-white">🚀 Daftar Gratis Sekarang</button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-about">
+                <h3>EduGrow</h3>
+                <p>Platform pembelajaran online terlengkap dan terpercaya untuk mengembangkan skill Anda. Raih impian karir bersama mentor terbaik dan komunitas yang supportif.</p>
+                <div class="social-links">
+                    <div class="social-link">f</div>
+                    <div class="social-link">t</div>
+                    <div class="social-link">in</div>
+                    <div class="social-link">ig</div>
+                </div>
+            </div>
+            <div class="footer-links">
+                <h4>Course</h4>
+                <ul>
+                    <li><a href="#">Web Development</a></li>
+                    <li><a href="#">UI/UX Design</a></li>
+                    <li><a href="#">Data Science</a></li>
+                    <li><a href="#">Digital Marketing</a></li>
+                    <li><a href="#">Mobile Development</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Press</a></li>
+                    <li><a href="#">Partners</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Support</h4>
+                <ul>
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 EduGrow. All rights reserved. Made with 💚 in Indonesia</p>
+        </div>
+    </footer>
+
+    <!-- Scroll to top button -->
+    <div class="scroll-top" id="scrollTop">↑</div>
+
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+
+            // Scroll to top button
+            const scrollTop = document.getElementById('scrollTop');
+            if (window.scrollY > 500) {
+                scrollTop.classList.add('visible');
+            } else {
+                scrollTop.classList.remove('visible');
+            }
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Scroll to top functionality
+        document.getElementById('scrollTop').addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Button interactions
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 100);
+            });
+        });
+
+        // Card hover effects with dynamic borders
+        document.querySelectorAll('.feature-card, .course-card, .testimonial-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.borderColor = 'rgba(167, 139, 250, 0.5)';
+            });
+            card.addEventListener('mouseleave', function() {
+                this.style.borderColor = '';
+            });
+        });
+
+        // Intersection Observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all cards for animation
+        document.querySelectorAll('.feature-card, .course-card, .testimonial-card, .pricing-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(card);
+        });
+
+        // Mobile menu toggle (basic functionality)
+        document.querySelector('.mobile-menu').addEventListener('click', function() {
+            this.classList.toggle('active');
+            // Add your mobile menu logic here
+        });
+    </script>
+</body>
+</html>
