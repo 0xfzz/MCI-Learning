@@ -13,14 +13,24 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     /**
+     * The primary key associated with the table.
+     *
+     * @var string
+     */
+    protected $primaryKey = "user_id";
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var list<string>
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        "username",
+        "email",
+        "password",
+        "role",
+        "name",
+        "avatar",
     ];
 
     /**
@@ -28,10 +38,7 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    protected $hidden = ["password", "remember_token"];
 
     /**
      * Get the attributes that should be cast.
@@ -41,8 +48,89 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            "email_verified_at" => "datetime",
+            "password" => "hashed",
         ];
+    }
+
+    /**
+     * Get the courses taught by the instructor.
+     */
+    public function taughtCourses()
+    {
+        return $this->hasMany(Course::class, "instructor_id", "user_id");
+    }
+
+    /**
+     * Get the enrollments for the user.
+     */
+    public function enrollments()
+    {
+        return $this->hasMany(Enrollment::class, "user_id", "user_id");
+    }
+
+    /**
+     * Get the courses the user is enrolled in.
+     */
+    public function enrolledCourses()
+    {
+        return $this->belongsToMany(
+            Course::class,
+            "enrollments",
+            "user_id",
+            "course_id",
+            "user_id",
+            "course_id",
+        )
+            ->withPivot("enrolled_at", "is_completed", "completed_at")
+            ->withTimestamps();
+    }
+
+    /**
+     * Get the lesson progress for the user.
+     */
+    public function lessonProgress()
+    {
+        return $this->hasMany(LessonProgress::class, "user_id", "user_id");
+    }
+
+    /**
+     * Get the payments made by the user.
+     */
+    public function payments()
+    {
+        return $this->hasMany(Payment::class, "user_id", "user_id");
+    }
+
+    /**
+     * Get the reviews written by the user.
+     */
+    public function reviews()
+    {
+        return $this->hasMany(Review::class, "user_id", "user_id");
+    }
+
+    /**
+     * Check if the user is an admin.
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role === "admin";
+    }
+
+    /**
+     * Check if the user is an instructor.
+     */
+    public function isInstructor(): bool
+    {
+        return $this->role === "instructor";
+    }
+
+    /**
+     * Check if the user is a student.
+     */
+    public function isStudent(): bool
+    {
+        return $this->role === "student";
     }
 }

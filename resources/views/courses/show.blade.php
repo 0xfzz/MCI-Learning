@@ -2,21 +2,7 @@
 
 @section('title', 'COURSUE - Course Platform')
 
-@section('search-place    <button class="w-full px-6 py-3 [background:#3b82f6] text-white rounded-xl font-semibold hover:[background:#2563eb] transition hover:-translate-y-1 [box-shadow:0_6px_16px_rgba(59,130,246,0.3)]">
-        Download Now 📥
-    </button>
-</div>
-@endsection
-
-@section('right-sidebar')
-<!-- Playlist Sidebar -->
-<aside class="bg-white border-l border-gray-200 p-6 overflow-y-auto hidden xl:block">
-    <div class="flex items-center justify-between mb-6">
-        <h3 class="font-bold [color:#1f2937] text-lg">Playlist Tutorial</h3>
-        <button class="[color:#7c3aed] text-sm font-semibold underline hover:[color:#6d28d9]" onclick="toggleAllCategories()">
-            Expand All
-        </button>
-    </div>der', 'Cari tutorial disini...')
+@section('search-placeholder', 'Cari tutorial disini...')
 
 @section('content')
 <!-- Breadcrumb -->
