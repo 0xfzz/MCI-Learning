@@ -37,9 +37,16 @@ class LoginController extends Controller
         $request->session()->regenerate();
 
         $user = $request->user();
-        $redirectRoute = ($user instanceof User && $user->isAdmin())
-            ? route('admin.dashboard')
-            : route('dashboard');
+
+        if (! $user instanceof User) {
+            return redirect()->intended(route('dashboard'));
+        }
+
+        $redirectRoute = match (true) {
+            $user->isAdmin() => route('admin.dashboard'),
+            $user->isInstructor() => route('instructor.courses.index'),
+            default => route('dashboard'),
+        };
 
         return redirect()->intended($redirectRoute);
     }

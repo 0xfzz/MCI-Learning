@@ -29,7 +29,7 @@
     @stack('styles')
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 font-sans antialiased text-gray-900 dark:text-gray-100">
-    <div class="grid lg:grid-cols-[260px_1fr] xl:grid-cols-[260px_1fr_340px] h-screen overflow-hidden bg-white dark:bg-gray-900">
+    <div class="grid lg:grid-cols-[260px_1fr] xl:grid-cols-[260px_1fr] h-screen overflow-hidden bg-white dark:bg-gray-900">
         <!-- Left Sidebar -->
         @include('components.sidebar')
 
@@ -81,11 +81,6 @@
 
             @yield('content')
         </main>
-
-        <!-- Right Sidebar (Optional) -->
-        <div class="bg-white dark:bg-gray-900 border-l border-gray-200 dark:border-gray-800">
-            @yield('right-sidebar')
-        </div>
     </div>
     @stack('scripts')
 </body>

@@ -140,5 +140,17 @@
                 </a>
             @endif
         @endif
+
+        @auth
+            <div class="mt-8 border-t border-dashed border-gray-200 dark:border-gray-800 pt-4 px-2">
+                <form method="POST" action="{{ route('logout') }}" class="w-full">
+                    @csrf
+                    <button type="submit" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 text-sm text-rose-500 hover:border-rose-400/60 transition">
+                        <span class="text-lg w-5 text-center"><i class="fa-solid fa-arrow-right-from-bracket"></i></span>
+                        <span>Keluar</span>
+                    </button>
+                </form>
+            </div>
+        @endauth
     </nav>
 </aside>
