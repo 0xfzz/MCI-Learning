@@ -72,9 +72,9 @@
         </div>
     </section>
 
-    <article class="relative z-10 max-w-3xl mx-auto px-6 lg:px-10 -mt-24">
-        <div class="rounded-[2.5rem] border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-8 lg:p-12 shadow-[0_22px_60px_rgba(2,95,90,0.12)] space-y-10">
-            <div class="prose prose-lg dark:prose-invert max-w-none prose-headings:[color:#025f5a] dark:prose-headings:text-teal-200 prose-a:text-teal-600 dark:prose-a:text-teal-300 prose-strong:text-gray-900 dark:prose-strong:text-white">
+    <article class="relative z-10 max-w-5xl mx-auto px-6 lg:px-16 -mt-24">
+    <div class="rounded-[2.75rem] border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-12 lg:p-20 shadow-[0_28px_80px_rgba(2,95,90,0.14)] space-y-14">
+            <div class="prose prose-2xl dark:prose-invert max-w-none prose-headings:[color:#025f5a] dark:prose-headings:text-teal-200 prose-a:text-teal-600 dark:prose-a:text-teal-300 prose-strong:text-gray-900 dark:prose-strong:text-white">
                 {!! $blog->content_html !!}
             </div>
         </div>
