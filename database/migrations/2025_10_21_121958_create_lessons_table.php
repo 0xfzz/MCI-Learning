@@ -27,7 +27,7 @@ return new class extends Migration {
             $table->integer("order_number");
             $table->boolean("is_section")->default(false); // true = section, false = video lesson
             $table->boolean("is_free")->default(false); // free preview
-            $table->timestamps();
+            $table->timestamp("created_at")->useCurrent();
         });
     }
 

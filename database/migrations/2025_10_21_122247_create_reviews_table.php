@@ -22,7 +22,7 @@ return new class extends Migration {
                 ->onDelete("cascade");
             $table->integer("rating"); // 1-5
             $table->text("comment")->nullable();
-            $table->timestamps();
+            $table->timestamp("created_at")->useCurrent();
 
             // Unique index to ensure a user can only review a course once
             $table->unique(["user_id", "course_id"]);

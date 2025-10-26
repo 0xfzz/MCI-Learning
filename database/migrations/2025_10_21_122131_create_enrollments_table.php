@@ -23,7 +23,6 @@ return new class extends Migration {
             $table->timestamp("enrolled_at")->useCurrent();
             $table->boolean("is_completed")->default(false);
             $table->timestamp("completed_at")->nullable();
-            $table->timestamps();
 
             // Unique index to ensure a user can only enroll once per course
             $table->unique(["user_id", "course_id"]);

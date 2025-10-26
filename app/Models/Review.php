@@ -10,6 +10,20 @@ class Review extends Model
     use HasFactory;
 
     /**
+     * The name of the "created at" column.
+     *
+     * @var string
+     */
+    const CREATED_AT = "created_at";
+
+    /**
+     * The name of the "updated at" column.
+     *
+     * @var string|null
+     */
+    const UPDATED_AT = null;
+
+    /**
      * The primary key associated with the table.
      *
      * @var string

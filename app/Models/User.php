@@ -13,6 +13,13 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
+
+    /**
      * The primary key associated with the table.
      *
      * @var string
@@ -38,7 +45,7 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
-    protected $hidden = ["password", "remember_token"];
+    protected $hidden = ["password"];
 
     /**
      * Get the attributes that should be cast.
@@ -48,9 +55,17 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            "email_verified_at" => "datetime",
             "password" => "hashed",
+            "created_at" => "datetime",
         ];
+    }
+
+    /**
+     * Disable remember token support since the column does not exist.
+     */
+    public function getRememberTokenName()
+    {
+        return null;
     }
 
     /**
@@ -81,9 +96,7 @@ class User extends Authenticatable
             "course_id",
             "user_id",
             "course_id",
-        )
-            ->withPivot("enrolled_at", "is_completed", "completed_at")
-            ->withTimestamps();
+        )->withPivot("enrolled_at", "is_completed", "completed_at");
     }
 
     /**

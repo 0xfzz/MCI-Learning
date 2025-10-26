@@ -22,9 +22,9 @@ return new class extends Migration {
                 ->onDelete("cascade");
             $table->integer("amount");
             $table->string("status")->default("pending"); // pending, success, failed
-            $table->string("payment_code")->unique();
+            $table->string("bukti_transfer")->nullable(); // path/url to transfer receipt image
             $table->timestamp("paid_at")->nullable();
-            $table->timestamps();
+            $table->timestamp("created_at")->useCurrent();
         });
     }
 

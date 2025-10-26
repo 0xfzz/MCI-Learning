@@ -36,6 +36,17 @@
             <span>Leaderboard</span>
         </a>
 
+        @if(auth()->check() && auth()->user() instanceof \App\Models\User && auth()->user()->isAdmin())
+            <div class="text-xs text-gray-400 font-semibold uppercase tracking-wider mt-6 mb-3 px-2">
+                Admin
+            </div>
+
+        <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition mb-1 {{ request()->routeIs('admin.*') ? '[background:#e6f7f6] [color:#025f5a] font-semibold dark:[background:#01444022] dark:text-white' : '' }}">
+                <span class="text-lg w-5 text-center"><i class="fa-solid fa-shield-halved"></i></span>
+                <span>Admin Dashboard</span>
+            </a>
+        @endif
+
         <div class="text-xs text-gray-400 font-semibold uppercase tracking-wider mt-6 mb-3 px-2">
             Kategori
         </div>
