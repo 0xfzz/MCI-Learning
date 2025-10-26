@@ -299,7 +299,7 @@ class DatabaseSeeder extends Seeder
             "course_id" => $reactCourse->course_id,
             "amount" => 199000,
             "status" => "success",
-            "payment_code" => "PAY-" . strtoupper(uniqid()),
+            "bukti_transfer" => "receipts/pay-react-1.jpg",
             "paid_at" => now()->subDays(10),
         ]);
 
@@ -308,7 +308,7 @@ class DatabaseSeeder extends Seeder
             "course_id" => $laravelCourse->course_id,
             "amount" => 399000,
             "status" => "success",
-            "payment_code" => "PAY-" . strtoupper(uniqid()),
+            "bukti_transfer" => "receipts/pay-laravel-1.jpg",
             "paid_at" => now()->subDays(7),
         ]);
 
@@ -317,7 +317,7 @@ class DatabaseSeeder extends Seeder
             "course_id" => $reactCourse->course_id,
             "amount" => 199000,
             "status" => "pending",
-            "payment_code" => "PAY-" . strtoupper(uniqid()),
+            "bukti_transfer" => null,
             "paid_at" => null,
         ]);
 

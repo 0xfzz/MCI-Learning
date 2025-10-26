@@ -22,7 +22,6 @@ return new class extends Migration {
                 ->onDelete("cascade");
             $table->boolean("is_completed")->default(false);
             $table->timestamp("completed_at")->nullable();
-            $table->timestamps();
 
             // Unique index to ensure a user can only have one progress record per lesson
             $table->unique(["user_id", "lesson_id"]);

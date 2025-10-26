@@ -31,7 +31,7 @@ return new class extends Migration {
             $table->string("whatsapp_group")->nullable();
             $table->string("source_code_link")->nullable();
             $table->string("status")->default("draft"); // draft, published
-            $table->timestamps();
+            $table->timestamp("created_at")->useCurrent();
         });
     }
 

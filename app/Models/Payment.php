@@ -10,6 +10,20 @@ class Payment extends Model
     use HasFactory;
 
     /**
+     * The name of the "created at" column.
+     *
+     * @var string
+     */
+    const CREATED_AT = "created_at";
+
+    /**
+     * The name of the "updated at" column.
+     *
+     * @var string|null
+     */
+    const UPDATED_AT = null;
+
+    /**
      * The primary key associated with the table.
      *
      * @var string
@@ -26,7 +40,7 @@ class Payment extends Model
         "course_id",
         "amount",
         "status",
-        "payment_code",
+        "bukti_transfer",
         "paid_at",
     ];
 
@@ -40,6 +54,7 @@ class Payment extends Model
         return [
             "amount" => "integer",
             "paid_at" => "datetime",
+            "created_at" => "datetime",
         ];
     }
 
@@ -128,15 +143,4 @@ class Payment extends Model
         return $query->where("status", "failed");
     }
 
-    /**
-     * Generate a unique payment code.
-     */
-    public static function generatePaymentCode(): string
-    {
-        do {
-            $code = "PAY-" . strtoupper(uniqid());
-        } while (self::where("payment_code", $code)->exists());
-
-        return $code;
-    }
 }

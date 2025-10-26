@@ -1,0 +1,16 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+
+class AdminDashboardController extends Controller
+{
+    /**
+     * Show the admin dashboard.
+     */
+    public function __invoke()
+    {
+        return view('admin.dashboard');
+    }
+}
