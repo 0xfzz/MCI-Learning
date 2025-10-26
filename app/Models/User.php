@@ -146,4 +146,9 @@ class User extends Authenticatable
     {
         return $this->role === "student";
     }
+
+    public function getRouteKeyName(): string
+    {
+        return "user_id";
+    }
 }
