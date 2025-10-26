@@ -20,3 +20,8 @@ Route::get('/courses', function () {
 Route::get('/courses/{id}', function ($id) {
     return view('courses.show');
 })->name('courses.show');
+
+// Blog
+Route::get('/blog', function () {
+    return view('blog.index');
+})->name('blog.index');
