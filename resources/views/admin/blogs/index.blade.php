@@ -65,6 +65,12 @@
                         </td>
                         <td class="px-6 py-5 align-top">
                             <div class="flex items-center justify-end gap-2">
+                                @if ($blog->status === 'published')
+                                    <a href="{{ route('blog.show', $blog->slug) }}" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-sky-500/40 text-sky-600 dark:text-sky-300 hover:bg-sky-50/70 dark:hover:bg-sky-500/10 transition text-sm font-semibold">
+                                        <i class="fa-solid fa-up-right-from-square"></i>
+                                        Lihat
+                                    </a>
+                                @endif
                                 <a href="{{ route('admin.blogs.edit', $blog) }}" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-teal-500/40 text-teal-600 dark:text-teal-300 hover:bg-teal-50/70 dark:hover:bg-teal-500/10 transition text-sm font-semibold">
                                     <i class="fa-solid fa-pen"></i>
                                     Edit

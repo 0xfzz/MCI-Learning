@@ -46,7 +46,11 @@
 
     <div>
         <label for="markdown-editor" class="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">Konten Markdown</label>
-        <textarea id="markdown-editor" name="content" rows="12">{{ old('content', $blog->content ?? '') }}</textarea>
+        <textarea
+            id="markdown-editor"
+            name="content"
+            rows="12"
+            data-blog-id="{{ $blog->id ?? 'new' }}">{{ old('content', $blog->content ?? '') }}</textarea>
         @error('content')
             <p class="mt-2 text-sm text-rose-500">{{ $message }}</p>
         @enderror
@@ -77,16 +81,21 @@
                 }
 
                 if (!textarea.dataset.easymdeInitialized) {
-                    // Initialize Markdown editor once per page load
-                    new EasyMDE({
+                    const blogId = textarea.dataset.blogId || 'new';
+                    const editor = new EasyMDE({
                         element: textarea,
                         spellChecker: false,
+                        initialValue: textarea.value,
                         autosave: {
                             enabled: true,
-                            uniqueId: 'mci-admin-blog-editor',
+                            uniqueId: `mci-admin-blog-editor-${blogId}`,
                             delay: 1000,
                         },
                         placeholder: 'Tulis konten artikel dalam format Markdown...'
+                    });
+
+                    editor.codemirror.on('change', () => {
+                        textarea.value = editor.value();
                     });
                     textarea.dataset.easymdeInitialized = 'true';
                 }

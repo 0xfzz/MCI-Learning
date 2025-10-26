@@ -1,7 +1,8 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminDashboardController;
-use App\Http\Controllers\Admin\BlogController;
+use App\Http\Controllers\Admin\BlogController as AdminBlogController;
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use Illuminate\Support\Facades\Route;
@@ -18,7 +19,7 @@ Route::get('/dashboard', function () {
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', AdminDashboardController::class)->name('dashboard');
-    Route::resource('blogs', BlogController::class);
+    Route::resource('blogs', AdminBlogController::class);
 });
 
 // Courses
@@ -55,6 +56,5 @@ Route::post('/logout', [LoginController::class, 'destroy'])
     ->name('logout');
 
 // Blog
-Route::get('/blog', function () {
-    return view('blog.index');
-})->name('blog.index');
+Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
+Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');

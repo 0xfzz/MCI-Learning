@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@php
+    use Illuminate\Support\Str;
+@endphp
+
 @section('title', 'MCI Blog - Wawasan Teknologi & Transformasi Karir')
 
 @section('content')
@@ -67,34 +71,70 @@
                 </div>
             </div>
             <div class="bg-white/90 dark:bg-gray-900/60 border-2 border-teal-500/30 dark:border-teal-400/30 rounded-3xl p-8 shadow-[0_20px_60px_rgba(20,184,166,0.2)] backdrop-blur-xl space-y-6">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-xs uppercase tracking-[0.3em] text-gray-400">Topik Hangat</p>
-                        <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Inside MCI Community</h3>
+                @if ($heroPost)
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-xs uppercase tracking-[0.3em] text-gray-400">Sorotan Minggu Ini</p>
+                            <h3 class="text-2xl font-bold text-gray-900 dark:text-white line-clamp-2">{{ $heroPost->title }}</h3>
+                        </div>
+                        <span class="px-4 py-1 rounded-full text-xs font-semibold bg-teal-100 text-teal-700 dark:bg-teal-500/10 dark:text-teal-200">
+                            {{ $heroPost->created_at?->translatedFormat('d M Y') ?? '—' }}
+                        </span>
                     </div>
-                    <span class="px-4 py-1 rounded-full text-xs font-semibold bg-teal-100 text-teal-700 dark:bg-teal-500/10 dark:text-teal-200">Edisi Oktober</span>
-                </div>
-                <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
-                    Mentor kami merangkum highlight pembelajaran sepekan, best practice projek open source, dan roadmap karir yang bisa langsung kamu adaptasi.
-                </p>
-                <div class="grid grid-cols-2 gap-4 text-sm">
-                    <div class="p-4 rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
-                        <p class="text-xs uppercase text-gray-400 mb-2">Kategori Populer</p>
-                        <p class="font-semibold text-gray-900 dark:text-white">AI & Machine Learning</p>
+                    <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
+                        {{ $heroPost->excerpt }}
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+                        <div class="p-4 rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+                            <p class="text-xs uppercase text-gray-400 mb-2">Penulis</p>
+                            <p class="font-semibold text-gray-900 dark:text-white">{{ $heroPost->author ?? 'Tim MCI' }}</p>
+                        </div>
+                        <div class="p-4 rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+                            <p class="text-xs uppercase text-gray-400 mb-2">Waktu baca</p>
+                            <p class="font-semibold text-gray-900 dark:text-white">{{ $heroPost->reading_time }}</p>
+                        </div>
+                        <div class="p-4 rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+                            <p class="text-xs uppercase text-gray-400 mb-2">Dipublikasikan</p>
+                            <p class="font-semibold text-gray-900 dark:text-white">{{ $heroPost->created_at?->translatedFormat('d M Y, H:i') ?? '—' }}</p>
+                        </div>
+                        <div class="p-4 rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 flex items-center justify-between">
+                            <p class="text-xs uppercase text-gray-400">Aksi</p>
+                            <a href="{{ route('blog.show', $heroPost->slug) }}" class="inline-flex items-center gap-2 text-teal-600 dark:text-teal-200 font-semibold hover:text-teal-500">
+                                Baca Selengkapnya
+                                <i class="fa-solid fa-arrow-right-long"></i>
+                            </a>
+                        </div>
                     </div>
-                    <div class="p-4 rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
-                        <p class="text-xs uppercase text-gray-400 mb-2">Rata-rata waktu baca</p>
-                        <p class="font-semibold text-gray-900 dark:text-white">6 menit</p>
+                @else
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-xs uppercase tracking-[0.3em] text-gray-400">Topik Hangat</p>
+                            <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Inside MCI Community</h3>
+                        </div>
+                        <span class="px-4 py-1 rounded-full text-xs font-semibold bg-teal-100 text-teal-700 dark:bg-teal-500/10 dark:text-teal-200">Edisi Oktober</span>
                     </div>
-                    <div class="p-4 rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
-                        <p class="text-xs uppercase text-gray-400 mb-2">Kontributor</p>
-                        <p class="font-semibold text-gray-900 dark:text-white">35 mentor aktif</p>
+                    <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
+                        Mentor kami merangkum highlight pembelajaran sepekan, best practice projek open source, dan roadmap karir yang bisa langsung kamu adaptasi.
+                    </p>
+                    <div class="grid grid-cols-2 gap-4 text-sm">
+                        <div class="p-4 rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+                            <p class="text-xs uppercase text-gray-400 mb-2">Kategori Populer</p>
+                            <p class="font-semibold text-gray-900 dark:text-white">AI & Machine Learning</p>
+                        </div>
+                        <div class="p-4 rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+                            <p class="text-xs uppercase text-gray-400 mb-2">Rata-rata waktu baca</p>
+                            <p class="font-semibold text-gray-900 dark:text-white">6 menit</p>
+                        </div>
+                        <div class="p-4 rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+                            <p class="text-xs uppercase text-gray-400 mb-2">Kontributor</p>
+                            <p class="font-semibold text-gray-900 dark:text-white">35 mentor aktif</p>
+                        </div>
+                        <div class="p-4 rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+                            <p class="text-xs uppercase text-gray-400 mb-2">Komunitas</p>
+                            <p class="font-semibold text-gray-900 dark:text-white">125K pembaca</p>
+                        </div>
                     </div>
-                    <div class="p-4 rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
-                        <p class="text-xs uppercase text-gray-400 mb-2">Komunitas</p>
-                        <p class="font-semibold text-gray-900 dark:text-white">125K pembaca</p>
-                    </div>
-                </div>
+                @endif
             </div>
         </div>
     </section>
@@ -139,54 +179,124 @@
     <!-- Featured Stories -->
     <section class="py-10">
         <div class="max-w-7xl mx-auto px-6 lg:px-10">
-            <div class="grid lg:grid-cols-[1.4fr_1fr] gap-10">
-                <article class="relative overflow-hidden rounded-3xl border border-gray-200 dark:border-gray-800 bg-gray-900 text-white shadow-[0_22px_55px_rgba(2,95,90,0.25)]">
-                    <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent"></div>
-                    <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1400&q=80" alt="AI collaboration" class="w-full h-full object-cover opacity-60">
-                    <div class="relative p-10 lg:p-12 flex flex-col justify-end min-h-[420px]">
-                        <span class="inline-flex items-center gap-2 px-4 py-2 bg-white/15 rounded-full text-xs font-semibold uppercase tracking-widest">
-                            Future of Work
-                        </span>
-                        <h3 class="mt-6 text-3xl lg:text-4xl font-black leading-tight">
-                            Menggabungkan AI Copilot dengan Workflow Tim Engineering: Panduan Praktis dari Mentor MCI
-                        </h3>
-                        <p class="mt-4 text-gray-200 text-base leading-relaxed">
-                            Temukan framework kolaborasi manusia dan mesin yang terbukti mempercepat delivery produk tanpa mengorbankan kualitas kode ataupun keamanan.
-                        </p>
-                        <div class="mt-8 flex items-center justify-between text-sm text-gray-200">
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center font-semibold">AR</div>
-                                <div>
-                                    <p class="font-semibold">Ayu Rahmadani</p>
-                                    <p class="text-xs text-gray-300">Lead Mentor Machine Learning</p>
+            @if ($heroPost)
+                <div class="grid lg:grid-cols-[1.4fr_1fr] gap-10">
+                    <article class="relative overflow-hidden rounded-3xl border border-gray-200 dark:border-gray-800 bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800 text-white shadow-[0_22px_55px_rgba(2,95,90,0.25)]">
+                        <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(94,234,212,0.2),transparent_60%)]"></div>
+                        <div class="relative p-10 lg:p-12 flex flex-col min-h-[420px]">
+                            <span class="inline-flex items-center gap-2 px-4 py-2 bg-white/15 rounded-full text-xs font-semibold uppercase tracking-widest">
+                                Sorotan Utama
+                            </span>
+                            <a href="{{ route('blog.show', $heroPost->slug) }}" class="mt-6 text-3xl lg:text-4xl font-black leading-tight text-white hover:text-teal-200 transition">
+                                {{ $heroPost->title }}
+                            </a>
+                            <p class="mt-4 text-gray-200 text-base leading-relaxed">
+                                {{ $heroPost->excerpt }}
+                            </p>
+                            <div class="mt-8 flex items-center justify-between text-sm text-gray-200">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-white/15 flex items-center justify-center font-semibold">
+                                        {{ Str::upper(Str::substr($heroPost->author ?? 'MCI', 0, 2)) }}
+                                    </div>
+                                    <div>
+                                        <p class="font-semibold">{{ $heroPost->author ?? 'Tim MCI' }}</p>
+                                        <p class="text-xs text-gray-300">{{ $heroPost->created_at?->translatedFormat('d M Y, H:i') ?? '—' }}</p>
+                                    </div>
                                 </div>
+                                <div class="text-xs uppercase tracking-widest">{{ $heroPost->reading_time }}</div>
                             </div>
-                            <div class="text-xs uppercase tracking-widest">12 menit baca</div>
+                            <a href="{{ route('blog.show', $heroPost->slug) }}" class="mt-6 inline-flex items-center gap-3 text-sm font-semibold text-white hover:text-teal-200 transition">
+                                Baca Selengkapnya
+                                <i class="fa-solid fa-arrow-right-long"></i>
+                            </a>
                         </div>
-                    </div>
-                </article>
+                    </article>
 
-                <div class="space-y-6">
-                    <article class="group p-8 rounded-3xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 hover:-translate-y-1 hover:[border-color:#025f5a] transition-all">
-                        <span class="inline-flex items-center gap-2 px-3 py-1 bg-teal-100 dark:bg-teal-500/10 text-teal-700 dark:text-teal-200 text-xs font-bold uppercase tracking-widest">Community Story</span>
-                        <h3 class="mt-4 text-2xl font-bold text-gray-900 dark:text-white group-hover:text-teal-500">Bangun Portofolio Open Source yang Memikat Rekruter Global</h3>
-                        <p class="mt-3 text-gray-500 dark:text-gray-300 leading-relaxed">Strategi alumni MCI membawa projek komunitas menjadi bukti kompetensi saat proses hiring di perusahaan unicorn Asia Tenggara.</p>
-                        <div class="mt-6 flex items-center justify-between text-sm text-gray-400">
-                            <span>5 menit baca</span>
-                            <span>Dipublikasikan 18 Okt 2025</span>
-                        </div>
-                    </article>
-                    <article class="group p-8 rounded-3xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 hover:-translate-y-1 hover:[border-color:#025f5a] transition-all">
-                        <span class="inline-flex items-center gap-2 px-3 py-1 bg-purple-100 dark:bg-purple-500/10 text-purple-700 dark:text-purple-200 text-xs font-bold uppercase tracking-widest">Leadership</span>
-                        <h3 class="mt-4 text-2xl font-bold text-gray-900 dark:text-white group-hover:text-purple-500">Mendesain Ritual Tech Sync yang Efektif untuk Tim Remote</h3>
-                        <p class="mt-3 text-gray-500 dark:text-gray-300 leading-relaxed">Checklist fasilitasi pertemuan mingguan agar alignment produk dan engineering tetap solid meski tim tersebar lintas zona waktu.</p>
-                        <div class="mt-6 flex items-center justify-between text-sm text-gray-400">
-                            <span>7 menit baca</span>
-                            <span>Dipublikasikan 16 Okt 2025</span>
-                        </div>
-                    </article>
+                    <div class="space-y-6">
+                        @forelse ($secondaryFeatured as $featured)
+                            <article class="group p-8 rounded-3xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 hover:-translate-y-1 hover:[border-color:#025f5a] transition-all">
+                                <span class="inline-flex items-center gap-2 px-3 py-1 bg-teal-100 dark:bg-teal-500/10 text-teal-700 dark:text-teal-200 text-xs font-bold uppercase tracking-widest">Sorotan Blog</span>
+                                <a href="{{ route('blog.show', $featured->slug) }}" class="mt-4 block text-2xl font-bold text-gray-900 dark:text-white group-hover:text-teal-500">
+                                    {{ $featured->title }}
+                                </a>
+                                <p class="mt-3 text-gray-500 dark:text-gray-300 leading-relaxed">{{ $featured->excerpt }}</p>
+                                <div class="mt-6 flex items-center justify-between text-sm text-gray-400">
+                                    <span>{{ $featured->reading_time }}</span>
+                                    <span>Dipublikasikan {{ $featured->created_at?->translatedFormat('d M Y') ?? '—' }}</span>
+                                </div>
+                            </article>
+                        @empty
+                            <article class="group p-8 rounded-3xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+                                <span class="inline-flex items-center gap-2 px-3 py-1 bg-teal-100 dark:bg-teal-500/10 text-teal-700 dark:text-teal-200 text-xs font-bold uppercase tracking-widest">Community Story</span>
+                                <h3 class="mt-4 text-2xl font-bold text-gray-900 dark:text-white">Bangun Portofolio Open Source yang Memikat Rekruter Global</h3>
+                                <p class="mt-3 text-gray-500 dark:text-gray-300 leading-relaxed">Strategi alumni MCI membawa projek komunitas menjadi bukti kompetensi saat proses hiring di perusahaan unicorn Asia Tenggara.</p>
+                                <div class="mt-6 flex items-center justify-between text-sm text-gray-400">
+                                    <span>5 menit baca</span>
+                                    <span>Dipublikasikan 18 Okt 2025</span>
+                                </div>
+                            </article>
+                            <article class="group p-8 rounded-3xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+                                <span class="inline-flex items-center gap-2 px-3 py-1 bg-purple-100 dark:bg-purple-500/10 text-purple-700 dark:text-purple-200 text-xs font-bold uppercase tracking-widest">Leadership</span>
+                                <h3 class="mt-4 text-2xl font-bold text-gray-900 dark:text-white">Mendesain Ritual Tech Sync yang Efektif untuk Tim Remote</h3>
+                                <p class="mt-3 text-gray-500 dark:text-gray-300 leading-relaxed">Checklist fasilitasi pertemuan mingguan agar alignment produk dan engineering tetap solid meski tim tersebar lintas zona waktu.</p>
+                                <div class="mt-6 flex items-center justify-between text-sm text-gray-400">
+                                    <span>7 menit baca</span>
+                                    <span>Dipublikasikan 16 Okt 2025</span>
+                                </div>
+                            </article>
+                        @endforelse
+                    </div>
                 </div>
-            </div>
+            @else
+                <div class="grid lg:grid-cols-[1.4fr_1fr] gap-10">
+                    <article class="relative overflow-hidden rounded-3xl border border-gray-200 dark:border-gray-800 bg-gray-900 text-white shadow-[0_22px_55px_rgba(2,95,90,0.25)]">
+                        <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent"></div>
+                        <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1400&q=80" alt="AI collaboration" class="w-full h-full object-cover opacity-60">
+                        <div class="relative p-10 lg:p-12 flex flex-col justify-end min-h-[420px]">
+                            <span class="inline-flex items-center gap-2 px-4 py-2 bg-white/15 rounded-full text-xs font-semibold uppercase tracking-widest">
+                                Future of Work
+                            </span>
+                            <h3 class="mt-6 text-3xl lg:text-4xl font-black leading-tight">
+                                Menggabungkan AI Copilot dengan Workflow Tim Engineering: Panduan Praktis dari Mentor MCI
+                            </h3>
+                            <p class="mt-4 text-gray-200 text-base leading-relaxed">
+                                Temukan framework kolaborasi manusia dan mesin yang terbukti mempercepat delivery produk tanpa mengorbankan kualitas kode ataupun keamanan.
+                            </p>
+                            <div class="mt-8 flex items-center justify-between text-sm text-gray-200">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center font-semibold">AR</div>
+                                    <div>
+                                        <p class="font-semibold">Ayu Rahmadani</p>
+                                        <p class="text-xs text-gray-300">Lead Mentor Machine Learning</p>
+                                    </div>
+                                </div>
+                                <div class="text-xs uppercase tracking-widest">12 menit baca</div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <div class="space-y-6">
+                        <article class="group p-8 rounded-3xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 hover:-translate-y-1 hover:[border-color:#025f5a] transition-all">
+                            <span class="inline-flex items-center gap-2 px-3 py-1 bg-teal-100 dark:bg-teal-500/10 text-teal-700 dark:text-teal-200 text-xs font-bold uppercase tracking-widest">Community Story</span>
+                            <h3 class="mt-4 text-2xl font-bold text-gray-900 dark:text-white group-hover:text-teal-500">Bangun Portofolio Open Source yang Memikat Rekruter Global</h3>
+                            <p class="mt-3 text-gray-500 dark:text-gray-300 leading-relaxed">Strategi alumni MCI membawa projek komunitas menjadi bukti kompetensi saat proses hiring di perusahaan unicorn Asia Tenggara.</p>
+                            <div class="mt-6 flex items-center justify-between text-sm text-gray-400">
+                                <span>5 menit baca</span>
+                                <span>Dipublikasikan 18 Okt 2025</span>
+                            </div>
+                        </article>
+                        <article class="group p-8 rounded-3xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 hover:-translate-y-1 hover:[border-color:#025f5a] transition-all">
+                            <span class="inline-flex items-center gap-2 px-3 py-1 bg-purple-100 dark:bg-purple-500/10 text-purple-700 dark:text-purple-200 text-xs font-bold uppercase tracking-widest">Leadership</span>
+                            <h3 class="mt-4 text-2xl font-bold text-gray-900 dark:text-white group-hover:text-purple-500">Mendesain Ritual Tech Sync yang Efektif untuk Tim Remote</h3>
+                            <p class="mt-3 text-gray-500 dark:text-gray-300 leading-relaxed">Checklist fasilitasi pertemuan mingguan agar alignment produk dan engineering tetap solid meski tim tersebar lintas zona waktu.</p>
+                            <div class="mt-6 flex items-center justify-between text-sm text-gray-400">
+                                <span>7 menit baca</span>
+                                <span>Dipublikasikan 16 Okt 2025</span>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            @endif
         </div>
     </section>
 
@@ -205,42 +315,70 @@
             </div>
 
             @php
-                $articles = [
-                    ['title' => 'Membangun API Gateway yang Tangguh dengan Laravel Octane', 'category' => 'Backend', 'excerpt' => 'Pelajari blueprint arsitektur untuk menangani lonjakan traffic tanpa downtime, lengkap dengan observability stack.', 'author' => 'Rama Divo', 'role' => 'Principal Engineer', 'date' => '22 Okt 2025', 'time' => '8 menit', 'gradient' => 'from-slate-900 via-slate-800 to-slate-900'],
-                    ['title' => 'Menyusun Design System Skala Enterprise dalam 30 Hari', 'category' => 'Design', 'excerpt' => 'Berlangkah-langkah membuat sistem komponen kolaboratif yang siap digunakan tim engineer dan PM.', 'author' => 'Salsa Devi', 'role' => 'Lead Product Designer', 'date' => '20 Okt 2025', 'time' => '6 menit', 'gradient' => 'from-indigo-500 via-purple-500 to-pink-500'],
-                    ['title' => 'Roadmap Menjadi AI Product Manager untuk Developer', 'category' => 'Karir', 'excerpt' => 'Transform skill teknismu menjadi pengalaman memimpin lifecycle produk AI yang berdampak.', 'author' => 'Andika Putra', 'role' => 'AI Product Manager', 'date' => '19 Okt 2025', 'time' => '9 menit', 'gradient' => 'from-cyan-500 via-teal-500 to-emerald-500'],
-                    ['title' => 'Kontribusi Pertama ke Proyek Open Source Besar: Study Case', 'category' => 'Community', 'excerpt' => 'Langkah-langkah praktis dari memilih issue, komunikasi maintainer, hingga merge request pertama.', 'author' => 'Dewi Laksmi', 'role' => 'OSS Advocate', 'date' => '18 Okt 2025', 'time' => '5 menit', 'gradient' => 'from-orange-500 via-amber-500 to-yellow-400'],
-                    ['title' => 'Strategi Observability untuk Microservices di Kubernetes', 'category' => 'DevOps', 'excerpt' => 'Penerapan tracing, logging, dan metrics yang saling melengkapi agar debugging jadi cepat dan presisi.', 'author' => 'Galih Saputra', 'role' => 'Site Reliability Engineer', 'date' => '17 Okt 2025', 'time' => '7 menit', 'gradient' => 'from-blue-600 via-sky-500 to-cyan-500'],
-                    ['title' => 'Mindset Growth Engineer: Iterasi Produk Berbasis Data', 'category' => 'Growth', 'excerpt' => 'Framework eksperimen yang menjaga keseimbangan antara velocity, UX, dan stabilitas sistem.', 'author' => 'Rina Wibowo', 'role' => 'Growth Engineer', 'date' => '16 Okt 2025', 'time' => '6 menit', 'gradient' => 'from-fuchsia-500 via-rose-500 to-red-500'],
+                $gradients = [
+                    'from-slate-900 via-slate-800 to-slate-900',
+                    'from-indigo-500 via-purple-500 to-pink-500',
+                    'from-cyan-500 via-teal-500 to-emerald-500',
+                    'from-orange-500 via-amber-500 to-yellow-400',
+                    'from-blue-600 via-sky-500 to-cyan-500',
+                    'from-fuchsia-500 via-rose-500 to-red-500',
                 ];
             @endphp
 
-            <div class="grid md:grid-cols-2 xl:grid-cols-3 gap-8">
-                @foreach ($articles as $article)
-                    <article class="group relative rounded-3xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 overflow-hidden hover:-translate-y-2 transition-all">
-                        <div class="h-44 bg-gradient-to-br {{ $article['gradient'] }} relative">
-                            <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.25),transparent_60%)]"></div>
-                            <div class="absolute top-5 left-5 px-4 py-2 rounded-full bg-white/15 text-white text-xs font-semibold uppercase tracking-widest">
-                                {{ $article['category'] }}
-                            </div>
-                        </div>
-                        <div class="p-8">
-                            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3 group-hover:[color:#025f5a]">{{ $article['title'] }}</h3>
-                            <p class="text-gray-500 dark:text-gray-300 text-sm leading-relaxed mb-6">{{ $article['excerpt'] }}</p>
-                            <div class="flex items-center justify-between text-xs text-gray-400">
-                                <div>
-                                    <p class="font-semibold text-gray-700 dark:text-gray-200">{{ $article['author'] }}</p>
-                                    <p class="mt-1">{{ $article['role'] }}</p>
-                                </div>
-                                <div class="text-right">
-                                    <p>{{ $article['date'] }}</p>
-                                    <p class="mt-1 uppercase tracking-widest">{{ $article['time'] }} baca</p>
+            @if (count($articles))
+                <div class="grid md:grid-cols-2 xl:grid-cols-3 gap-8">
+                    @foreach ($articles as $article)
+                        <article class="group relative rounded-3xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 overflow-hidden hover:-translate-y-2 transition-all">
+                            <div class="h-44 bg-gradient-to-br {{ $gradients[$loop->index % count($gradients)] }} relative">
+                                <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.25),transparent_60%)]"></div>
+                                <div class="absolute top-5 left-5 px-4 py-2 rounded-full bg-white/15 text-white text-xs font-semibold uppercase tracking-widest">
+                                    Blog MCI
                                 </div>
                             </div>
-                        </div>
-                    </article>
-                @endforeach
-            </div>
+                            <div class="p-8 space-y-4">
+                                <h3 class="text-xl font-bold text-gray-900 dark:text-white leading-snug">
+                                    <a href="{{ route('blog.show', $article->slug) }}" class="group-hover:[color:#025f5a] transition">
+                                        {{ $article->title }}
+                                    </a>
+                                </h3>
+                                <p class="text-gray-500 dark:text-gray-300 text-sm leading-relaxed">
+                                    {{ $article->excerpt }}
+                                </p>
+                                <div class="flex items-center justify-between text-xs text-gray-400">
+                                    <div>
+                                        <p class="font-semibold text-gray-700 dark:text-gray-200">{{ $article->author ?? 'Tim MCI' }}</p>
+                                        <p class="mt-1 uppercase tracking-widest text-teal-500 dark:text-teal-300">{{ $article->reading_time }}</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <p>{{ $article->created_at?->translatedFormat('d M Y') ?? '—' }}</p>
+                                        <p class="mt-1 uppercase tracking-widest">{{ $article->created_at?->translatedFormat('H:i') ?? '' }}</p>
+                                    </div>
+                                </div>
+                                <div class="flex justify-end">
+                                    <a href="{{ route('blog.show', $article->slug) }}" class="inline-flex items-center gap-2 text-sm font-semibold text-teal-600 dark:text-teal-200 hover:text-teal-500">
+                                        Baca Selengkapnya
+                                        <i class="fa-solid fa-arrow-right-long"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </article>
+                    @endforeach
+                </div>
+
+                @php
+                    $blogPaginator = is_object($articles) ? $articles : null;
+                @endphp
+
+                @if ($blogPaginator)
+                    <div class="mt-10">
+                        {{ $blogPaginator->links() }}
+                    </div>
+                @endif
+            @else
+                <div class="rounded-3xl border border-dashed border-gray-300 dark:border-gray-700 p-16 text-center text-gray-500 dark:text-gray-400">
+                    Belum ada artikel yang dipublikasikan. Nantikan update terbaru dari tim MCI.
+                </div>
+            @endif
         </div>
     </section>
 
