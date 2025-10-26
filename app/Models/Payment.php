@@ -42,6 +42,7 @@ class Payment extends Model
         "status",
         "bukti_transfer",
         "paid_at",
+        "clarification_requested_at",
     ];
 
     /**
@@ -55,6 +56,7 @@ class Payment extends Model
             "amount" => "integer",
             "paid_at" => "datetime",
             "created_at" => "datetime",
+            "clarification_requested_at" => "datetime",
         ];
     }
 
@@ -82,6 +84,7 @@ class Payment extends Model
         $this->update([
             "status" => "success",
             "paid_at" => now(),
+            "clarification_requested_at" => null,
         ]);
     }
 
@@ -92,6 +95,7 @@ class Payment extends Model
     {
         $this->update([
             "status" => "failed",
+            "clarification_requested_at" => null,
         ]);
     }
 
@@ -141,6 +145,26 @@ class Payment extends Model
     public function scopeFailed($query)
     {
         return $query->where("status", "failed");
+    }
+
+    /**
+     * Scope a query to only include payments awaiting clarification.
+     */
+    public function scopeNeedsClarification($query)
+    {
+        return $query->pending()->whereNotNull("clarification_requested_at");
+    }
+
+    /**
+     * Flag the payment as requiring clarification.
+     */
+    public function requestClarification(): void
+    {
+        $this->update([
+            "status" => "pending",
+            "paid_at" => null,
+            "clarification_requested_at" => now(),
+        ]);
     }
 
 }
