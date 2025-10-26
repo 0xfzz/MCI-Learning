@@ -92,10 +92,16 @@
                 Kategori
             </div>
 
-        <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition mb-1">
-                <span class="text-lg w-5 text-center"><i class="fa-brands fa-react"></i></span>
-                <span>React JS</span>
+        <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition mb-1 {{ request()->routeIs('admin.dashboard') ? '[background:#e6f7f6] [color:#025f5a] font-semibold dark:[background:#01444022] dark:text-white' : '' }}">
+                <span class="text-lg w-5 text-center"><i class="fa-solid fa-shield-halved"></i></span>
+                <span>Admin Dashboard</span>
             </a>
+
+        <a href="{{ route('admin.blogs.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition mb-1 {{ request()->routeIs('admin.blogs.*') ? '[background:#e6f7f6] [color:#025f5a] font-semibold dark:[background:#01444022] dark:text-white' : '' }}">
+                <span class="text-lg w-5 text-center"><i class="fa-solid fa-pen-nib"></i></span>
+                <span>Kelola Blog</span>
+            </a>
+        @endif
 
         <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition mb-1">
                 <span class="text-lg w-5 text-center"><i class="fa-brands fa-vuejs"></i></span>
