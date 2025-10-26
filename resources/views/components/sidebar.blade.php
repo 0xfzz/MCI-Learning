@@ -7,7 +7,8 @@
 
     @php
         $user = auth()->user();
-        $isAdmin = $user instanceof \App\Models\User && $user->isAdmin();
+        $isAdmin = $user && method_exists($user, 'isAdmin') && $user->isAdmin();
+        $isInstructor = $user && method_exists($user, 'isInstructor') && $user->isInstructor();
         $onAdminPanel = $isAdmin && request()->routeIs('admin.*');
 
         $adminLinks = [
@@ -70,6 +71,17 @@
                 'label' => 'Blog',
             ],
         ];
+
+        $instructorLinks = $isInstructor
+            ? [
+                [
+                    'route' => 'instructor.courses.index',
+                    'active' => 'instructor.courses.*',
+                    'icon' => 'fa-solid fa-graduation-cap',
+                    'label' => 'Kursus Saya',
+                ],
+            ]
+            : [];
     @endphp
 
     <nav>
@@ -107,6 +119,17 @@
                     </a>
                 @endif
             @endforeach
+
+            @if ($instructorLinks)
+                <div class="text-xs text-gray-400 font-semibold uppercase tracking-wider mt-6 mb-3 px-2">Instruktur</div>
+                @foreach ($instructorLinks as $link)
+                    @php $isActive = request()->routeIs($link['active']); @endphp
+                    <a href="{{ route($link['route']) }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition mb-1 {{ $isActive ? '[background:#e6f7f6] [color:#025f5a] font-semibold dark:[background:#01444022] dark:text-white' : '' }}">
+                        <span class="text-lg w-5 text-center"><i class="{{ $link['icon'] }}"></i></span>
+                        <span>{{ $link['label'] }}</span>
+                    </a>
+                @endforeach
+            @endif
 
             @if ($isAdmin)
                 <div class="text-xs text-gray-400 font-semibold uppercase tracking-wider mt-6 mb-3 px-2">Admin</div>

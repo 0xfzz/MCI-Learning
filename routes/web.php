@@ -5,6 +5,8 @@ use App\Http\Controllers\Admin\PaymentActionController;
 use App\Http\Controllers\Admin\SalesPerformanceController;
 use App\Http\Controllers\Admin\TransactionVerificationController;
 use App\Http\Controllers\Admin\UserManagementController;
+use App\Http\Controllers\Instructor\CourseController as InstructorCourseController;
+use App\Http\Controllers\Instructor\LessonController as InstructorLessonController;
 use App\Http\Controllers\Admin\BlogController as AdminBlogController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\Auth\LoginController;
@@ -36,6 +38,25 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/payments/bulk-complete', [PaymentActionController::class, 'bulkComplete'])->name('payments.bulk-complete');
     Route::resource('blogs', AdminBlogController::class);
 });
+
+Route::middleware(['auth', 'instructor'])
+    ->prefix('instructor')
+    ->name('instructor.')
+    ->group(function () {
+        Route::get('/courses', [InstructorCourseController::class, 'index'])->name('courses.index');
+        Route::get('/courses/create', [InstructorCourseController::class, 'create'])->name('courses.create');
+        Route::post('/courses', [InstructorCourseController::class, 'store'])->name('courses.store');
+        Route::get('/courses/{course}/edit', [InstructorCourseController::class, 'edit'])->name('courses.edit');
+        Route::put('/courses/{course}', [InstructorCourseController::class, 'update'])->name('courses.update');
+        Route::delete('/courses/{course}', [InstructorCourseController::class, 'destroy'])->name('courses.destroy');
+
+        Route::get('/courses/{course}/lessons', [InstructorLessonController::class, 'index'])->name('lessons.index');
+        Route::get('/courses/{course}/lessons/create', [InstructorLessonController::class, 'create'])->name('lessons.create');
+        Route::post('/courses/{course}/lessons', [InstructorLessonController::class, 'store'])->name('lessons.store');
+        Route::get('/courses/{course}/lessons/{lesson}/edit', [InstructorLessonController::class, 'edit'])->name('lessons.edit');
+        Route::put('/courses/{course}/lessons/{lesson}', [InstructorLessonController::class, 'update'])->name('lessons.update');
+        Route::delete('/courses/{course}/lessons/{lesson}', [InstructorLessonController::class, 'destroy'])->name('lessons.destroy');
+    });
 
 // Courses
 Route::get('/courses', function () {
