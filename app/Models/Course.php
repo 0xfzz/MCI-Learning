@@ -185,4 +185,12 @@ class Course extends Model
     {
         return $this->discount_price ?? $this->price;
     }
+
+    /**
+     * Get the route key for the model.
+     */
+    public function getRouteKeyName()
+    {
+        return "course_id";
+    }
 }

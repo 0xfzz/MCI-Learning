@@ -34,7 +34,7 @@
             <p class="text-sm text-gray-500 dark:text-gray-400">Tinjau bukti pembayaran dan selesaikan verifikasi.</p>
         </div>
         <div class="flex gap-2">
-            <form method="GET" action="{{ route('admin.transactions') }}" class="flex items-center gap-2">
+            <form method="GET" action="{{ route('dashboard.transactions.index') }}" class="flex items-center gap-2">
                 <label for="status" class="sr-only">Status</label>
                 <select id="status" name="status" class="px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-600 dark:text-gray-300 focus:ring-2 focus:ring-teal-500 focus:outline-none">
                     <option value="all" @selected(($filters['status'] ?? 'all') === 'all')>Semua Status</option>
@@ -45,7 +45,7 @@
                 </select>
                 <button type="submit" class="px-4 py-2 text-sm rounded-xl border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:border-teal-400/60 transition">Filter</button>
             </form>
-            <form method="POST" action="{{ route('admin.payments.bulk-complete') }}">
+            <form method="POST" action="{{ route('dashboard.payments.bulk-complete') }}">
                 @csrf
                 <button type="submit" class="px-4 py-2 text-sm rounded-xl [background:linear-gradient(135deg,#06b6d4,#025f5a)] text-white shadow-[0_14px_35px_rgba(2,95,90,0.3)]">Tandai Selesai</button>
             </form>
@@ -69,15 +69,20 @@
                 <div class="mt-3 flex items-center justify-between text-xs text-gray-400 dark:text-gray-500">
                     <span>Diunggah {{ $transaction['submitted'] }}</span>
                     <div class="flex gap-2">
-                        <form method="POST" action="{{ route('admin.payments.verify', $transaction['id']) }}">
+                        @if($transaction['bukti_transfer'])
+                            <button type="button" onclick="showProofModal('{{ asset('storage/' . $transaction['bukti_transfer']) }}', '{{ $transaction['invoice'] }}')" class="px-3 py-1 rounded-lg border border-teal-500/40 text-teal-600 dark:text-teal-300 font-semibold hover:bg-teal-50 dark:hover:bg-teal-500/10 transition">
+                                <i class="fa-solid fa-image"></i> Lihat Bukti
+                            </button>
+                        @endif
+                        <form method="POST" action="{{ route('dashboard.payments.verify', $transaction['id']) }}">
                             @csrf
                             <button type="submit" class="px-3 py-1 rounded-lg text-white font-semibold [background:linear-gradient(135deg,#06b6d4,#025f5a)]">Verifikasi</button>
                         </form>
-                        <form method="POST" action="{{ route('admin.payments.clarify', $transaction['id']) }}">
+                        <form method="POST" action="{{ route('dashboard.payments.clarify', $transaction['id']) }}">
                             @csrf
                             <button type="submit" class="px-3 py-1 rounded-lg border border-gray-300 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:border-amber-400/60 hover:text-amber-500 transition">Minta Klarifikasi</button>
                         </form>
-                        <form method="POST" action="{{ route('admin.payments.reject', $transaction['id']) }}">
+                        <form method="POST" action="{{ route('dashboard.payments.reject', $transaction['id']) }}">
                             @csrf
                             <button type="submit" class="px-3 py-1 rounded-lg border border-gray-300 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:border-rose-400/60 hover:text-rose-500 transition">Tolak</button>
                         </form>
@@ -96,7 +101,7 @@
             <h2 class="text-xl font-bold text-gray-900 dark:text-gray-100">Riwayat Verifikasi</h2>
             <p class="text-sm text-gray-500 dark:text-gray-400">Catatan transaksi yang telah diproses.</p>
         </div>
-    <a href="{{ route('admin.transactions', ['status' => 'all']) }}" class="text-sm font-semibold text-teal-600 dark:text-teal-300 hover:text-teal-500">Lihat semua</a>
+    <a href="{{ route('dashboard.transactions.index', ['status' => 'all']) }}" class="text-sm font-semibold text-teal-600 dark:text-teal-300 hover:text-teal-500">Lihat semua</a>
     </div>
     @php
         $statusLabels = [
@@ -133,7 +138,55 @@
         @endforelse
     </div>
 </section>
+
+<!-- Proof Modal -->
+<div id="proofModal" class="hidden fixed inset-0 z-50 overflow-y-auto">
+    <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+        <!-- Background overlay -->
+        <div class="fixed inset-0 transition-opacity bg-gray-900/75 backdrop-blur-sm" onclick="closeProofModal()"></div>
+
+        <!-- Modal panel -->
+        <div class="inline-block align-bottom bg-white dark:bg-gray-900 rounded-3xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full border border-gray-200 dark:border-gray-800">
+            <div class="bg-white dark:bg-gray-900 px-6 pt-5 pb-4">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100" id="modalTitle">Bukti Transfer</h3>
+                    <button type="button" onclick="closeProofModal()" class="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300">
+                        <i class="fa-solid fa-xmark text-2xl"></i>
+                    </button>
+                </div>
+                <div class="mt-4">
+                    <img id="proofImage" src="" alt="Bukti Transfer" class="w-full rounded-2xl border border-gray-200 dark:border-gray-800">
+                </div>
+            </div>
+            <div class="bg-gray-50 dark:bg-gray-800/50 px-6 py-4 flex justify-end gap-3">
+                <button type="button" onclick="closeProofModal()" class="px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 text-sm text-gray-600 dark:text-gray-300 hover:border-teal-400/60 transition">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
-@section('right-sidebar')
-@endsection
+@push('scripts')
+<script>
+    function showProofModal(imageUrl, invoice) {
+        document.getElementById('proofImage').src = imageUrl;
+        document.getElementById('modalTitle').textContent = 'Bukti Transfer - ' + invoice;
+        document.getElementById('proofModal').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeProofModal() {
+        document.getElementById('proofModal').classList.add('hidden');
+        document.body.style.overflow = '';
+    }
+
+    // Close modal on Escape key
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            closeProofModal();
+        }
+    });
+</script>
+@endpush

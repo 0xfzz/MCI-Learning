@@ -12,7 +12,7 @@
             <h1 class="text-3xl font-black text-gray-900 dark:text-gray-100">Kursus Saya</h1>
             <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">Pantau dan kelola seluruh kursus yang Anda ajarkan.</p>
         </div>
-        <a href="{{ route('instructor.courses.create') }}" class="inline-flex items-center gap-2 px-4 py-3 rounded-xl bg-[#025f5a] text-white text-sm font-semibold shadow-lg shadow-emerald-500/20 hover:bg-[#014440] transition">
+        <a href="{{ route('dashboard.courses.create') }}" class="inline-flex items-center gap-2 px-4 py-3 rounded-xl bg-[#025f5a] text-white text-sm font-semibold shadow-lg shadow-emerald-500/20 hover:bg-[#014440] transition">
             <i class="fa-solid fa-circle-plus"></i>
             Kursus Baru
         </a>
@@ -39,7 +39,7 @@
 </div>
 
 <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-3xl p-6">
-    <form method="GET" action="{{ route('instructor.courses.index') }}" class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
+    <form method="GET" action="{{ route('dashboard.courses.index') }}" class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
         <div class="flex items-center gap-2">
             <label for="status" class="sr-only">Status</label>
             <select id="status" name="status" class="px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-600 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-500">
@@ -98,9 +98,9 @@
                         <td class="py-4 pr-4 text-right text-gray-500 dark:text-gray-400">{{ optional($course->created_at)?->format('d M Y') ?? '-' }}</td>
                         <td class="py-4 pr-4">
                             <div class="flex items-center justify-end gap-2">
-                                <a href="{{ route('instructor.lessons.index', $course) }}" class="px-3 py-2 text-xs rounded-xl border border-gray-200 dark:border-gray-700 text-[#025f5a] hover:border-teal-400/60 transition">Materi</a>
-                                <a href="{{ route('instructor.courses.edit', $course) }}" class="px-3 py-2 text-xs rounded-xl border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:border-teal-400/60 transition">Edit</a>
-                                <form method="POST" action="{{ route('instructor.courses.destroy', $course) }}" onsubmit="return confirm('Hapus kursus ini? Seluruh materi akan ikut terhapus.');">
+                                <a href="{{ route('dashboard.courses.lessons.index', $course) }}" class="px-3 py-2 text-xs rounded-xl border border-gray-200 dark:border-gray-700 text-[#025f5a] hover:border-teal-400/60 transition">Materi</a>
+                                <a href="{{ route('dashboard.courses.edit', $course) }}" class="px-3 py-2 text-xs rounded-xl border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:border-teal-400/60 transition">Edit</a>
+                                <form method="POST" action="{{ route('dashboard.courses.destroy', $course) }}" onsubmit="return confirm('Hapus kursus ini? Seluruh materi akan ikut terhapus.');">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="px-3 py-2 text-xs rounded-xl border border-gray-200 dark:border-gray-700 text-rose-500 hover:border-rose-400/60 transition">Hapus</button>
@@ -127,7 +127,4 @@
         </div>
     @endif
 </div>
-@endsection
-
-@section('right-sidebar')
 @endsection

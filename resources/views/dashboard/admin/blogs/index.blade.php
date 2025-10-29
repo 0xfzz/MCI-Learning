@@ -11,7 +11,7 @@
         <h1 class="text-3xl font-black text-gray-900 dark:text-gray-100">Artikel Blog MCI</h1>
         <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">Kelola artikel blog untuk komunitas Majelis Coding Indonesia.</p>
     </div>
-    <a href="{{ route('admin.blogs.create') }}" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl [background:linear-gradient(135deg,#06b6d4,#025f5a)] text-white font-semibold shadow-[0_12px_30px_rgba(2,95,90,0.25)] hover:-translate-y-1 transition">
+    <a href="{{ route('dashboard.blogs.create') }}" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl [background:linear-gradient(135deg,#06b6d4,#025f5a)] text-white font-semibold shadow-[0_12px_30px_rgba(2,95,90,0.25)] hover:-translate-y-1 transition">
         <i class="fa-solid fa-plus"></i>
         Artikel Baru
     </a>
@@ -71,11 +71,11 @@
                                         Lihat
                                     </a>
                                 @endif
-                                <a href="{{ route('admin.blogs.edit', $blog) }}" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-teal-500/40 text-teal-600 dark:text-teal-300 hover:bg-teal-50/70 dark:hover:bg-teal-500/10 transition text-sm font-semibold">
+                                <a href="{{ route('dashboard.blogs.edit', $blog) }}" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-teal-500/40 text-teal-600 dark:text-teal-300 hover:bg-teal-50/70 dark:hover:bg-teal-500/10 transition text-sm font-semibold">
                                     <i class="fa-solid fa-pen"></i>
                                     Edit
                                 </a>
-                                <form action="{{ route('admin.blogs.destroy', $blog) }}" method="POST" onsubmit="return confirm('Hapus artikel ini?');">
+                                <form action="{{ route('dashboard.blogs.destroy', $blog) }}" method="POST" onsubmit="return confirm('Hapus artikel ini?');">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-rose-500/40 text-rose-500 hover:bg-rose-50/80 dark:border-rose-500/30 dark:text-rose-300 dark:hover:bg-rose-500/10 transition text-sm font-semibold">

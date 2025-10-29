@@ -20,7 +20,7 @@ class TransactionVerificationController extends Controller
         $pendingTransactions = $this->buildPendingTransactions();
         $history = $this->buildHistory($filters);
 
-        return view('admin.transactions', compact(
+        return view('dashboard.admin.transactions', compact(
             'summaryCards',
             'pendingTransactions',
             'history',

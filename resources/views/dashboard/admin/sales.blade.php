@@ -35,7 +35,7 @@
                 <h2 class="text-xl font-bold text-gray-900 dark:text-gray-100">Top 5 Kursus</h2>
                 <p class="text-sm text-gray-500 dark:text-gray-400">Daftar kursus dengan penjualan tertinggi bulan ini.</p>
             </div>
-            <a href="{{ route('admin.sales.export', ['type' => 'top_courses', 'period' => $filters['period'] ?? 30, 'status' => $filters['status'] ?? 'all']) }}" class="text-sm font-semibold text-teal-600 dark:text-teal-300 hover:text-teal-500">Unduh CSV</a>
+            <a href="{{ route('dashboard.sales.export', ['type' => 'top_courses', 'period' => $filters['period'] ?? 30, 'status' => $filters['status'] ?? 'all']) }}" class="text-sm font-semibold text-teal-600 dark:text-teal-300 hover:text-teal-500">Unduh CSV</a>
         </div>
         <div class="space-y-4">
             @forelse ($topCourses as $course)
@@ -91,7 +91,7 @@
             $statusOptions = ['all' => 'Semua Status', 'success' => 'Terverifikasi', 'pending' => 'Menunggu', 'failed' => 'Ditolak'];
         @endphp
         <div class="flex flex-wrap items-center gap-2">
-            <form method="GET" action="{{ route('admin.sales') }}" class="flex items-center gap-2">
+            <form method="GET" action="{{ route('dashboard.sales.index') }}" class="flex items-center gap-2">
                 <label for="period" class="sr-only">Periode</label>
                 <select id="period" name="period" class="px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-600 dark:text-gray-300 focus:ring-2 focus:ring-teal-500 focus:outline-none">
                     @foreach ($periodOptions as $value => $label)
@@ -109,7 +109,7 @@
                 <button type="submit" class="px-4 py-2 text-sm rounded-xl border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:border-teal-400/60 transition">Filter</button>
             </form>
 
-            <a href="{{ route('admin.sales.export', ['type' => 'history', 'period' => $filters['period'] ?? 30, 'status' => $filters['status'] ?? 'all']) }}" class="px-4 py-2 text-sm rounded-xl [background:linear-gradient(135deg,#06b6d4,#025f5a)] text-white shadow-[0_14px_35px_rgba(2,95,90,0.3)]">Ekspor</a>
+            <a href="{{ route('dashboard.sales.export', ['type' => 'history', 'period' => $filters['period'] ?? 30, 'status' => $filters['status'] ?? 'all']) }}" class="px-4 py-2 text-sm rounded-xl [background:linear-gradient(135deg,#06b6d4,#025f5a)] text-white shadow-[0_14px_35px_rgba(2,95,90,0.3)]">Ekspor</a>
         </div>
     </div>
     <div class="overflow-x-auto">
@@ -150,5 +150,3 @@
 </section>
 @endsection
 
-@section('right-sidebar')
-@endsection

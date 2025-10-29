@@ -21,7 +21,7 @@ class BlogController extends Controller
             ->latest()
             ->paginate(10);
 
-        return view('admin.blogs.index', compact('blogs'));
+        return view('dashboard.admin.blogs.index', compact('blogs'));
     }
 
     /**
@@ -33,7 +33,7 @@ class BlogController extends Controller
             'status' => 'draft',
         ]);
 
-        return view('admin.blogs.create', compact('blog'));
+        return view('dashboard.admin.blogs.create', compact('blog'));
     }
 
     /**
@@ -60,7 +60,7 @@ class BlogController extends Controller
             return back()->withInput();
         }
 
-        return redirect()->route('admin.blogs.index');
+        return redirect()->route('dashboard.blogs.index');
     }
 
     /**
@@ -68,7 +68,7 @@ class BlogController extends Controller
      */
     public function edit(Blog $blog)
     {
-        return view('admin.blogs.edit', compact('blog'));
+        return view('dashboard.admin.blogs.edit', compact('blog'));
     }
 
     /**
@@ -94,7 +94,7 @@ class BlogController extends Controller
             return back()->withInput();
         }
 
-        return redirect()->route('admin.blogs.index');
+        return redirect()->route('dashboard.blogs.index');
     }
 
     /**
@@ -110,7 +110,7 @@ class BlogController extends Controller
             session()->flash('error', 'Terjadi kesalahan saat menghapus artikel blog.');
         }
 
-        return redirect()->route('admin.blogs.index');
+        return redirect()->route('dashboard.blogs.index');
     }
 
     /**

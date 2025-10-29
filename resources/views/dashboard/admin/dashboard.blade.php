@@ -95,13 +95,13 @@
                     <div class="mt-3 flex items-center justify-between text-xs text-gray-400 dark:text-gray-500">
                         <span>Diunggah {{ $payment['submitted_at'] }}</span>
                         <div class="flex gap-2">
-                            <form method="POST" action="{{ route('admin.payments.verify', $payment['id']) }}">
+                            <form method="POST" action="{{ route('dashboard.payments.verify', $payment['id']) }}">
                                 @csrf
                                 <button type="submit" class="px-3 py-1 rounded-lg text-white text-xs font-semibold [background:linear-gradient(135deg,#06b6d4,#025f5a)] hover:-translate-y-0.5 transition">
                                     Verifikasi
                                 </button>
                             </form>
-                            <form method="POST" action="{{ route('admin.payments.clarify', $payment['id']) }}">
+                            <form method="POST" action="{{ route('dashboard.payments.clarify', $payment['id']) }}">
                                 @csrf
                                 <button type="submit" class="px-3 py-1 rounded-lg border border-gray-300 dark:border-gray-700 text-xs font-semibold text-gray-600 dark:text-gray-300 hover:border-amber-400/60 hover:text-amber-500 transition">
                                     Butuh Klarifikasi
@@ -118,7 +118,4 @@
         </div>
     </section>
 </div>
-@endsection
-
-@section('right-sidebar')
 @endsection

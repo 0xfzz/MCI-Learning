@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Payment extends Model
 {
@@ -81,11 +82,15 @@ class Payment extends Model
      */
     public function markAsSuccess()
     {
-        $this->update([
-            "status" => "success",
-            "paid_at" => now(),
-            "clarification_requested_at" => null,
-        ]);
+        DB::transaction(function () {
+            $this->update([
+                "status" => "success",
+                "paid_at" => now(),
+                "clarification_requested_at" => null,
+            ]);
+
+            $this->ensureEnrollmentExists();
+        });
     }
 
     /**
@@ -165,6 +170,29 @@ class Payment extends Model
             "paid_at" => null,
             "clarification_requested_at" => now(),
         ]);
+    }
+
+    /**
+     * Ensure the related student is enrolled after a successful payment.
+     */
+    public function ensureEnrollmentExists(): void
+    {
+        $this->loadMissing(["user", "course"]);
+
+        if (! $this->user || ! $this->course) {
+            return;
+        }
+
+        Enrollment::firstOrCreate(
+            [
+                "user_id" => $this->user_id,
+                "course_id" => $this->course_id,
+            ],
+            [
+                "enrolled_at" => now(),
+                "is_completed" => false,
+            ],
+        );
     }
 
 }

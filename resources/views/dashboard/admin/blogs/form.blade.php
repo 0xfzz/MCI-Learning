@@ -57,7 +57,7 @@
     </div>
 
     <div class="flex items-center justify-end gap-3">
-        <a href="{{ route('admin.blogs.index') }}" class="px-5 py-3 rounded-xl border border-gray-300 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:border-teal-500/50 hover:text-teal-500 transition font-semibold">
+        <a href="{{ route('dashboard.blogs.index') }}" class="px-5 py-3 rounded-xl border border-gray-300 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:border-teal-500/50 hover:text-teal-500 transition font-semibold">
             Batal
         </a>
         <button type="submit" class="px-6 py-3 rounded-xl [background:linear-gradient(135deg,#06b6d4,#025f5a)] text-white font-semibold shadow-[0_12px_30px_rgba(2,95,90,0.25)] hover:-translate-y-1 transition">
