@@ -13,6 +13,9 @@
     <!-- Font Awesome Icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet" />
 
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
     <!-- Scripts -->
     <script>
         (function(){
@@ -36,30 +39,74 @@
         <!-- Main Content -->
         <main class="overflow-y-auto p-6 lg:p-8 bg-transparent">
             <!-- Top Bar -->
-            <div class="flex items-center justify-between mb-8">
-                <div class="flex-1 max-w-2xl">
-                    <div class="relative">
-                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500">
-                            <i class="fa-solid fa-magnifying-glass"></i>
-                        </span>
-                        <input
-                            type="text"
-                            placeholder="@yield('search-placeholder', 'Cari tutorial disini...')"
-                            class="w-full pl-12 pr-4 py-3 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-xl focus:outline-none focus:ring-2 [focus:ring-color:#025f5a] focus:border-transparent transition"
-                        >
-                    </div>
-                </div>
-                <div class="flex items-center gap-3 ml-4">
+            <div class="flex items-center justify-end mb-8">
+                <div class="flex items-center gap-3">
                     <button data-theme-toggle class="w-10 h-10 flex items-center justify-center border border-gray-200 dark:border-gray-700 rounded-xl hover:[border-color:#025f5a] hover:[background:#e6f7f6] dark:hover:[background:#01444022] transition">
-                        <i class="fa-solid fa-moon block dark:hidden"></i>
-                        <i class="fa-solid fa-sun hidden dark:block"></i>
+                        <i class="fa-solid fa-moon dark:hidden text-gray-700"></i>
+                        <i class="fa-solid fa-sun hidden dark:block text-yellow-400"></i>
                     </button>
-                    <button class="w-10 h-10 flex items-center justify-center border border-gray-200 dark:border-gray-700 rounded-xl hover:[border-color:#025f5a] hover:[background:#e6f7f6] dark:hover:[background:#01444022] transition">
-                        <i class="fa-solid fa-bell"></i>
+                    <button class="w-10 h-10 flex items-center justify-center border border-gray-200 dark:border-gray-700 rounded-xl hover:[border-color:#025f5a] hover:[background:#e6f7f6] dark:hover:[background:#01444022] transition relative">
+                        <i class="fa-solid fa-bell text-gray-700 dark:text-gray-300"></i>
+                        <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full"></span>
                     </button>
-                    <button class="w-10 h-10 flex items-center justify-center border border-gray-200 dark:border-gray-700 rounded-xl hover:[border-color:#025f5a] hover:[background:#e6f7f6] dark:hover:[background:#01444022] transition">
-                        <i class="fa-solid fa-gear"></i>
-                    </button>
+                    <div class="relative" x-data="{ open: false }">
+                        <button @click="open = !open" class="w-10 h-10 flex items-center justify-center border border-gray-200 dark:border-gray-700 rounded-xl hover:[border-color:#025f5a] hover:[background:#e6f7f6] dark:hover:[background:#01444022] transition">
+                            <i class="fa-solid fa-gear text-gray-700 dark:text-gray-300"></i>
+                        </button>
+
+                        <!-- Settings Dropdown -->
+                        <div
+                            x-show="open"
+                            @click.away="open = false"
+                            x-transition:enter="transition ease-out duration-200"
+                            x-transition:enter-start="opacity-0 scale-95"
+                            x-transition:enter-end="opacity-100 scale-100"
+                            x-transition:leave="transition ease-in duration-150"
+                            x-transition:leave-start="opacity-100 scale-100"
+                            x-transition:leave-end="opacity-0 scale-95"
+                            class="absolute right-0 mt-2 w-72 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 z-50"
+                            style="display: none;"
+                        >
+                            <div class="p-4 border-b border-gray-200 dark:border-gray-700">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 rounded-full [background:linear-gradient(135deg,#06b6d4,#025f5a)] flex items-center justify-center text-white font-bold text-lg">
+                                        {{ strtoupper(substr(auth()->user()->name ?? auth()->user()->username, 0, 1)) }}
+                                    </div>
+                                    <div class="flex-1">
+                                        <h3 class="font-bold text-gray-900 dark:text-white">{{ auth()->user()->name ?? auth()->user()->username }}</h3>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">{{ auth()->user()->email }}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="p-2">
+                                <a href="{{ route('dashboard.profile.edit') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:[background:#e6f7f6] dark:hover:[background:#01444022] transition group">
+                                    <i class="fa-solid fa-user text-gray-500 dark:text-gray-400 group-hover:[color:#025f5a]"></i>
+                                    <span class="text-gray-700 dark:text-gray-300 group-hover:[color:#025f5a] font-medium">Profil Saya</span>
+                                </a>
+
+                                <a href="{{ route('dashboard.profile.password.edit') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:[background:#e6f7f6] dark:hover:[background:#01444022] transition group">
+                                    <i class="fa-solid fa-key text-gray-500 dark:text-gray-400 group-hover:[color:#025f5a]"></i>
+                                    <span class="text-gray-700 dark:text-gray-300 group-hover:[color:#025f5a] font-medium">Ubah Password</span>
+                                </a>
+
+                                <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:[background:#e6f7f6] dark:hover:[background:#01444022] transition group">
+                                    <i class="fa-solid fa-bell text-gray-500 dark:text-gray-400 group-hover:[color:#025f5a]"></i>
+                                    <span class="text-gray-700 dark:text-gray-300 group-hover:[color:#025f5a] font-medium">Notifikasi</span>
+                                </a>
+
+                                <div class="my-2 border-t border-gray-200 dark:border-gray-700"></div>
+
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    <button type="submit" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-red-50 dark:hover:bg-red-900/20 transition group">
+                                        <i class="fa-solid fa-right-from-bracket text-gray-500 dark:text-gray-400 group-hover:text-red-600"></i>
+                                        <span class="text-gray-700 dark:text-gray-300 group-hover:text-red-600 font-medium">Keluar</span>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 

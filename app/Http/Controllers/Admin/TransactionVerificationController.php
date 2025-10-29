@@ -75,6 +75,8 @@ class TransactionVerificationController extends Controller
                     'amount' => $this->formatCurrency((int) ($payment->amount ?? 0)),
                     'submitted' => optional($payment->created_at)?->diffForHumans() ?? '-',
                     'needs_clarification' => (bool) $payment->clarification_requested_at,
+                    'bukti_transfer' => $payment->bukti_transfer,
+                    'payment_method' => $payment->payment_method,
                 ];
             });
     }
@@ -98,12 +100,15 @@ class TransactionVerificationController extends Controller
             ->get()
             ->map(function (Payment $payment) {
                 return [
+                    'id' => $payment->payment_id,
                     'invoice' => sprintf('#PAY-%05d', $payment->payment_id),
                     'user' => $payment->user?->name ?? $payment->user?->username ?? 'Pengguna',
                     'course' => $payment->course?->title ?? 'Kursus tidak tersedia',
                     'status' => $payment->status,
                     'time' => optional($payment->created_at)?->diffForHumans() ?? '-',
                     'clarification_requested' => (bool) $payment->clarification_requested_at,
+                    'bukti_transfer' => $payment->bukti_transfer,
+                    'payment_method' => $payment->payment_method,
                 ];
             });
     }

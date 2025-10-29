@@ -69,23 +69,9 @@
                 <div class="mt-3 flex items-center justify-between text-xs text-gray-400 dark:text-gray-500">
                     <span>Diunggah {{ $transaction['submitted'] }}</span>
                     <div class="flex gap-2">
-                        @if($transaction['bukti_transfer'])
-                            <button type="button" onclick="showProofModal('{{ asset('storage/' . $transaction['bukti_transfer']) }}', '{{ $transaction['invoice'] }}')" class="px-3 py-1 rounded-lg border border-teal-500/40 text-teal-600 dark:text-teal-300 font-semibold hover:bg-teal-50 dark:hover:bg-teal-500/10 transition">
-                                <i class="fa-solid fa-image"></i> Lihat Bukti
-                            </button>
-                        @endif
-                        <form method="POST" action="{{ route('dashboard.payments.verify', $transaction['id']) }}">
-                            @csrf
-                            <button type="submit" class="px-3 py-1 rounded-lg text-white font-semibold [background:linear-gradient(135deg,#06b6d4,#025f5a)]">Verifikasi</button>
-                        </form>
-                        <form method="POST" action="{{ route('dashboard.payments.clarify', $transaction['id']) }}">
-                            @csrf
-                            <button type="submit" class="px-3 py-1 rounded-lg border border-gray-300 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:border-amber-400/60 hover:text-amber-500 transition">Minta Klarifikasi</button>
-                        </form>
-                        <form method="POST" action="{{ route('dashboard.payments.reject', $transaction['id']) }}">
-                            @csrf
-                            <button type="submit" class="px-3 py-1 rounded-lg border border-gray-300 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:border-rose-400/60 hover:text-rose-500 transition">Tolak</button>
-                        </form>
+                        <button type="button" onclick="showVerificationModal({{ json_encode($transaction) }})" class="px-4 py-2 rounded-xl text-white font-semibold [background:linear-gradient(135deg,#06b6d4,#025f5a)] hover:shadow-lg transition">
+                            <i class="fa-solid fa-clipboard-check"></i> Tinjau & Verifikasi
+                        </button>
                     </div>
                 </div>
             </div>
@@ -139,29 +125,89 @@
     </div>
 </section>
 
-<!-- Proof Modal -->
-<div id="proofModal" class="hidden fixed inset-0 z-50 overflow-y-auto">
+<!-- Verification Modal -->
+<div id="verificationModal" class="hidden fixed inset-0 z-50 overflow-y-auto">
     <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-        <!-- Background overlay -->
-        <div class="fixed inset-0 transition-opacity bg-gray-900/75 backdrop-blur-sm" onclick="closeProofModal()"></div>
+        <!-- Background overlay with blur -->
+        <div class="fixed inset-0 transition-opacity bg-gray-900/75 backdrop-blur-sm" onclick="closeVerificationModal()"></div>
 
         <!-- Modal panel -->
-        <div class="inline-block align-bottom bg-white dark:bg-gray-900 rounded-3xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full border border-gray-200 dark:border-gray-800">
+        <div class="relative inline-block align-bottom bg-white dark:bg-gray-900 rounded-3xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-3xl sm:w-full border border-gray-200 dark:border-gray-800">
             <div class="bg-white dark:bg-gray-900 px-6 pt-5 pb-4">
                 <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100" id="modalTitle">Bukti Transfer</h3>
-                    <button type="button" onclick="closeProofModal()" class="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300">
+                    <div>
+                        <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100" id="modalTitle">Verifikasi Pembayaran</h3>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1" id="modalSubtitle"></p>
+                    </div>
+                    <button type="button" onclick="closeVerificationModal()" class="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300">
                         <i class="fa-solid fa-xmark text-2xl"></i>
                     </button>
                 </div>
+
+                <!-- Transaction Details -->
+                <div class="mb-4 p-4 rounded-2xl bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700">
+                    <div class="grid grid-cols-2 gap-4 text-sm">
+                        <div>
+                            <p class="text-gray-500 dark:text-gray-400 mb-1">Invoice</p>
+                            <p class="font-semibold text-gray-900 dark:text-gray-100" id="detailInvoice"></p>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 dark:text-gray-400 mb-1">Jumlah</p>
+                            <p class="font-semibold text-teal-600 dark:text-teal-300" id="detailAmount"></p>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 dark:text-gray-400 mb-1">Peserta</p>
+                            <p class="font-semibold text-gray-900 dark:text-gray-100" id="detailUser"></p>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 dark:text-gray-400 mb-1">Kursus</p>
+                            <p class="font-semibold text-gray-900 dark:text-gray-100" id="detailCourse"></p>
+                        </div>
+                        <div class="col-span-2">
+                            <p class="text-gray-500 dark:text-gray-400 mb-1">Metode Pembayaran</p>
+                            <p class="font-semibold text-gray-900 dark:text-gray-100" id="detailPaymentMethod"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Proof Image -->
                 <div class="mt-4">
-                    <img id="proofImage" src="" alt="Bukti Transfer" class="w-full rounded-2xl border border-gray-200 dark:border-gray-800">
+                    <p class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Bukti Transfer</p>
+                    <div id="proofImageContainer" class="relative">
+                        <img id="proofImage" src="" alt="Bukti Transfer" class="w-full rounded-2xl border border-gray-200 dark:border-gray-800">
+                    </div>
+                    <div id="noProofMessage" class="hidden p-8 text-center rounded-2xl border border-dashed border-gray-300 dark:border-gray-700">
+                        <i class="fa-solid fa-image text-4xl text-gray-300 dark:text-gray-600 mb-2"></i>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Tidak ada bukti transfer yang diunggah</p>
+                    </div>
                 </div>
             </div>
-            <div class="bg-gray-50 dark:bg-gray-800/50 px-6 py-4 flex justify-end gap-3">
-                <button type="button" onclick="closeProofModal()" class="px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 text-sm text-gray-600 dark:text-gray-300 hover:border-teal-400/60 transition">
-                    Tutup
+
+            <!-- Action Buttons -->
+            <div class="bg-gray-50 dark:bg-gray-800/50 px-6 py-4 flex justify-between items-center gap-3 border-t border-gray-200 dark:border-gray-700">
+                <button type="button" onclick="closeVerificationModal()" class="px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 text-sm text-gray-600 dark:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600 transition">
+                    <i class="fa-solid fa-xmark"></i> Batal
                 </button>
+                <div class="flex gap-3">
+                    <form id="clarifyForm" method="POST" class="inline">
+                        @csrf
+                        <button type="submit" class="px-4 py-2 rounded-xl border border-amber-500/40 bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 font-semibold hover:bg-amber-100 dark:hover:bg-amber-500/20 transition">
+                            <i class="fa-solid fa-circle-exclamation"></i> Minta Klarifikasi
+                        </button>
+                    </form>
+                    <form id="rejectForm" method="POST" class="inline">
+                        @csrf
+                        <button type="submit" class="px-4 py-2 rounded-xl border border-rose-500/40 bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 font-semibold hover:bg-rose-100 dark:hover:bg-rose-500/20 transition">
+                            <i class="fa-solid fa-xmark-circle"></i> Tolak
+                        </button>
+                    </form>
+                    <form id="verifyForm" method="POST" class="inline">
+                        @csrf
+                        <button type="submit" class="px-6 py-2 rounded-xl text-white font-semibold [background:linear-gradient(135deg,#10b981,#059669)] hover:shadow-lg transition">
+                            <i class="fa-solid fa-check-circle"></i> Verifikasi
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -170,22 +216,56 @@
 
 @push('scripts')
 <script>
-    function showProofModal(imageUrl, invoice) {
-        document.getElementById('proofImage').src = imageUrl;
-        document.getElementById('modalTitle').textContent = 'Bukti Transfer - ' + invoice;
-        document.getElementById('proofModal').classList.remove('hidden');
+    let currentTransaction = null;
+
+    function showVerificationModal(transaction) {
+        currentTransaction = transaction;
+
+        // Update modal title and subtitle
+        document.getElementById('modalTitle').textContent = 'Verifikasi Pembayaran';
+        document.getElementById('modalSubtitle').textContent = 'Tinjau bukti pembayaran dan lakukan verifikasi';
+
+        // Update transaction details
+        document.getElementById('detailInvoice').textContent = transaction.invoice;
+        document.getElementById('detailAmount').textContent = transaction.amount;
+        document.getElementById('detailUser').textContent = transaction.user;
+        document.getElementById('detailCourse').textContent = transaction.course;
+        document.getElementById('detailPaymentMethod').textContent = transaction.payment_method || 'Transfer Bank';
+
+        // Update proof image
+        const proofImageContainer = document.getElementById('proofImageContainer');
+        const proofImage = document.getElementById('proofImage');
+        const noProofMessage = document.getElementById('noProofMessage');
+
+        if (transaction.bukti_transfer) {
+            proofImage.src = '/storage/' + transaction.bukti_transfer;
+            proofImageContainer.classList.remove('hidden');
+            noProofMessage.classList.add('hidden');
+        } else {
+            proofImageContainer.classList.add('hidden');
+            noProofMessage.classList.remove('hidden');
+        }
+
+        // Update form actions
+        document.getElementById('verifyForm').action = '/dashboard/payments/' + transaction.id + '/verify';
+        document.getElementById('clarifyForm').action = '/dashboard/payments/' + transaction.id + '/clarify';
+        document.getElementById('rejectForm').action = '/dashboard/payments/' + transaction.id + '/reject';
+
+        // Show modal
+        document.getElementById('verificationModal').classList.remove('hidden');
         document.body.style.overflow = 'hidden';
     }
 
-    function closeProofModal() {
-        document.getElementById('proofModal').classList.add('hidden');
+    function closeVerificationModal() {
+        document.getElementById('verificationModal').classList.add('hidden');
         document.body.style.overflow = '';
+        currentTransaction = null;
     }
 
     // Close modal on Escape key
     document.addEventListener('keydown', function(event) {
         if (event.key === 'Escape') {
-            closeProofModal();
+            closeVerificationModal();
         }
     });
 </script>

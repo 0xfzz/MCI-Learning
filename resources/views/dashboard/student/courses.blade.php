@@ -316,8 +316,8 @@ function openEnrollModal(course) {
     const form = document.getElementById('enrollForm');
     const paymentSection = document.getElementById('paymentMethodSection');
 
-    // Update form action
-    form.action = `/student/courses/${course.course_id}/enroll`;
+    // Update form action - use Laravel route
+    form.action = `/dashboard/my-courses/${course.course_id}/enroll`;
 
     // Build course info
     const price = course.is_paid
