@@ -22,7 +22,7 @@ class AdminDashboardController extends Controller
         $salesSummary = $this->buildSalesSummary();
         $pendingPayments = $this->buildPendingPayments();
 
-        return view('admin.dashboard', compact(
+        return view('dashboard.admin.dashboard', compact(
             'summaryCards',
             'salesSummary',
             'pendingPayments'

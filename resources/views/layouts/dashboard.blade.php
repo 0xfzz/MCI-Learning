@@ -29,12 +29,12 @@
     @stack('styles')
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 font-sans antialiased text-gray-900 dark:text-gray-100">
-    <div class="grid lg:grid-cols-[260px_1fr] xl:grid-cols-[260px_1fr] h-screen overflow-hidden bg-white dark:bg-gray-900">
+    <div class="grid @if(View::hasSection('right-sidebar')) lg:grid-cols-[260px_1fr_380px] @else lg:grid-cols-[260px_1fr] @endif h-screen overflow-hidden bg-white dark:bg-gray-900">
         <!-- Left Sidebar -->
         @include('components.sidebar')
 
         <!-- Main Content -->
-    <main class="overflow-y-auto p-6 lg:p-8 bg-transparent">
+        <main class="overflow-y-auto p-6 lg:p-8 bg-transparent">
             <!-- Top Bar -->
             <div class="flex items-center justify-between mb-8">
                 <div class="flex-1 max-w-2xl">
@@ -81,6 +81,9 @@
 
             @yield('content')
         </main>
+
+        <!-- Right Sidebar (Optional) -->
+        @yield('right-sidebar')
     </div>
     @stack('scripts')
 </body>

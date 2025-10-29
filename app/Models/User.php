@@ -17,7 +17,7 @@ class User extends Authenticatable
      *
      * @var bool
      */
-    public $timestamps = false;
+    public $timestamps = true;
 
     /**
      * The primary key associated with the table.

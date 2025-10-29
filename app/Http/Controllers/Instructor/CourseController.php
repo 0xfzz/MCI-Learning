@@ -49,7 +49,7 @@ class CourseController extends Controller
             ->get()
             ->sum('enrollments_count');
 
-        return view('instructor.courses.index', [
+        return view('dashboard.instructor.courses.index', [
             'courses' => $courses,
             'metrics' => [
                 'total' => $totalCourses,
@@ -61,7 +61,7 @@ class CourseController extends Controller
                 'published' => 'Dipublikasikan',
                 'draft' => 'Draft',
             ],
-            'manageLessonRoute' => fn ($course) => route('instructor.lessons.index', $course),
+            'manageLessonRoute' => fn ($course) => route('dashboard.courses.lessons.index', $course),
             'filters' => $filters,
         ]);
     }
@@ -71,7 +71,7 @@ class CourseController extends Controller
      */
     public function create()
     {
-        return view('instructor.courses.create', $this->formOptions());
+        return view('dashboard.instructor.courses.create', $this->formOptions());
     }
 
     /**
@@ -86,7 +86,7 @@ class CourseController extends Controller
         $course->save();
 
         return redirect()
-            ->route('instructor.lessons.index', $course)
+            ->route('dashboard.courses.lessons.index', $course)
             ->with('status', 'Kursus berhasil dibuat.');
     }
 
@@ -97,7 +97,7 @@ class CourseController extends Controller
     {
         $this->authorizeCourse($request, $course);
 
-        return view('instructor.courses.edit', array_merge(
+        return view('dashboard.instructor.courses.edit', array_merge(
             ['course' => $course],
             $this->formOptions(),
         ));
@@ -115,7 +115,7 @@ class CourseController extends Controller
         $course->save();
 
         return redirect()
-            ->route('instructor.courses.index')
+            ->route('dashboard.courses.index')
             ->with('status', 'Perubahan kursus telah disimpan.');
     }
 
@@ -129,7 +129,7 @@ class CourseController extends Controller
         $course->delete();
 
         return redirect()
-            ->route('instructor.courses.index')
+            ->route('dashboard.courses.index')
             ->with('status', 'Kursus telah dihapus.');
     }
 

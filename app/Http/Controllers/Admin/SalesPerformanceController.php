@@ -24,7 +24,7 @@ class SalesPerformanceController extends Controller
         $statusBreakdown = $this->buildStatusBreakdown($filters);
         $history = $this->buildSalesHistory($filters);
 
-        return view('admin.sales', compact(
+        return view('dashboard.admin.sales', compact(
             'highlights',
             'topCourses',
             'statusBreakdown',

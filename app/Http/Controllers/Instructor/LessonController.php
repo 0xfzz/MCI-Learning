@@ -22,7 +22,7 @@ class LessonController extends Controller
             $query->ordered();
         }])->ordered()->get();
 
-        return view('instructor.lessons.index', [
+        return view('dashboard.instructor.lessons.index', [
             'course' => $course,
             'sections' => $sections,
         ]);
@@ -35,7 +35,7 @@ class LessonController extends Controller
     {
         $this->authorizeCourse($request, $course);
 
-        return view('instructor.lessons.create', [
+        return view('dashboard.instructor.lessons.create', [
             'course' => $course,
             'sections' => $this->availableSections($course),
             'nextOrder' => $this->nextOrderNumber($course, $request->input('parent_id')),
@@ -49,18 +49,23 @@ class LessonController extends Controller
     {
         $this->authorizeCourse($request, $course);
 
-        $data = $this->prepareLessonPayload($request, $course);
+                $data = $this->prepareLessonPayload($request, $course);
         $lesson = $course->lessons()->create($data);
 
         if ($lesson->is_section) {
             return redirect()
-                ->route('instructor.lessons.index', $course)
+                ->route('dashboard.courses.lessons.index', $course)
                 ->with('status', 'Bagian baru telah ditambahkan.');
         }
 
         return redirect()
-            ->route('instructor.lessons.index', $course)
+            ->route('dashboard.courses.lessons.index', $course)
             ->with('status', 'Materi baru berhasil dibuat.');
+    }
+
+    /**
+     * Show the form for editing the specified lesson.
+```
     }
 
     /**
@@ -71,7 +76,7 @@ class LessonController extends Controller
         $this->authorizeCourse($request, $course);
         $this->ensureOwnership($course, $lesson);
 
-        return view('instructor.lessons.edit', [
+        return view('dashboard.instructor.lessons.edit', [
             'course' => $course,
             'lesson' => $lesson,
             'sections' => $this->availableSections($course, $lesson),
@@ -92,7 +97,7 @@ class LessonController extends Controller
         $lesson->save();
 
         return redirect()
-            ->route('instructor.lessons.index', $course)
+            ->route('dashboard.courses.lessons.index', $course)
             ->with('status', 'Perubahan materi telah disimpan.');
     }
 
@@ -107,7 +112,7 @@ class LessonController extends Controller
         $lesson->delete();
 
         return redirect()
-            ->route('instructor.lessons.index', $course)
+            ->route('dashboard.courses.lessons.index', $course)
             ->with('status', 'Materi berhasil dihapus.');
     }
 

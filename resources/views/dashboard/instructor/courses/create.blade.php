@@ -11,7 +11,7 @@
     <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">Isi detail utama kursus untuk mulai membagikan materi Anda.</p>
 </div>
 
-<form method="POST" action="{{ route('instructor.courses.store') }}" class="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-8">
+<form method="POST" action="{{ route('dashboard.courses.store') }}" class="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-8">
     @csrf
 
     <section class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-3xl p-6 space-y-6">
@@ -90,11 +90,8 @@
         </div>
         <div class="border-t border-dashed border-gray-200 dark:border-gray-800 pt-4">
             <button type="submit" class="w-full px-4 py-3 rounded-xl bg-[#025f5a] text-white text-sm font-semibold shadow-lg shadow-emerald-500/20 hover:bg-[#014440] transition">Simpan &amp; Kelola Materi</button>
-            <a href="{{ route('instructor.courses.index') }}" class="mt-3 inline-flex justify-center w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 text-sm text-gray-600 dark:text-gray-300 hover:border-teal-400/60 transition">Batal</a>
+            <a href="{{ route('dashboard.courses.index') }}" class="mt-3 inline-flex justify-center w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 text-sm text-gray-600 dark:text-gray-300 hover:border-teal-400/60 transition">Batal</a>
         </div>
     </aside>
 </form>
-@endsection
-
-@section('right-sidebar')
 @endsection

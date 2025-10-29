@@ -21,11 +21,66 @@ class UserManagementController extends Controller
         $users = $this->fetchUsers($request);
         $availableRoles = $this->availableRoles();
 
-        return view('admin.users', compact(
+        return view('dashboard.admin.users', compact(
             'metrics',
             'users',
             'availableRoles'
         ));
+    }
+
+    /**
+     * Store a new user in the system.
+     */
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'username' => ['required', 'string', 'max:255', 'unique:users,username'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
+            'password' => ['required', 'string', 'min:8'],
+            'role' => ['required', Rule::in(array_keys($this->availableRoles()))],
+        ]);
+
+        $validated['password'] = bcrypt($validated['password']);
+
+        User::create($validated);
+
+        return back()->with('status', 'Pengguna berhasil ditambahkan.');
+    }
+
+    /**
+     * Update an existing user's information.
+     */
+    public function update(Request $request, User $user)
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'username' => ['required', 'string', 'max:255', Rule::unique('users', 'username')->ignore($user->user_id, 'user_id')],
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->user_id, 'user_id')],
+            'password' => ['nullable', 'string', 'min:8'],
+            'role' => ['required', Rule::in(array_keys($this->availableRoles()))],
+        ]);
+
+        if ($user->user_id === $request->user()->user_id && $validated['role'] !== $user->role) {
+            return back()->withErrors('Anda tidak dapat mengubah peran akun Anda sendiri.');
+        }
+
+        if ($user->role === 'admin' && $validated['role'] !== 'admin') {
+            $remainingAdmins = User::where('role', 'admin')->where('user_id', '<>', $user->user_id)->count();
+            if ($remainingAdmins === 0) {
+                return back()->withErrors('Minimal satu admin harus tetap ada.');
+            }
+        }
+
+        if (!empty($validated['password'])) {
+            $validated['password'] = bcrypt($validated['password']);
+        } else {
+            unset($validated['password']);
+        }
+
+        $user->update($validated);
+
+        return back()->with('status', sprintf('Pengguna %s berhasil diperbarui.', $user->username));
     }
 
     /**

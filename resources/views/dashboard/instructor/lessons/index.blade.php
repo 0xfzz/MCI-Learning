@@ -6,7 +6,7 @@
 
 @section('content')
 <div class="mb-8">
-    <a href="{{ route('instructor.courses.index') }}" class="text-sm text-gray-500 dark:text-gray-400 hover:text-teal-500">
+    <a href="{{ route('dashboard.courses.index') }}" class="text-sm text-gray-500 dark:text-gray-400 hover:text-teal-500">
         <i class="fa-solid fa-arrow-left mr-2"></i>Kembali ke kursus saya
     </a>
 </div>
@@ -18,11 +18,11 @@
         <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">Susun urutan materi agar siswa belajar secara terarah.</p>
     </div>
     <div class="flex items-center gap-2">
-        <a href="{{ route('instructor.lessons.create', $course) }}" class="inline-flex items-center gap-2 px-4 py-3 rounded-xl bg-[#025f5a] text-white text-sm font-semibold shadow-lg shadow-emerald-500/20 hover:bg-[#014440] transition">
+        <a href="{{ route('dashboard.courses.lessons.create', $course) }}" class="inline-flex items-center gap-2 px-4 py-3 rounded-xl bg-[#025f5a] text-white text-sm font-semibold shadow-lg shadow-emerald-500/20 hover:bg-[#014440] transition">
             <i class="fa-solid fa-folder-tree"></i>
             Tambah Bagian
         </a>
-        <a href="{{ route('instructor.lessons.create', [$course, 'parent_id' => request('section')]) }}" class="inline-flex items-center gap-2 px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 text-sm text-gray-600 dark:text-gray-300 hover:border-teal-400/60 transition">
+        <a href="{{ route('dashboard.courses.lessons.create', [$course, 'parent_id' => request('section')]) }}" class="inline-flex items-center gap-2 px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 text-sm text-gray-600 dark:text-gray-300 hover:border-teal-400/60 transition">
             <i class="fa-solid fa-play"></i>
             Tambah Video
         </a>
@@ -38,8 +38,8 @@
                     <p class="text-xs text-gray-500 dark:text-gray-400">Urutan: {{ $section->order_number }}</p>
                 </div>
                 <div class="flex items-center gap-2">
-                    <a href="{{ route('instructor.lessons.edit', [$course, $section]) }}" class="px-3 py-2 text-xs rounded-xl border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:border-teal-400/60 transition">Edit</a>
-                    <form method="POST" action="{{ route('instructor.lessons.destroy', [$course, $section]) }}" onsubmit="return confirm('Hapus bagian ini beserta semua materinya?');">
+                    <a href="{{ route('dashboard.courses.lessons.edit', [$course, $section]) }}" class="px-3 py-2 text-xs rounded-xl border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:border-teal-400/60 transition">Edit</a>
+                    <form method="POST" action="{{ route('dashboard.courses.lessons.destroy', [$course, $section]) }}" onsubmit="return confirm('Hapus bagian ini beserta semua materinya?');">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="px-3 py-2 text-xs rounded-xl border border-gray-200 dark:border-gray-700 text-rose-500 hover:border-rose-400/60 transition">Hapus</button>
@@ -56,8 +56,8 @@
                                 <p class="text-xs text-gray-500 dark:text-gray-400">Durasi: {{ $lesson->duration ?? '-' }} • {{ $lesson->is_free ? 'Gratis' : 'Premium' }}</p>
                             </div>
                             <div class="flex items-center gap-2">
-                                <a href="{{ route('instructor.lessons.edit', [$course, $lesson]) }}" class="px-3 py-2 text-xs rounded-xl border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:border-teal-400/60 transition">Edit</a>
-                                <form method="POST" action="{{ route('instructor.lessons.destroy', [$course, $lesson]) }}" onsubmit="return confirm('Hapus materi ini?');">
+                                <a href="{{ route('dashboard.courses.lessons.edit', [$course, $lesson]) }}" class="px-3 py-2 text-xs rounded-xl border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:border-teal-400/60 transition">Edit</a>
+                                <form method="POST" action="{{ route('dashboard.courses.lessons.destroy', [$course, $lesson]) }}" onsubmit="return confirm('Hapus materi ini?');">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="px-3 py-2 text-xs rounded-xl border border-gray-200 dark:border-gray-700 text-rose-500 hover:border-rose-400/60 transition">Hapus</button>
