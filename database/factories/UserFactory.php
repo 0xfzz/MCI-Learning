@@ -30,6 +30,8 @@ class UserFactory extends Factory
             'name' => fake()->name(),
             'avatar' => fake()->imageUrl(200, 200, 'people'),
             'created_at' => now(),
+            'updated_at' => now(),
+            'email_verified_at' => now(),
         ];
     }
 }

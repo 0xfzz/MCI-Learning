@@ -5,11 +5,13 @@ use App\Http\Controllers\Admin\PaymentActionController;
 use App\Http\Controllers\Admin\SalesPerformanceController;
 use App\Http\Controllers\Admin\TransactionVerificationController;
 use App\Http\Controllers\Admin\UserManagementController;
+use App\Http\Controllers\Admin\ReviewModerationController;
 use App\Http\Controllers\Instructor\CourseController as InstructorCourseController;
 use App\Http\Controllers\Instructor\LessonController as InstructorLessonController;
 use App\Http\Controllers\Student\CourseEnrollmentController;
 use App\Http\Controllers\Student\CourseListController;
 use App\Http\Controllers\Student\CourseViewController;
+use App\Http\Controllers\Student\CourseReviewController;
 use App\Http\Controllers\Student\DashboardController as StudentDashboardController;
 use App\Http\Controllers\CourseCatalogController;
 use App\Http\Controllers\Admin\BlogController as AdminBlogController;
@@ -18,6 +20,7 @@ use App\Http\Controllers\LandingController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
@@ -36,6 +39,27 @@ Route::post('/logout', [LoginController::class, 'destroy'])
     ->middleware('auth')
     ->name('logout');
 
+// Email Verification
+Route::get('/email/verify', function () {
+    return view('auth.verify-email');
+})->middleware('auth')->name('verification.notice');
+
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    $request->fulfill();
+
+    return redirect()->route('dashboard.index');
+})->middleware(['auth', 'signed', 'throttle:6,1'])->name('verification.verify');
+
+Route::post('/email/verification-notification', function (Request $request) {
+    if ($request->user()->hasVerifiedEmail()) {
+        return back()->with('status', 'Email kamu sudah diverifikasi.');
+    }
+
+    $request->user()->sendEmailVerificationNotification();
+
+    return back()->with('status', 'Link verifikasi baru telah dikirim.');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+
 // Blog
 Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
 Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
@@ -44,7 +68,7 @@ Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
 Route::get('/courses', [CourseCatalogController::class, 'index'])->name('courses.index');
 
 // Dashboard Routes - Unified for all roles
-Route::middleware(['auth'])->prefix('dashboard')->name('dashboard.')->group(function () {
+Route::middleware(['auth', 'verified'])->prefix('dashboard')->name('dashboard.')->group(function () {
     // Main Dashboard (redirects based on role)
     Route::get('/', function (Request $request) {
         $user = $request->user();
@@ -83,6 +107,10 @@ Route::middleware(['auth'])->prefix('dashboard')->name('dashboard.')->group(func
         Route::post('/payments/bulk-complete', [PaymentActionController::class, 'bulkComplete'])->name('payments.bulk-complete');
 
         Route::resource('blogs', AdminBlogController::class)->except(['show']);
+
+        Route::get('/reviews', [ReviewModerationController::class, 'index'])->name('reviews.index');
+        Route::post('/reviews/{review}/approve', [ReviewModerationController::class, 'approve'])->name('reviews.approve');
+        Route::post('/reviews/{review}/reject', [ReviewModerationController::class, 'reject'])->name('reviews.reject');
     });
 
     // Instructor Routes
@@ -108,5 +136,6 @@ Route::middleware(['auth'])->prefix('dashboard')->name('dashboard.')->group(func
         Route::post('/my-courses/{course}/enroll', [CourseEnrollmentController::class, 'store'])->name('my-courses.enroll');
         Route::get('/my-courses/{course}/learn', [CourseViewController::class, 'show'])->name('my-courses.learn');
         Route::post('/my-courses/{course}/learn/lesson/{lesson}/complete', [CourseViewController::class, 'markComplete'])->name('my-courses.lesson.complete');
+        Route::post('/my-courses/{course}/reviews', [CourseReviewController::class, 'store'])->name('my-courses.reviews.store');
     });
 });
