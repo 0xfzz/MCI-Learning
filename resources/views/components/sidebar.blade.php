@@ -48,6 +48,12 @@
                     'label' => 'Verifikasi Transaksi',
                 ],
                 [
+                    'route' => 'dashboard.reviews.index',
+                    'active' => 'dashboard.reviews.*',
+                    'icon' => 'fa-solid fa-comments',
+                    'label' => 'Moderasi Ulasan',
+                ],
+                [
                     'route' => 'dashboard.blogs.index',
                     'active' => 'dashboard.blogs.*',
                     'icon' => 'fa-solid fa-pen-nib',

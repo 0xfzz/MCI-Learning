@@ -23,7 +23,6 @@ class LandingController extends Controller
             ->withCount([
                 'enrollments as students_count',
             ])
-            ->withAvg('reviews as average_rating', 'rating')
             ->where('status', 'published')
             ->orderByDesc('students_count')
             ->limit(6)
@@ -41,7 +40,7 @@ class LandingController extends Controller
                     'is_paid' => $course->is_paid,
                     'students_count' => $course->students_count ?? 0,
                     'average_rating' => round($course->average_rating ?? 0, 1),
-                    'reviews_count' => $course->reviews()->count(),
+                    'reviews_count' => $course->reviews_count ?? 0,
                     'instructor_name' => $course->instructor->name ?? 'Unknown',
                 ];
             });
@@ -52,9 +51,9 @@ class LandingController extends Controller
                 'user:user_id,name',
                 'course:course_id,title',
             ])
+            ->approved()
             ->whereNotNull('comment')
             ->where('comment', '!=', '')
-            ->where('rating', '>=', 4)
             ->orderByDesc('rating')
             ->orderByDesc('created_at')
             ->limit(3)
@@ -75,7 +74,7 @@ class LandingController extends Controller
             'total_students' => DB::table('enrollments')->distinct('user_id')->count(),
             'total_courses' => Course::where('status', 'published')->count(),
             'total_instructors' => DB::table('users')->where('role', 'instructor')->count(),
-            'average_rating' => round(Review::avg('rating') ?? 0, 1),
+            'average_rating' => round(Review::approved()->avg('rating') ?? 0, 1),
         ];
 
         return view('landing', [

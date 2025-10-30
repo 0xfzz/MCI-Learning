@@ -87,6 +87,18 @@ class CourseViewController extends Controller
 
         $progressPercentage = $totalLessons > 0 ? round(($completedLessons / $totalLessons) * 100) : 0;
 
+        $studentReview = $course->reviews()
+            ->where('user_id', $student->user_id)
+            ->first();
+
+        $recentApprovedReviews = $course->approvedReviews()
+            ->with('user')
+            ->orderByDesc('approved_at')
+            ->take(8)
+            ->get();
+
+        $averageRating = $course->average_rating ? round($course->average_rating, 1) : 0;
+
         return view('dashboard.student.course-view', compact(
             'course',
             'sections',
@@ -95,7 +107,10 @@ class CourseViewController extends Controller
             'enrollment',
             'totalLessons',
             'completedLessons',
-            'progressPercentage'
+            'progressPercentage',
+            'studentReview',
+            'recentApprovedReviews',
+            'averageRating'
         ));
     }
 

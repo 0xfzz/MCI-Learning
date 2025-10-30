@@ -15,6 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin' => \App\Http\Middleware\AdminOnly::class,
             'instructor' => \App\Http\Middleware\InstructorOnly::class,
             'student' => \App\Http\Middleware\StudentOnly::class,
+            'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         ]);
 
         // Redirect authenticated users from guest routes to dashboard

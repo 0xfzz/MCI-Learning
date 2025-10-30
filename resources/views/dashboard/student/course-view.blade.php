@@ -34,6 +34,22 @@
     </div>
 </div>
 
+@if(session('status'))
+    <div class="bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 rounded-2xl px-4 py-3 mb-6">
+        <i class="fa-solid fa-circle-check mr-2"></i>{{ session('status') }}
+    </div>
+@endif
+
+@if($errors->any())
+    <div class="bg-rose-50 dark:bg-rose-900/20 border border-rose-200 dark:border-rose-800 text-rose-600 dark:text-rose-300 rounded-2xl px-4 py-3 mb-6">
+        <ul class="list-disc list-inside text-sm space-y-1">
+            @foreach($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
 <!-- Video Player Card -->
 @if($currentLesson)
 <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden mb-6">
@@ -115,6 +131,107 @@
 @endif
 
 <!-- Additional Resources -->
+<div class="grid lg:grid-cols-2 gap-6 mb-6">
+    <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6">
+        <div class="flex items-start justify-between gap-3 mb-4">
+            <div>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Bagikan Pengalaman Belajar</h3>
+                <p class="text-sm text-gray-500 dark:text-gray-400">Admin akan meninjau ulasan sebelum ditampilkan.</p>
+            </div>
+            <div class="text-right">
+                <div class="text-3xl font-bold text-[#025f5a] dark:text-teal-300">{{ number_format($averageRating, 1) }}</div>
+                <span class="text-xs text-gray-500 dark:text-gray-400">Rata-rata rating</span>
+            </div>
+        </div>
+
+        @if($studentReview && $studentReview->status === 'approved')
+            <div class="bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 text-sm rounded-xl px-4 py-3">
+                <i class="fa-solid fa-circle-check mr-2"></i>Ulasan kamu sudah disetujui dan tampil sebagai testimoni kursus ini.
+            </div>
+        @else
+            @if($studentReview && $studentReview->status === 'pending')
+                <div class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 text-amber-700 dark:text-amber-300 text-sm rounded-xl px-4 py-3 mb-4">
+                    <i class="fa-solid fa-hourglass-half mr-2"></i>Ulasan kamu sedang menunggu persetujuan admin. Kamu masih bisa memperbarui isinya sebelum disetujui.
+                </div>
+            @elseif($studentReview && $studentReview->status === 'rejected')
+                <div class="bg-rose-50 dark:bg-rose-900/20 border border-rose-200 dark:border-rose-800 text-rose-600 dark:text-rose-300 text-sm rounded-xl px-4 py-3 mb-4">
+                    <i class="fa-solid fa-circle-exclamation mr-2"></i>Ulasan sebelumnya ditolak. Perbarui komentar agar bisa ditinjau ulang.
+                </div>
+            @endif
+
+            <form action="{{ route('dashboard.my-courses.reviews.store', $course->course_id) }}" method="POST" class="space-y-4">
+                @csrf
+                @php
+                    $selectedRating = (int) old('rating', $studentReview->rating ?? 0);
+                @endphp
+                <div>
+                    <label for="rating" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Penilaian</label>
+                    <div class="flex items-center gap-3">
+                        <select id="rating" name="rating" class="w-40 rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 text-sm focus:border-[#025f5a] focus:ring-[#025f5a]">
+                            <option value="">Pilih rating</option>
+                            @for($i = 1; $i <= 5; $i++)
+                                <option value="{{ $i }}" {{ $selectedRating === $i ? 'selected' : '' }}>
+                                    {{ $i }} Bintang
+                                </option>
+                            @endfor
+                        </select>
+                        <div class="flex items-center gap-1" data-rating-preview>
+                            @for($i = 1; $i <= 5; $i++)
+                                <i class="fa-solid fa-star text-lg transition-colors rating-star {{ $selectedRating >= $i ? 'text-yellow-400' : 'text-gray-300 dark:text-gray-700' }}" data-rating-star></i>
+                            @endfor
+                        </div>
+                    </div>
+                    <p class="text-xs text-gray-400 dark:text-gray-500 mt-2">1 = kurang puas, 5 = sangat merekomendasikan.</p>
+                </div>
+                <div>
+                    <label for="comment" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Ceritakan pengalamanmu</label>
+                    <textarea id="comment" name="comment" rows="5" class="w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 text-sm focus:border-[#025f5a] focus:ring-[#025f5a]" placeholder="Apa yang kamu suka dari kursus ini?">{{ old('comment', $studentReview->comment ?? '') }}</textarea>
+                    <p class="text-xs text-gray-400 dark:text-gray-500 mt-2">Komentar minimal 20 karakter agar admin dapat menilainya.</p>
+                </div>
+                <button type="submit" class="px-5 py-3 bg-[#025f5a] text-white text-sm font-semibold rounded-xl hover:bg-[#024842] transition shadow-lg shadow-[#025f5a]/20">
+                    Kirim Ulasan
+                </button>
+            </form>
+        @endif
+    </div>
+
+    <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6">
+        <div class="flex items-start justify-between gap-3 mb-4">
+            <div>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Testimoni Mahasiswa</h3>
+                <p class="text-sm text-gray-500 dark:text-gray-400">{{ $course->reviews_count }} ulasan disetujui</p>
+            </div>
+            <div class="text-right">
+                <div class="text-sm text-gray-400 dark:text-gray-500">Rating rata-rata</div>
+                <div class="text-xl font-bold text-[#025f5a] dark:text-teal-300">{{ number_format($averageRating, 1) }}/5</div>
+            </div>
+        </div>
+
+        <div class="space-y-4 max-h-96 overflow-y-auto pr-1">
+            @forelse($recentApprovedReviews as $review)
+                <div class="border border-gray-100 dark:border-gray-800 rounded-xl p-4 bg-gray-50/80 dark:bg-gray-800/60">
+                    <div class="flex items-center justify-between mb-3">
+                        <div>
+                            <div class="text-sm font-semibold text-gray-900 dark:text-gray-100">{{ $review->user->name ?? $review->user->username ?? 'Mahasiswa' }}</div>
+                            <div class="text-xs text-gray-500 dark:text-gray-400">{{ optional($review->approved_at)->format('d M Y') }}</div>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            @for($i = 1; $i <= 5; $i++)
+                                <i class="fa-solid fa-star text-xs {{ $review->rating >= $i ? 'text-yellow-400' : 'text-gray-300 dark:text-gray-600' }}"></i>
+                            @endfor
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-700 dark:text-gray-200 whitespace-pre-line">{{ $review->comment }}</p>
+                </div>
+            @empty
+                <div class="border border-dashed border-gray-200 dark:border-gray-700 rounded-xl p-6 text-center text-sm text-gray-500 dark:text-gray-400">
+                    Belum ada testimoni yang disetujui untuk kursus ini.
+                </div>
+            @endforelse
+        </div>
+    </div>
+</div>
+
 <div class="grid md:grid-cols-2 gap-6 mb-6">
     <!-- Forum Discussion Card -->
     <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 hover:border-[#025f5a] hover:shadow-lg transition-all">
@@ -343,6 +460,28 @@
             alert('Terjadi kesalahan saat menyimpan progress');
         });
     }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const ratingSelect = document.getElementById('rating');
+        const ratingStars = document.querySelectorAll('[data-rating-star]');
+
+        if (ratingSelect && ratingStars.length) {
+            const syncStars = (value) => {
+                ratingStars.forEach((star, index) => {
+                    const active = index < value;
+                    star.classList.toggle('text-yellow-400', active);
+                    star.classList.toggle('text-gray-300', !active);
+                    star.classList.toggle('dark:text-gray-700', !active);
+                });
+            };
+
+            syncStars(parseInt(ratingSelect.value || '0', 10));
+
+            ratingSelect.addEventListener('change', (event) => {
+                syncStars(parseInt(event.target.value || '0', 10));
+            });
+        }
+    });
 </script>
 @endpush
 @endsection

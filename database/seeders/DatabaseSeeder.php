@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
                 "role" => "admin",
                 "name" => "Admin User",
                 "avatar" => null,
+                "email_verified_at" => now(),
             ]
         );
 
@@ -42,6 +43,7 @@ class DatabaseSeeder extends Seeder
                 "role" => "instructor",
                 "name" => "John Doe",
                 "avatar" => null,
+                "email_verified_at" => now(),
             ]
         );
 
@@ -54,6 +56,7 @@ class DatabaseSeeder extends Seeder
                 "role" => "instructor",
                 "name" => "Jane Smith",
                 "avatar" => null,
+                "email_verified_at" => now(),
             ]
         );
 
@@ -66,6 +69,7 @@ class DatabaseSeeder extends Seeder
                 "role" => "student",
                 "name" => "Alice Johnson",
                 "avatar" => null,
+                "email_verified_at" => now(),
             ]
         );
 
@@ -78,6 +82,7 @@ class DatabaseSeeder extends Seeder
                 "role" => "student",
                 "name" => "Bob Williams",
                 "avatar" => null,
+                "email_verified_at" => now(),
             ]
         );
 
@@ -493,6 +498,9 @@ class DatabaseSeeder extends Seeder
                 "rating" => 5,
                 "comment" =>
                     "Amazing course! The instructor explains everything clearly and the examples are practical.",
+                "status" => "approved",
+                "approved_at" => now(),
+                "approved_by" => $admin->user_id,
             ]
         );
 
@@ -507,6 +515,9 @@ class DatabaseSeeder extends Seeder
                 "rating" => 4,
                 "comment" =>
                     "Great content, but I wish there were more advanced topics covered.",
+                "status" => "approved",
+                "approved_at" => now(),
+                "approved_by" => $admin->user_id,
             ]
         );
 
@@ -520,8 +531,15 @@ class DatabaseSeeder extends Seeder
                 "course_id" => $flutterCourse->course_id,
                 "rating" => 5,
                 "comment" => "Perfect for beginners! Highly recommended.",
+                "status" => "approved",
+                "approved_at" => now(),
+                "approved_by" => $admin->user_id,
             ]
         );
+
+        foreach ([$reactCourse, $laravelCourse, $flutterCourse] as $courseInstance) {
+            $courseInstance->refreshReviewStats();
+        }
 
         $this->call(BlogSeeder::class);
     }

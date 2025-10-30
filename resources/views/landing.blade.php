@@ -391,9 +391,9 @@
                 <!-- Fallback to default testimonials if no reviews -->
                 @php
                     $defaultTestimonials = [
-                        ['name' => 'Budi Wirawan', 'role' => 'Full Stack Developer', 'avatar' => 'BW', 'text' => 'MCI (Majelis Coding Indonesia) benar-benar mengubah karir saya! Dari yang tadinya tidak tahu coding sama sekali, sekarang saya sudah bekerja sebagai Full Stack Developer di perusahaan tech startup. Materinya sangat lengkap dan mentornya super helpful!'],
-                        ['name' => 'Sarah Rahmawati', 'role' => 'Senior UI/UX Designer', 'avatar' => 'SR', 'text' => 'Sebagai UI/UX Designer, saya selalu perlu update skill. MCI (Majelis Coding Indonesia) menyediakan course yang selalu up-to-date dengan trend terbaru. Project-based learning nya juga sangat membantu build portofolio saya.'],
-                        ['name' => 'Ahmad Pratama', 'role' => 'Data Scientist', 'avatar' => 'AP', 'text' => 'Investasi terbaik untuk career development! Saya ambil course Data Science dan dalam 6 bulan sudah dapat job offer dengan salary 2x lipat. Komunitasnya juga sangat supportive dan active.'],
+                        ['name' => 'Budi Wirawan', 'role' => 'Full Stack Developer', 'avatar' => 'BW', 'text' => 'MCI (Majelis Coding Indonesia) benar-benar mengubah karir saya! Dari yang tadinya tidak tahu coding sama sekali, sekarang saya sudah bekerja sebagai Full Stack Developer di perusahaan tech startup. Materinya sangat lengkap dan mentornya super helpful!', 'rating' => 5, 'course' => null],
+                        ['name' => 'Sarah Rahmawati', 'role' => 'Senior UI/UX Designer', 'avatar' => 'SR', 'text' => 'Sebagai UI/UX Designer, saya selalu perlu update skill. MCI (Majelis Coding Indonesia) menyediakan course yang selalu up-to-date dengan trend terbaru. Project-based learning nya juga sangat membantu build portofolio saya.', 'rating' => 5, 'course' => null],
+                        ['name' => 'Ahmad Pratama', 'role' => 'Data Scientist', 'avatar' => 'AP', 'text' => 'Investasi terbaik untuk career development! Saya ambil course Data Science dan dalam 6 bulan sudah dapat job offer dengan salary 2x lipat. Komunitasnya juga sangat supportive dan active.', 'rating' => 5, 'course' => null],
                     ];
                 @endphp
                 @foreach($defaultTestimonials as $testimonial)
