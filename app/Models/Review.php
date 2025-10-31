@@ -21,7 +21,7 @@ class Review extends Model
      *
      * @var string|null
      */
-    const UPDATED_AT = null;
+    const UPDATED_AT = "updated_at";
 
     /**
      * The primary key associated with the table.
@@ -35,7 +35,24 @@ class Review extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = ["user_id", "course_id", "rating", "comment"];
+    protected $fillable = [
+        "user_id",
+        "course_id",
+        "rating",
+        "comment",
+        "status",
+        "approved_at",
+        "approved_by",
+    ];
+
+    /**
+     * The model's default values for attributes.
+     *
+     * @var array<string, mixed>
+     */
+    protected $attributes = [
+        "status" => "pending",
+    ];
 
     /**
      * Get the attributes that should be cast.
@@ -46,6 +63,7 @@ class Review extends Model
     {
         return [
             "rating" => "integer",
+            "approved_at" => "datetime",
         ];
     }
 
@@ -63,6 +81,14 @@ class Review extends Model
     public function course()
     {
         return $this->belongsTo(Course::class, "course_id", "course_id");
+    }
+
+    /**
+     * Get the admin who approved the review.
+     */
+    public function approvedBy()
+    {
+        return $this->belongsTo(User::class, "approved_by", "user_id");
     }
 
     /**
@@ -103,5 +129,34 @@ class Review extends Model
     public function scopeRecent($query)
     {
         return $query->orderBy("created_at", "desc");
+    }
+
+    /**
+     * Scope for approved testimonials.
+     */
+    public function scopeApproved($query)
+    {
+        return $query->where("status", "approved");
+    }
+
+    /**
+     * Scope for pending reviews.
+     */
+    public function scopePending($query)
+    {
+        return $query->where("status", "pending");
+    }
+
+    /**
+     * Scope for rejected reviews.
+     */
+    public function scopeRejected($query)
+    {
+        return $query->where("status", "rejected");
+    }
+
+    public function getRouteKeyName()
+    {
+        return "review_id";
     }
 }

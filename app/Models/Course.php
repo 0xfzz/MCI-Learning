@@ -48,6 +48,8 @@ class Course extends Model
         "whatsapp_group",
         "source_code_link",
         "status",
+        "average_rating",
+        "reviews_count",
     ];
 
     /**
@@ -61,6 +63,8 @@ class Course extends Model
             "is_paid" => "boolean",
             "price" => "integer",
             "discount_price" => "integer",
+            "average_rating" => "float",
+            "reviews_count" => "integer",
         ];
     }
 
@@ -139,11 +143,19 @@ class Course extends Model
     }
 
     /**
+     * Get only approved reviews for the course.
+     */
+    public function approvedReviews()
+    {
+        return $this->reviews()->approved();
+    }
+
+    /**
      * Get the average rating for the course.
      */
     public function averageRating()
     {
-        return $this->reviews()->avg("rating");
+        return (float) $this->average_rating;
     }
 
     /**
@@ -152,6 +164,20 @@ class Course extends Model
     public function totalStudents()
     {
         return $this->enrollments()->count();
+    }
+
+    /**
+     * Refresh cached review statistics.
+     */
+    public function refreshReviewStats(): void
+    {
+        $average = (float) ($this->approvedReviews()->avg("rating") ?? 0);
+        $count = (int) $this->approvedReviews()->count();
+
+        $this->forceFill([
+            "average_rating" => round($average, 2),
+            "reviews_count" => $count,
+        ])->save();
     }
 
     /**
@@ -184,5 +210,13 @@ class Course extends Model
     public function getEffectivePrice()
     {
         return $this->discount_price ?? $this->price;
+    }
+
+    /**
+     * Get the route key for the model.
+     */
+    public function getRouteKeyName()
+    {
+        return "course_id";
     }
 }

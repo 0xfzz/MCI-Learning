@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
@@ -17,7 +17,7 @@ class User extends Authenticatable
      *
      * @var bool
      */
-    public $timestamps = false;
+    public $timestamps = true;
 
     /**
      * The primary key associated with the table.
@@ -57,6 +57,8 @@ class User extends Authenticatable
         return [
             "password" => "hashed",
             "created_at" => "datetime",
+                "updated_at" => "datetime",
+                "email_verified_at" => "datetime",
         ];
     }
 
@@ -145,5 +147,10 @@ class User extends Authenticatable
     public function isStudent(): bool
     {
         return $this->role === "student";
+    }
+
+    public function getRouteKeyName(): string
+    {
+        return "user_id";
     }
 }

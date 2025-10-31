@@ -17,14 +17,20 @@
             <a href="#features" class="text-gray-700 dark:text-gray-300 hover:[color:#025f5a] transition font-medium">Features</a>
             <a href="#courses" class="text-gray-700 dark:text-gray-300 hover:[color:#025f5a] transition font-medium">Courses</a>
             <a href="#testimonials" class="text-gray-700 dark:text-gray-300 hover:[color:#025f5a] transition font-medium">Testimonials</a>
-            <a href="#pricing" class="text-gray-700 dark:text-gray-300 hover:[color:#025f5a] transition font-medium">Pricing</a>
+            <a href="{{ route('blog.index') }}" class="text-gray-700 dark:text-gray-300 hover:[color:#025f5a] transition font-medium">Blog</a>
             <button data-theme-toggle class="w-10 h-10 flex items-center justify-center rounded-full [background:rgba(255,255,255,0.08)] [border:1px_solid_rgba(255,255,255,0.12)] text-gray-300 hover:text-white transition">
                 <i class="fa-solid fa-moon block dark:hidden"></i>
                 <i class="fa-solid fa-sun hidden dark:block"></i>
             </button>
-            <button class="px-8 py-3.5 [background:linear-gradient(135deg,#06b6d4_0%,#4f46e5_50%,#025f5a_100%)] rounded-full text-white font-semibold shadow-[0_10px_30px_rgba(20,184,166,0.3)] hover:shadow-[0_15px_40px_rgba(20,184,166,0.5)] transition-all hover:-translate-y-1">
-                Daftar Gratis
-            </button>
+            @auth
+                <a href="{{ route('dashboard.index') }}" class="px-8 py-3.5 [background:linear-gradient(135deg,#06b6d4_0%,#4f46e5_50%,#025f5a_100%)] rounded-full text-white font-semibold shadow-[0_10px_30px_rgba(20,184,166,0.3)] hover:shadow-[0_15px_40px_rgba(20,184,166,0.5)] transition-all hover:-translate-y-1">
+                    Dashboard
+                </a>
+            @else
+                <a href="{{ route('register') }}" class="px-8 py-3.5 [background:linear-gradient(135deg,#06b6d4_0%,#4f46e5_50%,#025f5a_100%)] rounded-full text-white font-semibold shadow-[0_10px_30px_rgba(20,184,166,0.3)] hover:shadow-[0_15px_40px_rgba(20,184,166,0.5)] transition-all hover:-translate-y-1">
+                    Daftar Gratis
+                </a>
+            @endauth
         </div>
 
         <div class="md:hidden flex items-center gap-3">
@@ -60,18 +66,38 @@
             </h1>
 
             <p class="text-xl [color:#b4b4b4] leading-relaxed">
-                Bergabunglah dengan 100,000+ pembelajar yang telah mengubah karir mereka. Akses ratusan course premium, mentor berpengalaman, dan komunitas yang supportif untuk mencapai kesuksesan.
+                Bergabunglah dengan {{ number_format($stats['total_students']) }}+ pembelajar yang telah mengubah karir mereka. Akses {{ $stats['total_courses'] }}+ course premium, mentor berpengalaman, dan komunitas yang supportif untuk mencapai kesuksesan.
             </p>
 
             <div class="flex flex-wrap gap-5">
-                <button class="px-11 py-5 [background:linear-gradient(135deg,#06b6d4_0%,#025f5a_100%)] rounded-full text-white text-lg font-bold shadow-[0_15px_40px_rgba(20,184,166,0.3)] hover:shadow-[0_20px_50px_rgba(20,184,166,0.5)] transition-all hover:-translate-y-1 flex items-center gap-3">
+                <a href="{{ route('register') }}" class="px-11 py-5 [background:linear-gradient(135deg,#06b6d4_0%,#025f5a_100%)] rounded-full text-white text-lg font-bold shadow-[0_15px_40px_rgba(20,184,166,0.3)] hover:shadow-[0_20px_50px_rgba(20,184,166,0.5)] transition-all hover:-translate-y-1 flex items-center gap-3">
                     <span><i class="fa-solid fa-rocket"></i></span>
                     <span>Mulai Belajar Gratis</span>
-                </button>
-                <button class="px-11 py-5 [border:2px_solid_#025f5a] rounded-full [color:#025f5a] text-lg font-bold [background:transparent] hover:[background:rgba(2,95,90,0.1)] transition-all hover:-translate-y-1 flex items-center gap-3">
+                </a>
+                <a href="#courses" class="px-11 py-5 [border:2px_solid_#025f5a] rounded-full [color:#025f5a] dark:text-white text-lg font-bold [background:transparent] hover:[background:rgba(2,95,90,0.1)] transition-all hover:-translate-y-1 flex items-center gap-3">
                     <span><i class="fa-solid fa-play"></i></span>
-                    <span>Tonton Demo</span>
-                </button>
+                    <span>Lihat Course</span>
+                </a>
+            </div>
+
+            <!-- Stats Section -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 pt-8">
+                <div class="text-center">
+                    <div class="text-4xl font-black [color:#025f5a] dark:text-white mb-2">{{ number_format($stats['total_students']) }}+</div>
+                    <div class="text-sm [color:#8b8b8b]">Siswa Aktif</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-black [color:#025f5a] dark:text-white mb-2">{{ $stats['total_courses'] }}+</div>
+                    <div class="text-sm [color:#8b8b8b]">Course Premium</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-black [color:#025f5a] dark:text-white mb-2">{{ $stats['total_instructors'] }}+</div>
+                    <div class="text-sm [color:#8b8b8b]">Instruktur Expert</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-black [color:#025f5a] dark:text-white mb-2">{{ $stats['average_rating'] }}<i class="fa-solid fa-star text-yellow-400 text-2xl ml-2"></i></div>
+                    <div class="text-sm [color:#8b8b8b]">Rating Rata-rata</div>
+                </div>
             </div>
         </div>
 
@@ -207,7 +233,7 @@
 <!-- Courses Section -->
 <section id="courses" class="py-32 px-8 [background:linear-gradient(135deg,#f8fafc_0%,#eef2ff_100%)] dark:[background:linear-gradient(135deg,#1e1e28_0%,#0a0a0f_100%)]">
     <div class="max-w-7xl mx-auto">
-            <div class="text-center max-w-3xl mx-auto mb-20">
+        <div class="text-center max-w-3xl mx-auto mb-20">
             <div class="[color:#025f5a] text-sm font-bold uppercase tracking-widest mb-4"><i class="fa-solid fa-book"></i> Course Populer</div>
             <h2 class="text-5xl lg:text-6xl font-black mb-6 [color:#025f5a] dark:text-white">Temukan Course yang Tepat untuk Anda</h2>
             <p class="text-xl [color:#b4b4b4] leading-relaxed">
@@ -217,38 +243,111 @@
 
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             @php
-                $courses = [
-                    ['icon' => 'fa-laptop-code', 'category' => 'Web Development', 'title' => 'Full Stack Web Development Masterclass', 'desc' => 'Pelajari HTML, CSS, JavaScript, React, Node.js dan bangun 10+ real-world projects profesional.', 'rating' => '4.9', 'reviews' => '12,543', 'students' => '45K', 'grad' => 'linear-gradient(135deg,#14b8a6,#06b6d4)'],
-                    ['icon' => 'fa-paintbrush', 'category' => 'UI/UX Design', 'title' => 'UI/UX Design Complete Guide', 'desc' => 'Master Figma, design principles, user research, dan create stunning interfaces yang user-friendly.', 'rating' => '4.8', 'reviews' => '8,932', 'students' => '32K', 'grad' => 'linear-gradient(135deg,#a855f7,#f43f5e)'],
-                    ['icon' => 'fa-robot', 'category' => 'Data Science', 'title' => 'Data Science & Machine Learning A-Z', 'desc' => 'Python, Pandas, Scikit-learn, TensorFlow - dari basic hingga advanced AI applications.', 'rating' => '4.9', 'reviews' => '15,234', 'students' => '56K', 'grad' => 'linear-gradient(135deg,#4f46e5,#06b6d4)'],
-                    ['icon' => 'fa-mobile-screen-button', 'category' => 'Mobile Development', 'title' => 'React Native: Build iOS & Android Apps', 'desc' => 'Create cross-platform mobile apps dengan React Native dan deploy ke App Store & Play Store.', 'rating' => '4.7', 'reviews' => '6,721', 'students' => '28K', 'grad' => 'linear-gradient(135deg,#10b981,#14b8a6)'],
-                    ['icon' => 'fa-chart-line', 'category' => 'Digital Marketing', 'title' => 'Digital Marketing Mastery 2025', 'desc' => 'SEO, SEM, Social Media Marketing, Email Marketing, dan Analytics untuk grow your business online.', 'rating' => '4.8', 'reviews' => '11,456', 'students' => '42K', 'grad' => 'linear-gradient(135deg,#f59e0b,#f97316)'],
-                    ['icon' => 'fa-shield-halved', 'category' => 'Cybersecurity', 'title' => 'Ethical Hacking & Cybersecurity Pro', 'desc' => 'Learn penetration testing, network security, dan protect systems dari cyber threats.', 'rating' => '4.9', 'reviews' => '7,892', 'students' => '25K', 'grad' => 'linear-gradient(135deg,#06b6d4,#025f5a)'],
+                // Gradient mappings for categories
+                $categoryGradients = [
+                    'Web Development' => 'linear-gradient(135deg,#14b8a6,#06b6d4)',
+                    'Mobile Development' => 'linear-gradient(135deg,#10b981,#14b8a6)',
+                    'Data Science' => 'linear-gradient(135deg,#4f46e5,#06b6d4)',
+                    'UI/UX Design' => 'linear-gradient(135deg,#a855f7,#f43f5e)',
+                    'Digital Marketing' => 'linear-gradient(135deg,#f59e0b,#f97316)',
+                    'Cybersecurity' => 'linear-gradient(135deg,#06b6d4,#025f5a)',
                 ];
+
+                // Icon mappings for categories
+                $categoryIcons = [
+                    'Web Development' => 'fa-laptop-code',
+                    'Mobile Development' => 'fa-mobile-screen-button',
+                    'Data Science' => 'fa-robot',
+                    'UI/UX Design' => 'fa-paintbrush',
+                    'Digital Marketing' => 'fa-chart-line',
+                    'Cybersecurity' => 'fa-shield-halved',
+                ];
+
+                $defaultGradient = 'linear-gradient(135deg,#06b6d4,#025f5a)';
+                $defaultIcon = 'fa-book';
             @endphp
 
-            @foreach($courses as $course)
-                <div class="[background:rgba(30,30,40,0.6)] rounded-3xl overflow-hidden [border:2px_solid_rgba(255,255,255,0.08)] hover:[border-color:rgba(2,95,90,0.4)] shadow-[0_10px_40px_rgba(20,184,166,0.15)] hover:shadow-[0_25px_50px_rgba(20,184,166,0.3)] transition-all duration-300 hover:-translate-y-3 cursor-pointer">
-                    <div class="h-48 flex items-center justify-center text-6xl relative" style="background: {{ $course['grad'] }}">
-                        <i class="fa-solid {{ $course['icon'] }}"></i>
-                    </div>
+            @forelse($featuredCourses as $course)
+                @php
+                    $gradient = $categoryGradients[$course['category']] ?? $defaultGradient;
+                    $icon = $categoryIcons[$course['category']] ?? $defaultIcon;
+                    $studentsFormatted = $course['students_count'] >= 1000
+                        ? number_format($course['students_count'] / 1000, 1) . 'K'
+                        : $course['students_count'];
+                @endphp
+                <a href="{{ route('courses.index') }}" class="block [background:rgba(30,30,40,0.6)] rounded-3xl overflow-hidden [border:2px_solid_rgba(255,255,255,0.08)] hover:[border-color:rgba(2,95,90,0.4)] shadow-[0_10px_40px_rgba(20,184,166,0.15)] hover:shadow-[0_25px_50px_rgba(20,184,166,0.3)] transition-all duration-300 hover:-translate-y-3 cursor-pointer">
+                    @if($course['thumbnail'])
+                        <div class="h-48 bg-cover bg-center relative" style="background-image: url('{{ asset('storage/' . $course['thumbnail']) }}')">
+                            <div class="absolute inset-0" style="background: {{ $gradient }}; opacity: 0.7;"></div>
+                            <div class="absolute inset-0 flex items-center justify-center text-6xl text-white">
+                                <i class="fa-solid {{ $icon }}"></i>
+                            </div>
+                        </div>
+                    @else
+                        <div class="h-48 flex items-center justify-center text-6xl relative text-white" style="background: {{ $gradient }}">
+                            <i class="fa-solid {{ $icon }}"></i>
+                        </div>
+                    @endif
                     <div class="p-8">
                         <span class="inline-block px-4 py-1.5 [background:rgba(2,95,90,0.15)] rounded-full text-xs font-semibold [color:#5eead4] mb-4">
                             {{ $course['category'] }}
                         </span>
                         <h3 class="text-xl font-bold text-white mb-3">{{ $course['title'] }}</h3>
-                        <p class="[color:#b4b4b4] text-sm mb-5 leading-relaxed">{{ $course['desc'] }}</p>
+                        <p class="[color:#b4b4b4] text-sm mb-5 leading-relaxed line-clamp-2">
+                            {{ Str::limit($course['description'], 100) }}
+                        </p>
                         <div class="flex items-center justify-between pt-5 [border-top:1px_solid_rgba(255,255,255,0.05)]">
                             <div class="flex items-center gap-2 [color:#fbbf24] font-semibold">
                                 <span><i class="fa-solid fa-star"></i></span>
-                                <span>{{ $course['rating'] }}</span>
-                                <span class="[color:#8b8b8b] text-sm">({{ $course['reviews'] }})</span>
+                                <span>{{ $course['average_rating'] ?: 'New' }}</span>
+                                @if($course['reviews_count'] > 0)
+                                    <span class="[color:#8b8b8b] text-sm">({{ number_format($course['reviews_count']) }})</span>
+                                @endif
                             </div>
-                            <div class="[color:#8b8b8b] text-sm">{{ $course['students'] }} siswa</div>
+                            <div class="[color:#8b8b8b] text-sm">{{ $studentsFormatted }} siswa</div>
                         </div>
                     </div>
-                </div>
-            @endforeach
+                </a>
+            @empty
+                <!-- Fallback to default courses if no data -->
+                @php
+                    $defaultCourses = [
+                        ['icon' => 'fa-laptop-code', 'category' => 'Web Development', 'title' => 'Full Stack Web Development Masterclass', 'desc' => 'Pelajari HTML, CSS, JavaScript, React, Node.js dan bangun 10+ real-world projects profesional.', 'rating' => '4.9', 'reviews' => '12,543', 'students' => '45K', 'grad' => 'linear-gradient(135deg,#14b8a6,#06b6d4)'],
+                        ['icon' => 'fa-paintbrush', 'category' => 'UI/UX Design', 'title' => 'UI/UX Design Complete Guide', 'desc' => 'Master Figma, design principles, user research, dan create stunning interfaces yang user-friendly.', 'rating' => '4.8', 'reviews' => '8,932', 'students' => '32K', 'grad' => 'linear-gradient(135deg,#a855f7,#f43f5e)'],
+                        ['icon' => 'fa-robot', 'category' => 'Data Science', 'title' => 'Data Science & Machine Learning A-Z', 'desc' => 'Python, Pandas, Scikit-learn, TensorFlow - dari basic hingga advanced AI applications.', 'rating' => '4.9', 'reviews' => '15,234', 'students' => '56K', 'grad' => 'linear-gradient(135deg,#4f46e5,#06b6d4)'],
+                    ];
+                @endphp
+                @foreach($defaultCourses as $course)
+                    <div class="[background:rgba(30,30,40,0.6)] rounded-3xl overflow-hidden [border:2px_solid_rgba(255,255,255,0.08)] hover:[border-color:rgba(2,95,90,0.4)] shadow-[0_10px_40px_rgba(20,184,166,0.15)] hover:shadow-[0_25px_50px_rgba(20,184,166,0.3)] transition-all duration-300 hover:-translate-y-3 cursor-pointer">
+                        <div class="h-48 flex items-center justify-center text-6xl relative text-white" style="background: {{ $course['grad'] }}">
+                            <i class="fa-solid {{ $course['icon'] }}"></i>
+                        </div>
+                        <div class="p-8">
+                            <span class="inline-block px-4 py-1.5 [background:rgba(2,95,90,0.15)] rounded-full text-xs font-semibold [color:#5eead4] mb-4">
+                                {{ $course['category'] }}
+                            </span>
+                            <h3 class="text-xl font-bold text-white mb-3">{{ $course['title'] }}</h3>
+                            <p class="[color:#b4b4b4] text-sm mb-5 leading-relaxed">{{ $course['desc'] }}</p>
+                            <div class="flex items-center justify-between pt-5 [border-top:1px_solid_rgba(255,255,255,0.05)]">
+                                <div class="flex items-center gap-2 [color:#fbbf24] font-semibold">
+                                    <span><i class="fa-solid fa-star"></i></span>
+                                    <span>{{ $course['rating'] }}</span>
+                                    <span class="[color:#8b8b8b] text-sm">({{ $course['reviews'] }})</span>
+                                </div>
+                                <div class="[color:#8b8b8b] text-sm">{{ $course['students'] }} siswa</div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            @endforelse
+        </div>
+
+        <!-- View All Courses Button -->
+        <div class="text-center mt-16">
+            <a href="{{ route('courses.index') }}" class="inline-flex items-center gap-3 px-11 py-5 [border:2px_solid_#025f5a] rounded-full [color:#025f5a] dark:text-white text-lg font-bold [background:transparent] hover:[background:rgba(2,95,90,0.1)] transition-all hover:-translate-y-1">
+                <span>Lihat Semua Course</span>
+                <i class="fa-solid fa-arrow-right"></i>
+            </a>
         </div>
     </div>
 </section>
@@ -256,7 +355,7 @@
 <!-- Testimonials Section -->
 <section id="testimonials" class="py-32 px-8 bg-white dark:[background:#0a0a0f]">
     <div class="max-w-7xl mx-auto">
-            <div class="text-center max-w-3xl mx-auto mb-20">
+        <div class="text-center max-w-3xl mx-auto mb-20">
             <div class="[color:#025f5a] text-sm font-bold uppercase tracking-widest mb-4"><i class="fa-solid fa-comment-dots"></i> Testimoni</div>
             <h2 class="text-5xl lg:text-6xl font-black mb-6 [color:#025f5a] dark:text-white">Apa Kata Mereka tentang MCI (Majelis Coding Indonesia)?</h2>
             <p class="text-xl [color:#b4b4b4] leading-relaxed">
@@ -265,15 +364,7 @@
         </div>
 
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            @php
-                $testimonials = [
-                    ['name' => 'Budi Wirawan', 'role' => 'Full Stack Developer', 'avatar' => 'BW', 'text' => 'MCI (Majelis Coding Indonesia) benar-benar mengubah karir saya! Dari yang tadinya tidak tahu coding sama sekali, sekarang saya sudah bekerja sebagai Full Stack Developer di perusahaan tech startup. Materinya sangat lengkap dan mentornya super helpful!'],
-                    ['name' => 'Sarah Rahmawati', 'role' => 'Senior UI/UX Designer', 'avatar' => 'SR', 'text' => 'Sebagai UI/UX Designer, saya selalu perlu update skill. MCI (Majelis Coding Indonesia) menyediakan course yang selalu up-to-date dengan trend terbaru. Project-based learning nya juga sangat membantu build portofolio saya.'],
-                    ['name' => 'Ahmad Pratama', 'role' => 'Data Scientist', 'avatar' => 'AP', 'text' => 'Investasi terbaik untuk career development! Saya ambil course Data Science dan dalam 6 bulan sudah dapat job offer dengan salary 2x lipat. Komunitasnya juga sangat supportive dan active.'],
-                ];
-            @endphp
-
-            @foreach($testimonials as $testimonial)
+            @forelse($testimonials as $testimonial)
                 <div class="[background:rgba(30,30,40,0.5)] p-10 rounded-3xl [border:2px_solid_rgba(255,255,255,0.05)] hover:[border-color:rgba(2,95,90,0.3)] shadow-[0_10px_40px_rgba(20,184,166,0.12)] hover:shadow-[0_20px_45px_rgba(20,184,166,0.25)] transition-all duration-300 hover:-translate-y-2 relative">
                     <div class="absolute top-5 left-8 text-8xl [color:rgba(2,95,90,0.15)] font-black leading-none">"</div>
                     <p class="[color:#d4d4d4] leading-relaxed mb-6 relative z-10">{{ $testimonial['text'] }}</p>
@@ -284,10 +375,43 @@
                         <div>
                             <h4 class="font-bold text-white">{{ $testimonial['name'] }}</h4>
                             <p class="[color:#8b8b8b] text-sm">{{ $testimonial['role'] }}</p>
+                            @if($testimonial['course'])
+                                <p class="[color:#5eead4] text-xs mt-1">{{ $testimonial['course'] }}</p>
+                            @endif
                         </div>
                     </div>
+                    <!-- Star rating -->
+                    <div class="flex gap-1 mt-4">
+                        @for($i = 1; $i <= 5; $i++)
+                            <i class="fa-solid fa-star {{ $i <= $testimonial['rating'] ? 'text-yellow-400' : 'text-gray-600' }} text-sm"></i>
+                        @endfor
+                    </div>
                 </div>
-            @endforeach
+            @empty
+                <!-- Fallback to default testimonials if no reviews -->
+                @php
+                    $defaultTestimonials = [
+                        ['name' => 'Budi Wirawan', 'role' => 'Full Stack Developer', 'avatar' => 'BW', 'text' => 'MCI (Majelis Coding Indonesia) benar-benar mengubah karir saya! Dari yang tadinya tidak tahu coding sama sekali, sekarang saya sudah bekerja sebagai Full Stack Developer di perusahaan tech startup. Materinya sangat lengkap dan mentornya super helpful!', 'rating' => 5, 'course' => null],
+                        ['name' => 'Sarah Rahmawati', 'role' => 'Senior UI/UX Designer', 'avatar' => 'SR', 'text' => 'Sebagai UI/UX Designer, saya selalu perlu update skill. MCI (Majelis Coding Indonesia) menyediakan course yang selalu up-to-date dengan trend terbaru. Project-based learning nya juga sangat membantu build portofolio saya.', 'rating' => 5, 'course' => null],
+                        ['name' => 'Ahmad Pratama', 'role' => 'Data Scientist', 'avatar' => 'AP', 'text' => 'Investasi terbaik untuk career development! Saya ambil course Data Science dan dalam 6 bulan sudah dapat job offer dengan salary 2x lipat. Komunitasnya juga sangat supportive dan active.', 'rating' => 5, 'course' => null],
+                    ];
+                @endphp
+                @foreach($defaultTestimonials as $testimonial)
+                    <div class="[background:rgba(30,30,40,0.5)] p-10 rounded-3xl [border:2px_solid_rgba(255,255,255,0.05)] hover:[border-color:rgba(2,95,90,0.3)] shadow-[0_10px_40px_rgba(20,184,166,0.12)] hover:shadow-[0_20px_45px_rgba(20,184,166,0.25)] transition-all duration-300 hover:-translate-y-2 relative">
+                        <div class="absolute top-5 left-8 text-8xl [color:rgba(2,95,90,0.15)] font-black leading-none">"</div>
+                        <p class="[color:#d4d4d4] leading-relaxed mb-6 relative z-10">{{ $testimonial['text'] }}</p>
+                        <div class="flex items-center gap-4">
+                            <div class="w-14 h-14 rounded-full [background:linear-gradient(135deg,#06b6d4,#025f5a)] flex items-center justify-center text-white font-bold text-xl">
+                                {{ $testimonial['avatar'] }}
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white">{{ $testimonial['name'] }}</h4>
+                                <p class="[color:#8b8b8b] text-sm">{{ $testimonial['role'] }}</p>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            @endforelse
         </div>
     </div>
 </section>
@@ -305,10 +429,17 @@
         <p class="text-2xl [color:#b4b4b4] mb-11 leading-relaxed">
             Bergabunglah dengan ribuan pelajar lainnya dan raih kesuksesan Anda hari ini!
         </p>
-        <button class="px-14 py-6 [background:linear-gradient(135deg,#06b6d4,#4f46e5,#025f5a)] rounded-full text-white text-xl font-bold shadow-[0_10px_30px_rgba(20,184,166,0.3)] hover:shadow-[0_20px_50px_rgba(20,184,166,0.5)] transition-all hover:-translate-y-2 inline-flex items-center gap-3">
-            <span><i class="fa-solid fa-rocket"></i></span>
-            <span>Daftar Gratis Sekarang</span>
-        </button>
+        @auth
+            <a href="{{ route('dashboard.index') }}" class="px-14 py-6 [background:linear-gradient(135deg,#06b6d4,#4f46e5,#025f5a)] rounded-full text-white text-xl font-bold shadow-[0_10px_30px_rgba(20,184,166,0.3)] hover:shadow-[0_20px_50px_rgba(20,184,166,0.5)] transition-all hover:-translate-y-2 inline-flex items-center gap-3">
+                <span><i class="fa-solid fa-rocket"></i></span>
+                <span>Ke Dashboard</span>
+            </a>
+        @else
+            <a href="{{ route('register') }}" class="px-14 py-6 [background:linear-gradient(135deg,#06b6d4,#4f46e5,#025f5a)] rounded-full text-white text-xl font-bold shadow-[0_10px_30px_rgba(20,184,166,0.3)] hover:shadow-[0_20px_50px_rgba(20,184,166,0.5)] transition-all hover:-translate-y-2 inline-flex items-center gap-3">
+                <span><i class="fa-solid fa-rocket"></i></span>
+                <span>Daftar Gratis Sekarang</span>
+            </a>
+        @endauth
     </div>
 </section>
 

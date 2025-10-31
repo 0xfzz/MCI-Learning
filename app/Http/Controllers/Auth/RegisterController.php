@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -37,9 +38,11 @@ class RegisterController extends Controller
             'role' => 'student',
         ]);
 
+        event(new Registered($user));
+
         Auth::login($user);
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard'));
+        return redirect()->route('verification.notice');
     }
 }

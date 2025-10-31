@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
@@ -37,9 +38,21 @@ class LoginController extends Controller
         $request->session()->regenerate();
 
         $user = $request->user();
-        $redirectRoute = ($user instanceof User && $user->isAdmin())
-            ? route('admin.dashboard')
-            : route('dashboard');
+
+        if (! $user instanceof User) {
+            return redirect()->intended(route('dashboard.index'));
+        }
+
+        if ($user instanceof MustVerifyEmail && ! $user->hasVerifiedEmail()) {
+            return redirect()->route('verification.notice');
+        }
+
+        $redirectRoute = match (true) {
+            $user->isAdmin() => route('dashboard.index'),
+            $user->isInstructor() => route('dashboard.courses.index'),
+            $user->isStudent() => route('dashboard.index'),
+            default => route('dashboard.index'),
+        };
 
         return redirect()->intended($redirectRoute);
     }
