@@ -58,6 +58,10 @@ class TransactionVerificationController extends Controller
 
     private function buildPendingTransactions(): Collection
     {
+        $statusConfig = $this->statusConfig();
+        $statusLabels = $statusConfig['labels'];
+        $statusColors = $statusConfig['colors'];
+
         return Payment::pending()
             ->with([
                 'user:user_id,name,username',
@@ -66,7 +70,9 @@ class TransactionVerificationController extends Controller
             ->latest('created_at')
             ->limit(5)
             ->get()
-            ->map(function (Payment $payment) {
+            ->map(function (Payment $payment) use ($statusLabels, $statusColors) {
+                $statusKey = $payment->clarification_requested_at ? 'clarification' : ($payment->status ?? 'pending');
+
                 return [
                     'id' => $payment->payment_id,
                     'invoice' => sprintf('#PAY-%05d', $payment->payment_id),
@@ -77,6 +83,10 @@ class TransactionVerificationController extends Controller
                     'needs_clarification' => (bool) $payment->clarification_requested_at,
                     'bukti_transfer' => $payment->bukti_transfer,
                     'payment_method' => $payment->payment_method,
+                    'status' => $payment->status,
+                    'status_label' => $statusLabels[$statusKey] ?? ucfirst($statusKey),
+                    'status_class' => $statusColors[$statusKey] ?? 'bg-gray-200 text-gray-600',
+                    'mode' => 'pending',
                 ];
             });
     }
@@ -91,6 +101,10 @@ class TransactionVerificationController extends Controller
             $query->where('status', $filters['status']);
         }
 
+        $statusConfig = $this->statusConfig();
+        $statusLabels = $statusConfig['labels'];
+        $statusColors = $statusConfig['colors'];
+
         return $query
             ->with([
                 'user:user_id,name,username',
@@ -98,19 +112,43 @@ class TransactionVerificationController extends Controller
             ])
             ->limit(8)
             ->get()
-            ->map(function (Payment $payment) {
+            ->map(function (Payment $payment) use ($statusLabels, $statusColors) {
+                $statusKey = $payment->clarification_requested_at ? 'clarification' : ($payment->status ?? 'pending');
+
                 return [
                     'id' => $payment->payment_id,
                     'invoice' => sprintf('#PAY-%05d', $payment->payment_id),
                     'user' => $payment->user?->name ?? $payment->user?->username ?? 'Pengguna',
                     'course' => $payment->course?->title ?? 'Kursus tidak tersedia',
                     'status' => $payment->status,
-                    'time' => optional($payment->created_at)?->diffForHumans() ?? '-',
+                    'status_label' => $statusLabels[$statusKey] ?? ucfirst($statusKey),
+                    'status_class' => $statusColors[$statusKey] ?? 'bg-gray-200 text-gray-600',
+                    'time' => optional($payment->updated_at ?? $payment->created_at)?->diffForHumans() ?? '-',
                     'clarification_requested' => (bool) $payment->clarification_requested_at,
                     'bukti_transfer' => $payment->bukti_transfer,
                     'payment_method' => $payment->payment_method,
+                    'amount' => $this->formatCurrency((int) ($payment->amount ?? 0)),
+                    'mode' => 'history',
                 ];
             });
+    }
+
+    private function statusConfig(): array
+    {
+        return [
+            'labels' => [
+                'success' => 'Terverifikasi',
+                'failed' => 'Ditolak',
+                'pending' => 'Menunggu Verifikasi',
+                'clarification' => 'Klarifikasi Diminta',
+            ],
+            'colors' => [
+                'success' => 'bg-emerald-500/10 text-emerald-500',
+                'failed' => 'bg-rose-500/10 text-rose-500',
+                'pending' => 'bg-amber-500/10 text-amber-500',
+                'clarification' => 'bg-amber-500/10 text-amber-500',
+            ],
+        ];
     }
 
     private function resolveFilters(Request $request): array

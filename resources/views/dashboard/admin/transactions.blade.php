@@ -89,19 +89,6 @@
         </div>
     <a href="{{ route('dashboard.transactions.index', ['status' => 'all']) }}" class="text-sm font-semibold text-teal-600 dark:text-teal-300 hover:text-teal-500">Lihat semua</a>
     </div>
-    @php
-        $statusLabels = [
-            'success' => 'Terverifikasi',
-            'failed' => 'Ditolak',
-            'pending' => 'Menunggu Verifikasi',
-        ];
-        $statusColors = [
-            'success' => 'bg-emerald-500/10 text-emerald-500',
-            'failed' => 'bg-rose-500/10 text-rose-500',
-            'pending' => 'bg-amber-500/10 text-amber-500',
-            'clarification' => 'bg-amber-500/10 text-amber-500',
-        ];
-    @endphp
     <div class="divide-y divide-gray-100 dark:divide-gray-800 text-sm">
         @forelse ($history as $row)
             <div class="py-4 flex items-center justify-between">
@@ -109,14 +96,12 @@
                     <p class="font-semibold text-gray-900 dark:text-gray-100">{{ $row['invoice'] }}</p>
                     <p class="text-xs text-gray-500 dark:text-gray-400">{{ $row['user'] }} • {{ $row['course'] }}</p>
                 </div>
-                <div class="flex items-center gap-4">
-                    @php
-                        $statusKey = $row['clarification_requested'] ? 'clarification' : $row['status'];
-                        $statusLabel = $row['clarification_requested'] ? 'Klarifikasi Diminta' : ($statusLabels[$row['status']] ?? ucfirst($row['status']));
-                        $statusClass = $statusColors[$statusKey] ?? 'bg-gray-200 text-gray-600';
-                    @endphp
-                    <span class="px-3 py-1 rounded-lg text-xs font-semibold {{ $statusClass }}">{{ $statusLabel }}</span>
+                <div class="flex items-center gap-3">
+                    <span class="px-3 py-1 rounded-lg text-xs font-semibold {{ $row['status_class'] ?? 'bg-gray-200 text-gray-600' }}">{{ $row['status_label'] ?? ucfirst($row['status']) }}</span>
                     <span class="text-xs text-gray-400 dark:text-gray-500">{{ $row['time'] }}</span>
+                    <button type="button" onclick='showVerificationModal(@json($row))' class="px-3 py-1.5 text-xs rounded-xl border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:border-teal-400/60 transition">
+                        Detail
+                    </button>
                 </div>
             </div>
         @empty
@@ -167,6 +152,14 @@
                             <p class="text-gray-500 dark:text-gray-400 mb-1">Metode Pembayaran</p>
                             <p class="font-semibold text-gray-900 dark:text-gray-100" id="detailPaymentMethod"></p>
                         </div>
+                        <div>
+                            <p class="text-gray-500 dark:text-gray-400 mb-1">Status</p>
+                            <span id="detailStatusBadge" class="inline-flex items-center gap-2 px-3 py-1 rounded-lg text-xs font-semibold bg-gray-200 text-gray-600">-</span>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 dark:text-gray-400 mb-1">Terakhir Diperbarui</p>
+                            <p class="font-semibold text-gray-900 dark:text-gray-100" id="detailProcessedAt">-</p>
+                        </div>
                     </div>
                 </div>
 
@@ -188,7 +181,7 @@
                 <button type="button" onclick="closeVerificationModal()" class="px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 text-sm text-gray-600 dark:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600 transition">
                     <i class="fa-solid fa-xmark"></i> Batal
                 </button>
-                <div class="flex gap-3">
+                <div id="modalActions" class="flex gap-3">
                     <form id="clarifyForm" method="POST" class="inline">
                         @csrf
                         <button type="submit" class="px-4 py-2 rounded-xl border border-amber-500/40 bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 font-semibold hover:bg-amber-100 dark:hover:bg-amber-500/20 transition">
@@ -221,9 +214,11 @@
     function showVerificationModal(transaction) {
         currentTransaction = transaction;
 
+        const isHistory = transaction.mode === 'history';
+
         // Update modal title and subtitle
-        document.getElementById('modalTitle').textContent = 'Verifikasi Pembayaran';
-        document.getElementById('modalSubtitle').textContent = 'Tinjau bukti pembayaran dan lakukan verifikasi';
+        document.getElementById('modalTitle').textContent = isHistory ? 'Detail Pembayaran' : 'Verifikasi Pembayaran';
+        document.getElementById('modalSubtitle').textContent = isHistory ? 'Riwayat transaksi yang telah diproses.' : 'Tinjau bukti pembayaran dan lakukan verifikasi';
 
         // Update transaction details
         document.getElementById('detailInvoice').textContent = transaction.invoice;
@@ -231,6 +226,18 @@
         document.getElementById('detailUser').textContent = transaction.user;
         document.getElementById('detailCourse').textContent = transaction.course;
         document.getElementById('detailPaymentMethod').textContent = transaction.payment_method || 'Transfer Bank';
+
+        const statusBadge = document.getElementById('detailStatusBadge');
+        if (statusBadge) {
+            const baseClass = 'inline-flex items-center gap-2 px-3 py-1 rounded-lg text-xs font-semibold';
+            statusBadge.className = `${baseClass} ${transaction.status_class || 'bg-gray-200 text-gray-600'}`;
+            statusBadge.textContent = transaction.status_label || (transaction.status ? transaction.status : 'Menunggu Verifikasi');
+        }
+
+        const processedAt = document.getElementById('detailProcessedAt');
+        if (processedAt) {
+            processedAt.textContent = isHistory ? (transaction.time || '-') : (transaction.submitted || '-');
+        }
 
         // Update proof image
         const proofImageContainer = document.getElementById('proofImageContainer');
@@ -246,10 +253,30 @@
             noProofMessage.classList.remove('hidden');
         }
 
-        // Update form actions
-        document.getElementById('verifyForm').action = '/dashboard/payments/' + transaction.id + '/verify';
-        document.getElementById('clarifyForm').action = '/dashboard/payments/' + transaction.id + '/clarify';
-        document.getElementById('rejectForm').action = '/dashboard/payments/' + transaction.id + '/reject';
+        const actionsContainer = document.getElementById('modalActions');
+        const verifyForm = document.getElementById('verifyForm');
+        const clarifyForm = document.getElementById('clarifyForm');
+        const rejectForm = document.getElementById('rejectForm');
+
+        if (isHistory) {
+            if (actionsContainer) {
+                actionsContainer.classList.add('hidden');
+            }
+        } else {
+            if (actionsContainer) {
+                actionsContainer.classList.remove('hidden');
+            }
+
+            if (verifyForm) {
+                verifyForm.action = '/dashboard/payments/' + transaction.id + '/verify';
+            }
+            if (clarifyForm) {
+                clarifyForm.action = '/dashboard/payments/' + transaction.id + '/clarify';
+            }
+            if (rejectForm) {
+                rejectForm.action = '/dashboard/payments/' + transaction.id + '/reject';
+            }
+        }
 
         // Show modal
         document.getElementById('verificationModal').classList.remove('hidden');
