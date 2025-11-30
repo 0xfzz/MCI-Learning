@@ -286,7 +286,7 @@ function openEditUserModal(user) {
     document.getElementById('edit_password').value = '';
 
     const form = document.getElementById('editUserForm');
-    form.action = `/admin/users/${user.user_id}`;
+    form.action = `/dashboard/users/${user.user_id}`;
 
     document.getElementById('editUserModal').classList.remove('hidden');
     document.body.style.overflow = 'hidden';
@@ -302,7 +302,7 @@ function openDeleteUserModal(userId, userName) {
     document.getElementById('deleteUserName').textContent = userName;
 
     const form = document.getElementById('deleteUserForm');
-    form.action = `/admin/users/${userId}`;
+    form.action = `/dashboard/users/${userId}`;
 
     document.getElementById('deleteUserModal').classList.remove('hidden');
     document.body.style.overflow = 'hidden';
