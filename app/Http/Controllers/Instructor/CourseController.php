@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Course;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 class CourseController extends Controller
@@ -81,6 +82,12 @@ class CourseController extends Controller
     {
         $data = $this->validateCourse($request);
 
+        // Handle thumbnail upload if provided
+        if ($request->hasFile('thumbnail')) {
+            $path = $request->file('thumbnail')->store('course-thumbnails', 'public');
+            $data['thumbnail'] = $path;
+        }
+
         $course = new Course($data);
         $course->instructor_id = $request->user()->user_id;
         $course->save();
@@ -111,6 +118,17 @@ class CourseController extends Controller
         $this->authorizeCourse($request, $course);
 
         $data = $this->validateCourse($request, $course);
+
+        // Handle thumbnail upload/replacement if provided
+        if ($request->hasFile('thumbnail')) {
+            // Delete old thumbnail if exists
+            if ($course->thumbnail) {
+                Storage::disk('public')->delete($course->thumbnail);
+            }
+            $path = $request->file('thumbnail')->store('course-thumbnails', 'public');
+            $data['thumbnail'] = $path;
+        }
+
         $course->fill($data);
         $course->save();
 
@@ -171,6 +189,7 @@ class CourseController extends Controller
             'title' => ['required', 'string', 'max:255'],
             'category_id' => ['nullable', 'exists:categories,category_id'],
             'description' => ['nullable', 'string'],
+            'thumbnail' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
             'level' => ['nullable', Rule::in(['beginner', 'intermediate', 'advanced'])],
             'is_paid' => ['nullable', 'boolean'],
             'price' => ['nullable', 'integer', 'min:0', 'required_if:is_paid,1'],

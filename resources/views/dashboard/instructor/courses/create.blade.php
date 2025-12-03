@@ -11,13 +11,29 @@
     <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">Isi detail utama kursus untuk mulai membagikan materi Anda.</p>
 </div>
 
-<form method="POST" action="{{ route('dashboard.courses.store') }}" class="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-8">
+<form method="POST" action="{{ route('dashboard.courses.store') }}" enctype="multipart/form-data" class="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-8">
     @csrf
 
     <section class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-3xl p-6 space-y-6">
         <div>
             <label for="title" class="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">Judul Kursus</label>
             <input id="title" name="title" type="text" value="{{ old('title') }}" required class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-teal-500">
+        </div>
+
+        <div>
+            <label for="thumbnail" class="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">Thumbnail Kursus</label>
+            <input id="thumbnail" name="thumbnail" type="file" accept="image/jpeg,image/png,image/jpg,image/webp" class="hidden" onchange="previewThumbnail(event)">
+            <div class="flex items-start gap-4">
+                <div id="thumbnail-preview" class="w-32 h-32 rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-700 flex items-center justify-center overflow-hidden bg-gray-50 dark:bg-gray-800">
+                    <i class="fa-solid fa-image text-3xl text-gray-400 dark:text-gray-600"></i>
+                </div>
+                <div class="flex-1">
+                    <button type="button" onclick="document.getElementById('thumbnail').click()" class="px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition">
+                        <i class="fa-solid fa-upload mr-2"></i>Pilih Gambar
+                    </button>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">Format: JPG, PNG, WEBP. Maks 2MB. Rekomendasi 1200x630px</p>
+                </div>
+            </div>
         </div>
 
         <div>
@@ -94,4 +110,21 @@
         </div>
     </aside>
 </form>
+
+@push('scripts')
+<script>
+function previewThumbnail(event) {
+    const file = event.target.files[0];
+    const preview = document.getElementById('thumbnail-preview');
+
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            preview.innerHTML = '<img src="' + e.target.result + '" class="w-full h-full object-cover">';
+        };
+        reader.readAsDataURL(file);
+    }
+}
+</script>
+@endpush
 @endsection
