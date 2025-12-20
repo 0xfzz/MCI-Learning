@@ -201,15 +201,20 @@
                                         <div class="text-2xl font-bold text-white">
                                             {{ $course->is_paid ? 'Rp '.number_format($course->getEffectivePrice(), 0, ',', '.') : 'Gratis' }}
                                         </div>
-                                        @auth
-                                            <a href="{{ route('dashboard.my-courses.index') }}" class="px-5 py-2.5 rounded-full [background:rgba(2,95,90,0.2)] border-2 border-[#025f5a] text-white font-semibold hover:[background:linear-gradient(135deg,#06b6d4,#025f5a)] transition-all hover:shadow-[0_8px_25px_rgba(20,184,166,0.4)]">
-                                                Lihat Detail
-                                            </a>
-                                        @else
-                                            <a href="{{ route('login') }}" class="px-5 py-2.5 rounded-full [background:rgba(2,95,90,0.2)] border-2 border-[#025f5a] text-white font-semibold hover:[background:linear-gradient(135deg,#06b6d4,#025f5a)] transition-all hover:shadow-[0_8px_25px_rgba(20,184,166,0.4)]">
-                                                Daftar
-                                            </a>
-                                        @endauth
+                                        <button
+                                            type="button"
+                                            class="open-course-modal px-5 py-2.5 rounded-full [background:rgba(2,95,90,0.2)] border-2 border-[#025f5a] text-white font-semibold hover:[background:linear-gradient(135deg,#06b6d4,#025f5a)] transition-all hover:shadow-[0_8px_25px_rgba(20,184,166,0.4)]"
+                                            data-title="{{ $course->title }}"
+                                            data-description="{{ \Illuminate\Support\Str::limit($course->description, 400) }}"
+                                            data-category="{{ $course->category->name ?? 'Uncategorized' }}"
+                                            data-level="{{ $course->level ? ($levelOptions[$course->level] ?? ucfirst($course->level)) : '' }}"
+                                            data-price="{{ $course->is_paid ? 'Rp '.number_format($course->getEffectivePrice(), 0, ',', '.') : 'Gratis' }}"
+                                            data-lessons="{{ $course->lessons_count ?? 0 }}"
+                                            data-students="{{ $course->students_count ?? 0 }}"
+                                            data-thumbnail="{{ $course->thumbnail ? asset('storage/'.$course->thumbnail) : '' }}"
+                                        >
+                                            Lihat Detail
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -288,6 +293,54 @@
     </div>
 </footer>
 
+<!-- Course detail modal (reusable) -->
+<div id="courseModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300" role="dialog" aria-modal="true" aria-labelledby="courseModalTitle" aria-describedby="courseModalDescription">
+    <div class="fixed inset-0 bg-black/50 backdrop-blur-sm" aria-hidden="true"></div>
+    <div class="relative bg-white dark:bg-gray-900 rounded-3xl w-full max-w-5xl p-6 md:p-8 z-10 mx-4 shadow-[0_25px_60px_rgba(2,95,90,0.15)] border border-transparent hover:border-[rgba(2,95,90,0.08)] overflow-hidden transform scale-95 transition-all duration-300">
+        <button id="courseModalClose" class="absolute top-6 right-6 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 z-20 bg-white dark:bg-gray-900 shadow-lg border border-gray-200 dark:border-gray-700" aria-label="Close modal">
+            <i class="fa-solid fa-xmark text-xl"></i>
+        </button>
+        <div class="grid grid-cols-1 md:grid-cols-[300px_1fr] gap-6 md:gap-8 items-start">
+            <div class="w-full h-56 md:h-64 rounded-xl overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-700 flex items-center justify-center group hover:scale-105 transition-transform duration-300 shadow-lg relative">
+                <img id="courseModalThumbnail" src="" alt="Course thumbnail" class="w-full h-full object-cover hidden">
+                <div id="courseModalThumbnailPlaceholder" class="text-6xl [color:#b4b4b4] dark:text-gray-500 group-hover:[color:#5eead4] transition-colors">
+                    <i class="fa-solid fa-book"></i>
+                </div>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <span id="courseModalCategory" class="inline-block px-3 py-1 text-xs font-semibold rounded-full [background:rgba(2,95,90,0.15)] dark:[background:rgba(2,95,90,0.2)] [color:#025f5a] dark:text-teal-300 mb-2"></span>
+                    <h3 id="courseModalTitle" class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-2 leading-tight"></h3>
+                </div>
+                <p id="courseModalDescription" class="text-gray-600 dark:text-gray-300 leading-relaxed text-sm md:text-base"></p>
+
+                <div class="flex flex-wrap items-center gap-4 text-sm [color:#8b8b8b] dark:text-gray-400">
+                    <div class="flex items-center gap-1">
+                        <i class="fa-solid fa-layer-group [color:#5eead4]"></i>
+                        <span id="courseModalLessons">0</span> modul
+                    </div>
+                    <div class="flex items-center gap-1">
+                        <i class="fa-solid fa-users [color:#5eead4]"></i>
+                        <span id="courseModalStudents">0</span> siswa
+                    </div>
+                </div>
+
+                <div class="pt-4 border-t border-gray-200 dark:border-gray-700">
+                    <div class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-4" id="courseModalPrice"></div>
+                    <div class="flex flex-wrap gap-3">
+                        @auth
+                            <a id="courseModalDashboardLink" href="{{ route('dashboard.index') }}" class="px-6 py-3 rounded-full [background:linear-gradient(135deg,#06b6d4,#025f5a)] text-white font-semibold shadow-[0_8px_25px_rgba(20,184,166,0.4)] hover:shadow-[0_12px_35px_rgba(20,184,166,0.6)] transition-all hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-teal-400">Lihat Dashboard</a>
+                        @else
+                            <a href="{{ route('register') }}" class="px-6 py-3 rounded-full bg-gradient-to-r from-teal-500 to-cyan-600 hover:from-teal-600 hover:to-cyan-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2">Daftar Sekarang</a>
+                        @endauth
+                        <button id="courseModalCloseBtn" class="px-6 py-3 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500">Tutup</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Scroll to top button -->
 <button id="scrollTop" class="fixed bottom-10 right-10 w-14 h-14 [background:linear-gradient(135deg,#06b6d4,#025f5a)] rounded-full flex items-center justify-center text-white text-2xl opacity-0 translate-y-24 transition-all duration-300 shadow-[0_10px_30px_rgba(20,184,166,0.4)] hover:-translate-y-1 hover:shadow-[0_20px_50px_rgba(20,184,166,0.6)] z-50" aria-label="Scroll to top">
     <i class="fa-solid fa-arrow-up"></i>
@@ -308,6 +361,99 @@
     // Scroll to top functionality
     document.getElementById('scrollTop').addEventListener('click', () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Course modal logic
+    let modalOpen = false;
+    const modal = document.getElementById('courseModal');
+    const modalContent = modal.querySelector('.relative');
+    const focusableElements = modal.querySelectorAll('a, button, [tabindex]:not([tabindex="-1"])');
+    let firstFocusableElement, lastFocusableElement;
+
+    function openCourseModal(data) {
+        document.getElementById('courseModalTitle').textContent = data.title || '';
+        document.getElementById('courseModalDescription').textContent = data.description || '';
+        document.getElementById('courseModalCategory').textContent = [data.category, data.level].filter(Boolean).join(' • ');
+        document.getElementById('courseModalPrice').textContent = data.price || '';
+        document.getElementById('courseModalLessons').textContent = data.lessons || '0';
+        document.getElementById('courseModalStudents').textContent = data.students || '0';
+
+        const thumb = document.getElementById('courseModalThumbnail');
+        const placeholder = document.getElementById('courseModalThumbnailPlaceholder');
+        if (data.thumbnail) {
+            thumb.src = data.thumbnail;
+            thumb.classList.remove('hidden');
+            placeholder.classList.add('hidden');
+        } else {
+            thumb.classList.add('hidden');
+            placeholder.classList.remove('hidden');
+        }
+
+        modal.classList.remove('hidden');
+        setTimeout(() => {
+            modal.classList.remove('opacity-0');
+            modalContent.classList.remove('scale-95');
+        }, 10); // Small delay to trigger animation
+
+        document.body.classList.add('overflow-hidden');
+        modalOpen = true;
+
+        // Focus management
+        firstFocusableElement = focusableElements[0];
+        lastFocusableElement = focusableElements[focusableElements.length - 1];
+        firstFocusableElement.focus();
+    }
+
+    function closeCourseModal() {
+        modal.classList.add('opacity-0');
+        modalContent.classList.add('scale-95');
+        setTimeout(() => {
+            modal.classList.add('hidden');
+        }, 300); // Match transition duration
+        document.body.classList.remove('overflow-hidden');
+        modalOpen = false;
+    }
+
+    // Keyboard navigation
+    modal.addEventListener('keydown', (e) => {
+        if (!modalOpen) return;
+        if (e.key === 'Escape') {
+            closeCourseModal();
+        } else if (e.key === 'Tab') {
+            if (e.shiftKey) {
+                if (document.activeElement === firstFocusableElement) {
+                    e.preventDefault();
+                    lastFocusableElement.focus();
+                }
+            } else {
+                if (document.activeElement === lastFocusableElement) {
+                    e.preventDefault();
+                    firstFocusableElement.focus();
+                }
+            }
+        }
+    });
+
+    document.querySelectorAll('.open-course-modal').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const data = {
+                title: btn.getAttribute('data-title'),
+                description: btn.getAttribute('data-description'),
+                category: btn.getAttribute('data-category'),
+                level: btn.getAttribute('data-level'),
+                price: btn.getAttribute('data-price'),
+                lessons: btn.getAttribute('data-lessons'),
+                students: btn.getAttribute('data-students'),
+                thumbnail: btn.getAttribute('data-thumbnail'),
+            };
+            openCourseModal(data);
+        });
+    });
+
+    document.getElementById('courseModalClose').addEventListener('click', closeCourseModal);
+    document.getElementById('courseModalCloseBtn').addEventListener('click', closeCourseModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeCourseModal();
     });
 </script>
 @endpush
