@@ -128,7 +128,7 @@ class LessonController extends Controller
             return;
         }
 
-        if ($course->instructor_id !== $user->user_id) {
+        if ((int) $course->instructor_id !== (int) $user->user_id) {
             abort(403);
         }
     }
@@ -138,7 +138,7 @@ class LessonController extends Controller
      */
     private function ensureOwnership(Course $course, Lesson $lesson): void
     {
-        if ($lesson->course_id !== $course->course_id) {
+        if ((int) $lesson->course_id !== (int) $course->course_id) {
             abort(404);
         }
     }
