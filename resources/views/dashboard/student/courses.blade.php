@@ -191,7 +191,7 @@
             <div id="enrollModalContent">
                 <!-- Course details will be populated here -->
             </div>
-            <form id="enrollForm" method="POST" enctype="multipart/form-data" class="mt-6">
+            <form id="enrollForm" method="POST" action="" enctype="multipart/form-data" class="mt-6">
                 @csrf
                 <div class="space-y-4">
                     <div id="paymentMethodSection" class="hidden">
@@ -318,6 +318,7 @@ function openEnrollModal(course) {
 
     // Update form action - use Laravel route
     form.action = `/dashboard/my-courses/${course.course_id}/enroll`;
+    console.log("Form action set to:", form.action);
 
     // Build course info
     const price = course.is_paid
@@ -372,6 +373,36 @@ function openEnrollModal(course) {
     modal.classList.remove('hidden');
     document.body.style.overflow = 'hidden';
 }
+
+// Add form submission handler
+document.addEventListener('DOMContentLoaded', function() {
+    const enrollForm = document.getElementById('enrollForm');
+    if (enrollForm) {
+        enrollForm.addEventListener('submit', function(e) {
+            // Validate form has an action
+            if (!this.action || this.action === '' || this.action === window.location.href) {
+                e.preventDefault();
+                alert('Error: Form action not set. Please try closing and reopening the modal.');
+                console.error('Form action is not properly set:', this.action);
+                return false;
+            }
+
+            // Check if paid course requires bukti_transfer
+            const isPaid = currentCourse && currentCourse.is_paid;
+            const buktiTransfer = document.getElementById('bukti_transfer');
+
+            if (isPaid && buktiTransfer && !buktiTransfer.files.length) {
+                e.preventDefault();
+                alert('Harap unggah bukti transfer untuk kursus berbayar');
+                return false;
+            }
+
+            console.log('Form submitting to:', this.action);
+            // Allow form to submit
+            return true;
+        });
+    }
+});
 
 function closeEnrollModal() {
     document.getElementById('enrollModal').classList.add('hidden');
