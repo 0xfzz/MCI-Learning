@@ -163,7 +163,7 @@ class CourseController extends Controller
             return;
         }
 
-        if ($course->instructor_id !== $user->user_id) {
+        if ((int) $course->instructor_id !== (int) $user->user_id) {
             abort(403);
         }
     }
