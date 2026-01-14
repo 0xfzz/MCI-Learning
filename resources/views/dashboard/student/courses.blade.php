@@ -253,7 +253,6 @@
                                 name="bukti_transfer"
                                 accept="image/jpeg,image/jpg,image/png,image/webp"
                                 class="hidden"
-                                required
                                 onchange="previewProof(event)"
                             >
                             <label for="bukti_transfer" class="flex items-center justify-center w-full px-4 py-6 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-xl cursor-pointer hover:border-[#025f5a] transition">
@@ -359,15 +358,18 @@ function openEnrollModal(course) {
         </div>
     `;
 
-    // Show/hide payment method section
+    // Show/hide payment method section and control required attribute
+    const buktiTransferInput = document.getElementById('bukti_transfer');
     if (course.is_paid) {
         paymentSection.classList.remove('hidden');
         document.getElementById('bankInfoSection').classList.remove('hidden');
         document.getElementById('proofUploadSection').classList.remove('hidden');
+        buktiTransferInput.setAttribute('required', 'required');
     } else {
         paymentSection.classList.add('hidden');
         document.getElementById('bankInfoSection').classList.add('hidden');
         document.getElementById('proofUploadSection').classList.add('hidden');
+        buktiTransferInput.removeAttribute('required');
     }
 
     modal.classList.remove('hidden');

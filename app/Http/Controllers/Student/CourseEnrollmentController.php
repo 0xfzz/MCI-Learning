@@ -32,7 +32,7 @@ class CourseEnrollmentController extends Controller
 
         if ($student->enrollments()->where('course_id', $course->course_id)->exists()) {
             return redirect()
-                ->route('dashboard')
+                ->route('dashboard.my-courses.index')
                 ->with('status', 'Anda sudah terdaftar di kursus ini.');
         }
 
@@ -65,7 +65,7 @@ class CourseEnrollmentController extends Controller
             $existingSuccessPayment->ensureEnrollmentExists();
 
                 return redirect()
-                    ->route('dashboard')
+                    ->route('dashboard.my-courses.index')
                 ->with('status', 'Pembayaran Anda telah diverifikasi. Kursus siap dipelajari.');
         }
 
@@ -81,7 +81,7 @@ class CourseEnrollmentController extends Controller
                 : 'Pembayaran Anda sedang diverifikasi. Kami akan mendaftarkan Anda setelah selesai.';
 
             return redirect()
-                ->route('dashboard')
+                ->route('dashboard.my-courses.index')
                 ->with('status', $message);
         }
 
@@ -105,7 +105,7 @@ class CourseEnrollmentController extends Controller
             DB::commit();
 
             return redirect()
-                ->route('dashboard')
+                ->route('dashboard.my-courses.index')
                 ->with('status', 'Permintaan pembayaran berhasil dibuat. Bukti transfer telah diunggah dan akan segera diverifikasi.');
         } catch (\Throwable $exception) {
             DB::rollBack();
@@ -140,7 +140,7 @@ class CourseEnrollmentController extends Controller
             DB::commit();
 
             return redirect()
-                ->route('dashboard')
+                ->route('dashboard.my-courses.index')
                 ->with('status', 'Berhasil mendaftar kursus. Selamat belajar!');
         } catch (\Throwable $exception) {
             DB::rollBack();
