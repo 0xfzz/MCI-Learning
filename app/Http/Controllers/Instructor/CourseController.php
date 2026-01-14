@@ -156,7 +156,14 @@ class CourseController extends Controller
      */
     private function authorizeCourse(Request $request, Course $course): void
     {
-        if ($course->instructor_id !== $request->user()->user_id) {
+        $user = $request->user();
+
+        // Allow admin to edit any course, or instructor to edit their own course
+        if ($user->isAdmin()) {
+            return;
+        }
+
+        if ($course->instructor_id !== $user->user_id) {
             abort(403);
         }
     }

@@ -121,7 +121,14 @@ class LessonController extends Controller
      */
     private function authorizeCourse(Request $request, Course $course): void
     {
-        if ($course->instructor_id !== $request->user()->user_id) {
+        $user = $request->user();
+
+        // Allow admin to manage any course, or instructor to manage their own course
+        if ($user->isAdmin()) {
+            return;
+        }
+
+        if ($course->instructor_id !== $user->user_id) {
             abort(403);
         }
     }
