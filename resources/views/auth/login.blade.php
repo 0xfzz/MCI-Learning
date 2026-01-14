@@ -4,12 +4,14 @@
 
 @section('content')
 <div class="min-h-screen flex items-center justify-center px-6 py-16">
-    <div class="max-w-md w-full bg-white dark:bg-gray-900 border border-teal-500/20 dark:border-teal-400/20 rounded-3xl shadow-[0_25px_60px_rgba(20,184,166,0.18)] p-10">
+    <div class="max-w-2xl w-full bg-white dark:bg-gray-900 border border-teal-500/20 dark:border-teal-400/20 rounded-3xl shadow-[0_25px_60px_rgba(20,184,166,0.18)] p-10">
         <div class="text-center mb-10">
-            <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl [background:linear-gradient(135deg,#06b6d4,#025f5a)] text-white text-3xl mb-6">
-                <i class="fa-solid fa-graduation-cap"></i>
+            <div class="inline-flex items-center justify-center mb-6">
+                <img src="{{ asset('assets/logo/putih.png') }}" alt="MCI (Majelis Coding Indonesia)" class="h-10 w-auto dark:block hidden">
+                <img src="{{ asset('assets/logo/hijau.png') }}" alt="MCI (Majelis Coding Indonesia)" class="h-10 w-auto dark:hidden block">
             </div>
-            <h1 class="text-3xl font-bold [color:#025f5a] dark:text-teal-200 mb-2">Selamat Datang Kembali</h1>
+            <hr class="w-16 h-0.5 bg-gradient-to-r from-transparent via-teal-500 to-transparent mx-auto mb-6 border-0">
+            <h1 class="text-3xl font-bold [color:#025f5a] dark:text-teal-200 mb-2">Welcome Back, Learner</h1>
             <p class="text-sm text-gray-500 dark:text-gray-400">Masuk untuk melanjutkan perjalanan belajar Anda.</p>
         </div>
 

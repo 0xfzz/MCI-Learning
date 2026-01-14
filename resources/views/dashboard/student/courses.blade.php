@@ -214,22 +214,22 @@
                                 <div class="flex items-center justify-between bg-white/10 backdrop-blur rounded-xl p-3">
                                     <div>
                                         <p class="text-xs opacity-75 mb-1">Bank</p>
-                                        <p class="font-bold">BCA</p>
+                                        <p class="font-bold">Bank Mandiri</p>
                                     </div>
                                 </div>
                                 <div class="flex items-center justify-between bg-white/10 backdrop-blur rounded-xl p-3">
                                     <div class="flex-1">
                                         <p class="text-xs opacity-75 mb-1">Nomor Rekening</p>
-                                        <p class="font-bold text-lg tracking-wider">1234567890</p>
+                                        <p class="font-bold text-lg tracking-wider">1370022078634</p>
                                     </div>
-                                    <button type="button" onclick="copyToClipboard('1234567890')" class="ml-3 px-3 py-1 bg-white/20 hover:bg-white/30 rounded-lg text-xs font-semibold transition whitespace-nowrap">
+                                    <button type="button" onclick="copyToClipboard('1370022078634')" class="ml-3 px-3 py-1 bg-white/20 hover:bg-white/30 rounded-lg text-xs font-semibold transition whitespace-nowrap">
                                         <i class="fa-solid fa-copy mr-1"></i>Salin
                                     </button>
                                 </div>
                                 <div class="flex items-center justify-between bg-white/10 backdrop-blur rounded-xl p-3">
                                     <div>
                                         <p class="text-xs opacity-75 mb-1">Atas Nama</p>
-                                        <p class="font-bold">MCI Learning Indonesia</p>
+                                        <p class="font-bold">FAIZ NURDIANA</p>
                                     </div>
                                 </div>
                             </div>
